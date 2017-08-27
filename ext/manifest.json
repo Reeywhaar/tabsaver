@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "Tab Saver",
+  "version": "0.0.1",
+  "description": "Allows you to manage and save tabs",
+  "icons": {
+    "48": "icons/icon.png"
+	},
+	"browser_action": {
+    "default_icon": "icons/icon.png",
+    "default_title": "Tab Saver",
+		"default_popup": "html/panel.html",
+		"browser_style": true
+  },
+	"background":{
+		"page": "html/background.html"
+	},
+	"permissions": [
+		"storage",
+		"tabs",
+		"downloads",
+		"activeTab"
+	]
+}

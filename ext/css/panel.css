@@ -1,0 +1,100 @@
+:root{
+	--active-color: hsl(200, 60%, 50%);
+}
+
+html, body{
+	padding: 0;
+	margin: 0;
+}
+
+body{
+	min-width: 25em;
+	font-size: 110%;
+}
+
+.save-new{
+	display:flex;
+	padding: 4px 4px;
+}
+
+.save-new input{
+	flex-grow: 10;
+	margin-right: 2px;
+	font-size: 1em;
+}
+
+.tab-saver-items{
+	display:flex;
+	flex-flow: column;
+	position: relative;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.tab-saver-item{
+	padding: 4px 4px;
+	background: hsl(200, 10%, 90%);
+	display:flex;
+	flex-wrap: nowrap;
+	align-items:center;
+	margin-bottom: 1px;
+}
+
+.tab-saver-item__title{
+	flex-grow: 10;
+}
+
+.tab-saver-item-button{
+	margin-left:.2em;
+	margin-right:.2em;
+	transition: opacity .2s;
+}
+
+.tab-saver-item-button:hover{
+	color:var(--active-color);
+}
+
+.tab-saver-item:not(:hover) .tab-saver-item-button{
+	opacity: 0;
+}
+
+.notification{
+	margin: 2px;
+	padding: 2px;
+	background: rgba(0,0,0,.05);
+	text-align: center;
+}
+
+.notification:empty{
+	display: none;
+}
+
+.tab-saver-item__title[contenteditable=true]{
+	font-weight: bold;
+}
+
+.prefs{
+	display:flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: space-around;
+	height:30px;
+	background: hsl(0, 0%, 95%);
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.prefs__export, .prefs__import{
+	padding:2px;
+}
+
+.prefs__export:hover, .prefs__import:hover{
+	color:var(--active-color);
+}
+
+.prefs__export:active, .prefs__import:active{
+	background: hsl(0, 0%, 85%);
+}
+
+button{
+	padding:0;
+}
