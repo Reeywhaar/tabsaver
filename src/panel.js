@@ -1,4 +1,4 @@
-import {withDefault, pipe, readFile, setsAreEqual, live, first, firstIndex, sleep, oneOf} from "./utils.js";
+import {live, sleep, oneOf} from "./utils.js";
 import {data} from "./shared.js";
 
 const templates = {
