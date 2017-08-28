@@ -8,7 +8,7 @@ html, body{
 }
 
 .main{
-	min-width: 30em;
+	width: 30em;
 }
 
 .save-new{
@@ -97,7 +97,7 @@ html, body{
 
 @media (max-width: 250px){
 	.main{
-		min-width: auto;
+		width: auto;
 	}
 	.save-new{
 		padding: 4px 0px;
