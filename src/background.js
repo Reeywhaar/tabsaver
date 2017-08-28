@@ -101,7 +101,7 @@ async function main(){
 		for(let window of windows){
 			if(tabSetsAreEqual(
 				tabset.data.map(x => x.url),
-				window.tabs.map(x => x.url)
+				window.tabs.map(x => getUnmangledURL(x.url))
 			)){
 				await browser.windows.update(window.id, {focused:true})
 				return;
