@@ -8,3 +8,6 @@ run:
 
 sign:
 	web-ext sign -s ext --api-key ${APIKEY} --api-secret ${APISECRET}
+
+lint:
+	web-ext lint -s ext

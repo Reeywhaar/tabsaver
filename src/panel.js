@@ -1,18 +1,6 @@
 import {live, sleep, oneOf} from "./utils.js";
 import {data} from "./shared.js";
 
-const templates = {
-	"tab-saver-item": `
-		<div class="tab-saver-item" data-name="{saveName}">
-			<span class="tab-saver-item__title">{saveName}</span>
-			<span class="tab-saver-item-button btn-open">Open</span>
-			<span class="tab-saver-item-button btn-save">Save</span>
-			<span class="tab-saver-item-button btn-remove">✖︎</span>
-		</div>
-	`,
-	"tab-saver-items": `<div class="tab-saver-items">{content}</div>`,
-};
-
 const DOM = {
 	content: document.querySelector(".content"),
 	new: {
@@ -23,22 +11,27 @@ const DOM = {
 	export: document.querySelector(".prefs__export"),
 };
 
-function parseTemplate(tpl, data = {}){
-	for(let val in data){
-		tpl = tpl.split(`{${val}}`).join(data[val]);
-	};
-	return tpl;
+function render(data){
+	const items = document.querySelector("#tab-saver-items").content;
+	const item = document.querySelector("#tab-saver-item").content;
+	const itemsDOM = data.reverse().map(({key, data}) => {
+		const el = item.cloneNode(true);
+		el.querySelector(".tab-saver-item").dataset.name = key;
+		el.querySelector(".tab-saver-item__title").innerText = key;
+		return el;
+	});
+	const container = items.cloneNode(true).querySelector(".tab-saver-items")
+	for(const item of itemsDOM){
+		container.appendChild(item);
+	}
+	return container;
 }
 
-function render(data){
-	const itemsHTML = data.map(({key, data}) => {
-		return parseTemplate(templates["tab-saver-item"], {
-			saveName: key,
-		});
-	}).join("\n");
-	return parseTemplate(templates["tab-saver-items"], {
-		content: itemsHTML,
-	});
+function clearNode(node){
+	while(node.firstChild){
+		node.removeChild(node.firstChild);
+	};
+	return node;
 }
 
 function attachListeners(callback){
@@ -95,12 +88,12 @@ async function getCurrentTabs(){
 let notificationCounter = 0;
 
 function notify(text){
-	document.querySelector(".notification").innerHTML = text;
+	document.querySelector(".notification").innerText = text;
 	notificationCounter++;
 	sleep(6000).then(() => {
 		notificationCounter--;
 		if(notificationCounter === 0){
-			document.querySelector(".notification").innerHTML = "";
+			document.querySelector(".notification").innerText = "";
 		}
 	})
 }
@@ -119,17 +112,22 @@ async function expand(el, em = 40){
 	el.removeChild(exp);
 }
 
+function renderItems(data){
+	clearNode(DOM.content);
+	DOM.content.appendChild(render(data));
+}
+
 async function main(){
 	await expand(document.querySelector(".main"));
-	DOM.content.innerHTML = render((await data.get()).reverse());
 	const bgpage = await browser.runtime.getBackgroundPage();
+	renderItems(await data.get());
 
 	attachListeners(async (event, payload = null)=>{
 		const handlers = {
 			"new": async (name) => {
 				try{
 					const d = await bgpage.addTabSet(name, await getCurrentTabs());
-					document.querySelector(".content").innerHTML = render(d.reverse());
+					renderItems(d)
 				} catch (e) {
 					if(oneOf(e.message, "Name exists", "TabSet is empty")){
 						notify(e.message);
@@ -150,7 +148,7 @@ async function main(){
 				try{
 					const d = await bgpage.saveTabSet(name, await getCurrentTabs());
 					notify(`"${name}" saved`);
-					document.querySelector(".content").innerHTML = render(d.reverse());
+					renderItems(d);
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
@@ -164,7 +162,7 @@ async function main(){
 				try{
 					const d = await bgpage.removeTabSet(name);
 					notify(`"${name}" removed`);
-					document.querySelector(".content").innerHTML = render(d.reverse());
+					renderItems(d);
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
@@ -177,7 +175,7 @@ async function main(){
 			"item:rename": async ([oldn, newn]) => {
 				try{
 					const d = await bgpage.renameTabSet(oldn, newn);
-					document.querySelector(".content").innerHTML = render(d.reverse());
+					renderItems(d);
 				} catch (e) {
 					if(e.message === "Name already exists"){
 						notify(e.message);

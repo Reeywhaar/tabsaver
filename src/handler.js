@@ -26,10 +26,18 @@ function notify(text){
 	});
 }
 
+function createLink(href, text){
+	const a = document.createElement("a");
+	a.href = href;
+	a.innerText = text;
+	return a;
+}
+
 async function main(){
 	const urlEl = document.querySelector(".url");
-	urlEl.innerHTML = `<a href="${getURL()}">${getURL()}</a>`
-	urlEl.addEventListener("click", (e) => {
+	const link = createLink(getURL(), getURL())
+	urlEl.appendChild(link);
+	link.addEventListener("click", (e) => {
 		e.preventDefault();
 		copyToClipboard(getURL());
 		notify("Copied to Clipboard");
