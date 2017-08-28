@@ -9,7 +9,6 @@ html, body{
 
 body{
 	min-width: 25em;
-	font-size: 110%;
 }
 
 .save-new{
@@ -77,14 +76,15 @@ body{
 	flex-wrap: nowrap;
 	align-items: center;
 	justify-content: space-around;
-	height:30px;
 	background: hsl(0, 0%, 95%);
 	-moz-user-select: none;
 	user-select: none;
 }
 
 .prefs__export, .prefs__import{
-	padding:2px;
+	padding:.5em;
+	flex:1;
+	text-align: center;
 }
 
 .prefs__export:hover, .prefs__import:hover{
@@ -93,6 +93,23 @@ body{
 
 .prefs__export:active, .prefs__import:active{
 	background: hsl(0, 0%, 85%);
+}
+
+@media (max-width: 250px){
+	body{
+		min-width: auto;
+	}
+	.save-new{
+		padding: 4px 0px;
+	}
+	.prefs{
+		flex-wrap: wrap;
+		height: auto;
+		margin-top:.2em;
+	}
+	.prefs__export, .prefs__import{
+		flex-basis: 100%;
+	}
 }
 
 button{
