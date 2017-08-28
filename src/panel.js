@@ -105,7 +105,22 @@ function notify(text){
 	})
 }
 
+//function to expand element's width.
+//Actually it's a hack because you have to deal with two panel's variants:
+//- in button
+//- in menu
+//so, while in button mode we must expand body, so it will not catch css small width query
+async function expand(el, em = 40){
+	const exp = document.createElement("div");
+	exp.style.height = `1px`;
+	exp.style.width = `${em}em`;
+	el.appendChild(exp);
+	await sleep(50);
+	el.removeChild(exp);
+}
+
 async function main(){
+	await expand(document.querySelector(".main"));
 	DOM.content.innerHTML = render((await data.get()).reverse());
 	const bgpage = await browser.runtime.getBackgroundPage();
 
