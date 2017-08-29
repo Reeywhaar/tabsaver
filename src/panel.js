@@ -200,6 +200,9 @@ async function main(){
 			return await handlers[event](payload);
 		};
 	});
+
+	await sleep(200);
+	DOM.new.input.focus();
 }
 
 main().catch(err => console.error(err));
