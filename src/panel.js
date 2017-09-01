@@ -37,9 +37,11 @@ function clearNode(node){
 function attachListeners(callback){
 	DOM.new.button.addEventListener("click", async () => {
 		if (DOM["new"].input.value !== "") {
-			await callback("new", DOM["new"].input.value)
-			DOM["new"].input.value = "";
+			await callback("new", DOM["new"].input.value);
+		} else {
+			await callback("new", null);
 		}
+		DOM["new"].input.value = "";
 	});
 	DOM.new.input.addEventListener("keydown", e => {
 		if (e.which === 13) DOM.new.button.click();

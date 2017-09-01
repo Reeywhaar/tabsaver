@@ -135,3 +135,9 @@ export function getKey(obj, key, def = null){
 	if(key in obj) return obj[key];
 	return def;
 }
+
+export function padLeft(length, padder = " ", str){
+	str = str.toString();
+	if(str.length >= length) return str;
+	return padder.repeat(length - str.length) + str;
+}

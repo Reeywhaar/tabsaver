@@ -7,7 +7,8 @@ import {
 	oneOf,
 	sleep,
 	strAfter,
-	getKey
+	getKey,
+	padLeft
 } from "./utils.js";
 import {data} from "./shared.js";
 
@@ -40,6 +41,12 @@ async function main(){
 			return !oneOf(x, "", "about:blank", "about:newtab");
 		})
 		return setsAreEqual(setA, setB);
+	}
+
+	function getDefaultTabSetName(){
+		const date = new Date();
+		const pl = padLeft.bind(null, 2, "0");
+		return `${date.getFullYear()}-${pl(date.getMonth())}-${pl(date.getDate())} ${pl(date.getHours())}:${pl(date.getMinutes())}`;
 	}
 
 	window.import = async () => {
@@ -88,6 +95,9 @@ async function main(){
 	}
 
 	window.addTabSet = async (name, tabs) => {
+		if(name === null){
+			name = getDefaultTabSetName();
+		};
 		const d = await data.get();
 		if (first(d, x => {
 			return x.key === name;
