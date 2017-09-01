@@ -11,3 +11,6 @@ sign:
 
 lint:
 	web-ext lint -s ext
+
+icon.png:
+	convert icon.psd[0] ext/icons/icon.png
