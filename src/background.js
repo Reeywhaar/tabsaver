@@ -1,5 +1,17 @@
-import {readFileAsJson, saveFile, first, setsAreEqual, firstIndex, oneOf, sleep, strAfter} from "./utils.js";
+import {
+	readFileAsJson,
+	saveFile,
+	first,
+	setsAreEqual,
+	firstIndex,
+	oneOf,
+	sleep,
+	strAfter,
+	getKey
+} from "./utils.js";
 import {data} from "./shared.js";
+
+const DEFAULT_COOKIE_STORE_ID = "firefox-default";
 
 async function main(){
 	const extensionURL = await browser.extension.getURL("/html/handler.html");
@@ -47,6 +59,7 @@ async function main(){
 		.map(x => ({
 			url: x.url,
 			pinned: x.pinned,
+			cookieStoreId: x.cookieStoreId || DEFAULT_COOKIE_STORE_ID,
 		}))
 		.filter(x => {
 			return !oneOf(x.url, "about:blank", "about:newtab");
@@ -111,16 +124,17 @@ async function main(){
 			x.url = getMangledURL(x.url);
 			return x;
 		});
-		const window = await browser.windows.create({
-			url: allowedTabs.map(x => x.url),
-		});
-		for(let [index, tab] of window.tabs.entries()){
-			await browser.tabs.update(
-				tab.id,
-				{
-					pinned: "pinned" in allowedTabs[index] ? allowedTabs[index].pinned : false,
-				},
-			)
+		let window = await browser.windows.create();
+		const tabNeedToBeClosed = window.tabs[0];
+		for(const [index, tab] of allowedTabs.entries()){
+			await browser.tabs.create({
+				url: tab.url,
+				windowId: window.id,
+				pinned: getKey(tab, "pinned", false),
+				cookieStoreId: getKey(tab, "cookieStoreId", DEFAULT_COOKIE_STORE_ID),
+				active: false,
+			});
+			if(index === 0) await browser.tabs.remove(tabNeedToBeClosed.id);
 		}
 	};
 

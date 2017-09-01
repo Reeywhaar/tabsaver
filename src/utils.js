@@ -130,3 +130,8 @@ export function strAfter(str, search){
 	if(str.indexOf(search) === -1) return str;
 	return str.substr(str.indexOf(search) + search.length);
 }
+
+export function getKey(obj, key, def = null){
+	if(key in obj) return obj[key];
+	return def;
+}

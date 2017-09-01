@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Tab Saver",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Allows you to manage and save tabs",
   "icons": {
     "48": "icons/icon.png"
@@ -19,7 +19,7 @@
 		"storage",
 		"tabs",
 		"downloads",
-		"activeTab"
+		"cookies"
 	],
 	"applications": {
 		"gecko": {
