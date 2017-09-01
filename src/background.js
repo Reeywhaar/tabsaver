@@ -8,7 +8,8 @@ import {
 	sleep,
 	strAfter,
 	getKey,
-	padLeft
+	padLeft,
+	parseQuery,
 } from "./utils.js";
 import {data} from "./shared.js";
 
@@ -29,7 +30,10 @@ async function main(){
 	}
 
 	function getUnmangledURL(url){
-		if(url.indexOf(extensionURL) === 0) return decodeURIComponent(strAfter(url, "?url="));
+		if(url.indexOf(extensionURL) === 0){
+			const qu = parseQuery("?" + strAfter(url, "handler.html?"));
+			return qu.url;
+		};
 		return url;
 	}
 
@@ -137,13 +141,24 @@ async function main(){
 		const window = await browser.windows.create();
 		const tabNeedToBeClosed = window.tabs[0];
 		for(const [index, tab] of allowedTabs.entries()){
-			await browser.tabs.create({
+			const props = {
 				url: tab.url,
 				windowId: window.id,
 				pinned: getKey(tab, "pinned", false),
 				cookieStoreId: getKey(tab, "cookieStoreId", DEFAULT_COOKIE_STORE_ID),
 				active: false,
-			});
+			};
+			try{
+				await browser.tabs.create(props);
+			} catch (e) {
+				if(e.message.indexOf("No cookie store exists with ID") === 0){
+					props.url =	`/html/handler.html?url=${encodeURIComponent(tab.url)}&containerRemoved=true`;
+					props.cookieStoreId = DEFAULT_COOKIE_STORE_ID;
+					await browser.tabs.create(props);
+				} else {
+					throw e;
+				}
+			}
 			if(index === 0) await browser.tabs.remove(tabNeedToBeClosed.id);
 		}
 		return window.id;

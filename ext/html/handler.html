@@ -30,12 +30,21 @@
 	</style>
 </head>
 <body>
-	<div class="content">
-		<h1 class="header">Opening of such url is restricted by the current extensions api :(</h1>
-		<div class="url"></div>
-		<div class="notification"></div>
-		<div class="workaround">As current workaround you can click on a link above and it will be copied to clipboard which you can manually paste it into the location bar. Sorry...</div>
-		<script src="/js/handler.js"></script>
-	</div>
+	<template id="restricted">
+		<div class="content">
+			<h1 class="header">Opening of such url is restricted by the current extensions api :(</h1>
+			<div class="url"></div>
+			<div class="notification"></div>
+			<div class="workaround">As current workaround you can click on a link above and it will be copied to clipboard which you can manually paste it into the location bar. Sorry...</div>
+		</div>
+	</template>
+	<template id="container-removed">
+		<div class="content">
+			<h1 class="header">Tab Container was removed</h1>
+			<div class="url"></div>
+			<div class="workaround">You may still open url with default container by clicking url above</div>
+		</div>
+	</template>
+	<script src="/js/handler.js"></script>
 </body>
 </html>

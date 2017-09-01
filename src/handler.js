@@ -1,4 +1,4 @@
-import {sleep} from "./utils.js";
+import {sleep, parseQuery} from "./utils.js";
 
 function getURL(){
 	return decodeURIComponent(window.location.search.substr(5));
@@ -33,16 +33,46 @@ function createLink(href, text){
 	return a;
 }
 
-async function main(){
+function getTemplate(selector){
+	return document.querySelector(selector).content.cloneNode(true);
+}
+
+function loadTemplate(selector){
+	document.body.appendChild(getTemplate(selector));
+}
+
+function showRestricted(url){
+	loadTemplate("#restricted");
+	document.title = url;
 	const urlEl = document.querySelector(".url");
-	const link = createLink(getURL(), getURL())
+	const link = createLink(url, url)
 	urlEl.appendChild(link);
 	link.addEventListener("click", (e) => {
 		e.preventDefault();
-		copyToClipboard(getURL());
+		copyToClipboard(url);
 		notify("Copied to Clipboard");
 	});
-	document.title = getURL();
+}
+
+function showContainerRemoved(url){
+	loadTemplate("#container-removed");
+	document.title = url;
+	const urlEl = document.querySelector(".url");
+	const link = createLink(url, url)
+	urlEl.appendChild(link);
+	link.addEventListener("click", (e) => {
+		e.preventDefault();
+		window.location.replace(url);
+	});
+}
+
+async function main(){
+	const query = parseQuery(window.location.search);
+	if("containerRemoved" in query){
+		showContainerRemoved(query.url);
+	} else {
+		showRestricted(query.url);
+	}
 }
 
 main().catch(e => console.error(e));

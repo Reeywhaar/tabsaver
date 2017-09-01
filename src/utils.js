@@ -141,3 +141,17 @@ export function padLeft(length, padder = " ", str){
 	if(str.length >= length) return str;
 	return padder.repeat(length - str.length) + str;
 }
+
+export function parseQuery(query){
+	return query
+	.substr(1)
+	.split("&")
+	.map(x => {
+		return x
+		.split("=")
+		.map(x => decodeURIComponent(x));
+	}).reduce((c, x) => {
+		c[x[0]] = x[1];
+		return c;
+	}, {});
+}
