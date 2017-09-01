@@ -127,14 +127,14 @@ async function main(){
 				window.tabs.map(x => getUnmangledURL(x.url))
 			)){
 				await browser.windows.update(window.id, {focused:true})
-				return;
+				return window.id;
 			};
 		};
 		const allowedTabs = tabset.data.map(x => {
 			x.url = getMangledURL(x.url);
 			return x;
 		});
-		let window = await browser.windows.create();
+		const window = await browser.windows.create();
 		const tabNeedToBeClosed = window.tabs[0];
 		for(const [index, tab] of allowedTabs.entries()){
 			await browser.tabs.create({
@@ -146,6 +146,7 @@ async function main(){
 			});
 			if(index === 0) await browser.tabs.remove(tabNeedToBeClosed.id);
 		}
+		return window.id;
 	};
 
 	window.renameTabSet = async (oldn, newn) => {

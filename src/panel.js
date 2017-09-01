@@ -144,7 +144,11 @@ async function main(){
 				}
 			},
 			"item:open": async (name) => {
-				await bgpage.openTabSet(name);
+				const windowId = await bgpage.openTabSet(name);
+				const currentWindow = await browser.windows.getCurrent();
+				if(windowId === currentWindow.id){
+					notify("Tabset is opened in current window");
+				}
 			},
 			"item:save": async (name) => {
 				try{
