@@ -61,7 +61,7 @@ html, body{
 	--padding-x: 6px;
 	--padding-y: 4px;
 	padding: var(--padding-y) var(--padding-x);
-	background: hsl(200, 10%, 96%);
+	background: hsla(200, 10%, 95%, .5);
 	display:flex;
 	flex-wrap: nowrap;
 	align-items:center;
