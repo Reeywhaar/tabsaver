@@ -192,7 +192,6 @@ async function main(){
 			"new": async (name) => {
 				try{
 					const d = await bgpage.TabSet.add(name, await getCurrentTabs());
-					await renderItems(d)
 				} catch (e) {
 					if(oneOf(e.message, "Name exists", "TabSet is empty")){
 						notify(e.message);
@@ -217,7 +216,6 @@ async function main(){
 				try{
 					const d = await bgpage.TabSet.save(name, await getCurrentTabs());
 					notify(`"${name}" saved`);
-					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
@@ -231,7 +229,6 @@ async function main(){
 				try{
 					const d = await bgpage.TabSet.remove(name);
 					notify(`"${name}" removed`);
-					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
@@ -244,7 +241,6 @@ async function main(){
 			"item:rename": async ([oldn, newn]) => {
 				try{
 					const d = await bgpage.TabSet.rename(oldn, newn);
-					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Name already exists"){
 						notify(e.message);
@@ -272,6 +268,10 @@ async function main(){
 
 	await sleep(200);
 	DOM.new.input.focus();
+
+	browser.storage.onChanged.addListener(async e => {
+		renderItems(await data.get());
+	});
 }
 
 main().catch(err => console.error(err));

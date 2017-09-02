@@ -5,6 +5,7 @@ import {
 	getKey,
 } from "./utils.js";
 import {
+	data,
 	getMangledURL,
 	getUnmangledURL,
 	getDefaultTabSetName,
