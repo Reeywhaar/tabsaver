@@ -4,6 +4,7 @@ import {
 	oneOf,
 	findParent,
 	withDefault,
+	getKey,
 } from "./utils.js";
 import {
 	DEFAULT_COOKIE_STORE_ID,
@@ -41,7 +42,7 @@ function getTemplate(tpl){
 }
 
 async function renderTab(tab){
-	const identity = await browser.contextualIdentities.get(withDefault(tab.cookieStoreId, DEFAULT_COOKIE_STORE_ID));
+	const identity = await browser.contextualIdentities.get(getKey(tab, "cookieStoreId", DEFAULT_COOKIE_STORE_ID));
 	const link = getTemplate("tab-saver-item__link");
 	link.href = tab.url;
 	link.target = "_blank";

@@ -10,7 +10,8 @@
     "default_icon": "icons/icon.png",
     "default_title": "Tab Saver",
 		"default_popup": "html/panel.html",
-		"browser_style": true
+		"browser_style": true,
+		"default_area": "tabstrip"
   },
 	"background":{
 		"page": "html/background.html"
