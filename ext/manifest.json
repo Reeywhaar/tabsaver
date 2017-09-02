@@ -19,7 +19,8 @@
 		"storage",
 		"tabs",
 		"downloads",
-		"cookies"
+		"cookies",
+		"contextualIdentities"
 	],
 	"applications": {
 		"gecko": {

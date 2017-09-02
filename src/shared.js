@@ -13,3 +13,5 @@ export const data = {
 		);
 	},
 }
+
+export const DEFAULT_COOKIE_STORE_ID = "firefox-default";

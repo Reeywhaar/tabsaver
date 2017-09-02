@@ -72,12 +72,21 @@ html, body{
 }
 
 .tab-saver-item__link{
+	--color: Highlight;
+	cursor: pointer;
 	display: block;
 	padding: .2em 10px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	word-break: keep-all;
-	color: Highlight;
+	color: var(--color);
+	text-decoration: none;
+}
+
+.tab-saver-item__link[data-identity-name]:before{
+	content: attr(data-identity-name)":";
+	margin-right: .2em;
+	font-size: 85%;
 }
 
 .tab-saver-item-button{

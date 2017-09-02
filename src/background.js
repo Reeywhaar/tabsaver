@@ -11,9 +11,7 @@ import {
 	padLeft,
 	parseQuery,
 } from "./utils.js";
-import {data} from "./shared.js";
-
-const DEFAULT_COOKIE_STORE_ID = "firefox-default";
+import {data, DEFAULT_COOKIE_STORE_ID} from "./shared.js";
 
 async function main(){
 	const extensionURL = await browser.extension.getURL("/html/handler.html");

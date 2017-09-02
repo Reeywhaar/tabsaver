@@ -1,5 +1,5 @@
-import {live, sleep, oneOf, findParent} from "./utils.js";
-import {data} from "./shared.js";
+import {live, sleep, oneOf, findParent, withDefault} from "./utils.js";
+import {data, DEFAULT_COOKIE_STORE_ID} from "./shared.js";
 
 const DOM = {
 	content: document.querySelector(".content"),
@@ -28,24 +28,38 @@ function getTemplate(tpl){
 	return templates[tpl].cloneNode(true);
 }
 
+//will be set in main function.
 let getMangledURL = (x) => x;
 
-function render(data){
-	const itemsDOM = data.reverse().map(({key, data}) => {
-		const el = getTemplate("tab-saver-item");
-		el.dataset.name = key;
-		el.querySelector(".tab-saver-item__title").innerText = key;
-		const linksContainer = el.querySelector(".tab-saver-item__links");
-		linksContainer.classList.add("hidden");
-		for(const tab of data){
-			const link = getTemplate("tab-saver-item__link");
-			link.href = getMangledURL(tab.url);
-			link.target = "_blank";
-			link.innerText = tab.url;
-			linksContainer.appendChild(link);
-		}
-		return el;
-	});
+async function renderTab(tab){
+	const identity = await browser.contextualIdentities.get(withDefault(tab.cookieStoreId, DEFAULT_COOKIE_STORE_ID));
+	const link = getTemplate("tab-saver-item__link");
+	link.href = tab.url;
+	link.target = "_blank";
+	link.innerText = tab.url;
+	if(identity){
+		link.dataset.identityName = identity.name;
+		link.dataset.identityId = identity.cookieStoreId;
+		link.style.setProperty("--color", identity.color);
+	};
+	return link;
+}
+
+async function render(data){
+	const itemsDOM = await Promise.all(
+		data.reverse()
+		.map(async ({key, data}) => {
+			const el = getTemplate("tab-saver-item");
+			el.dataset.name = key;
+			el.querySelector(".tab-saver-item__title").innerText = key;
+			const linksContainer = el.querySelector(".tab-saver-item__links");
+			linksContainer.classList.add("hidden");
+			for(const tab of data){
+				linksContainer.appendChild(await renderTab(tab));
+			};
+			return el;
+		})
+	);
 	const container = getTemplate("tab-saver-items");
 	for(const item of itemsDOM){
 		container.appendChild(item);
@@ -74,7 +88,7 @@ function attachListeners(callback){
 	});
 	["save", "open", "remove"].forEach(event => {
 		live(DOM.content, ".tab-saver-item .btn-" + event, "click", async function() {
-			let parent = this.parentElement;
+			let parent = findParent(this, ".tab-saver-item");
 			await callback("item:" + event, parent.dataset.name);
 		});
 	});
@@ -87,6 +101,15 @@ function attachListeners(callback){
 		this.contentEditable = true;
 		this.focus();
 		document.execCommand("selectAll", false, null);
+	});
+	live(DOM.content, ".tab-saver-item__link", "click", async function(e) {
+		e.preventDefault();
+		const props = {
+			url: getMangledURL(this.href),
+			cookieStoreId: withDefault(this.dataset.identityId, DEFAULT_COOKIE_STORE_ID),
+		};
+		console.log(props);
+		await browser.tabs.create(props);
 	});
 	live(
 		DOM.content,
@@ -145,23 +168,23 @@ async function expand(el, em = 40){
 	el.removeChild(exp);
 }
 
-function renderItems(data){
+async function renderItems(data){
 	clearNode(DOM.content);
-	DOM.content.appendChild(render(data));
+	DOM.content.appendChild(await render(data));
 }
 
 async function main(){
 	await expand(document.querySelector(".main"));
 	const bgpage = await browser.runtime.getBackgroundPage();
 	getMangledURL = bgpage.getMangledURL;
-	renderItems(await data.get());
+	await renderItems(await data.get());
 
 	attachListeners(async (event, payload = null)=>{
 		const handlers = {
 			"new": async (name) => {
 				try{
 					const d = await bgpage.addTabSet(name, await getCurrentTabs());
-					renderItems(d)
+					await renderItems(d)
 				} catch (e) {
 					if(oneOf(e.message, "Name exists", "TabSet is empty")){
 						notify(e.message);
@@ -186,7 +209,7 @@ async function main(){
 				try{
 					const d = await bgpage.saveTabSet(name, await getCurrentTabs());
 					notify(`"${name}" saved`);
-					renderItems(d);
+					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
@@ -200,7 +223,7 @@ async function main(){
 				try{
 					const d = await bgpage.removeTabSet(name);
 					notify(`"${name}" removed`);
-					renderItems(d);
+					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
@@ -213,7 +236,7 @@ async function main(){
 			"item:rename": async ([oldn, newn]) => {
 				try{
 					const d = await bgpage.renameTabSet(oldn, newn);
-					renderItems(d);
+					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Name already exists"){
 						notify(e.message);
