@@ -13,7 +13,6 @@ import {
 
 async function main(){
 	await load();
-	window.data = data;
 
 	window.import = async () => {
 		const imported = await readFileAsJson();
