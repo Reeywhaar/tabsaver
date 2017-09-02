@@ -13,10 +13,7 @@ export function sleep(n){
 
 export function pipe(obj, ...fns){
 	return fns.reduce((c, fn)=>{
-		if (c instanceof Promise) {
-			return c.then(c => fn(c))
-		}
-		return fn(c);
+		return (c instanceof Promise) ? c.then(c => fn(c)) : fn(c);
 	}, obj);
 }
 
