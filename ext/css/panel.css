@@ -7,6 +7,10 @@ html, body{
 	margin: 0;
 }
 
+.hidden{
+	display:none;
+}
+
 .main{
 	width: 25em;
 }
@@ -28,6 +32,11 @@ html, body{
 	font-size: 120%;
 }
 
+.content{
+	max-height: 500px;
+	overflow-y: scroll;
+}
+
 .tab-saver-items{
 	display:flex;
 	flex-flow: column;
@@ -45,6 +54,10 @@ html, body{
 }
 
 .tab-saver-item{
+	margin-bottom: 1px;
+}
+
+.tab-saver-item__item{
 	--padding-x: 6px;
 	--padding-y: 4px;
 	padding: var(--padding-y) var(--padding-x);
@@ -52,11 +65,19 @@ html, body{
 	display:flex;
 	flex-wrap: nowrap;
 	align-items:center;
-	margin-bottom: 1px;
 }
 
 .tab-saver-item__title{
 	flex-grow: 10;
+}
+
+.tab-saver-item__link{
+	display: block;
+	padding: .2em 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: keep-all;
+	color: Highlight;
 }
 
 .tab-saver-item-button{

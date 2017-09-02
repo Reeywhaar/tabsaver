@@ -22,11 +22,17 @@
 	</template>
 	<template id="tab-saver-item">
 		<div class="tab-saver-item" data-name="{saveName}">
-			<span class="tab-saver-item__title">{saveName}</span>
-			<span class="tab-saver-item-button btn-open">Open</span>
-			<span class="tab-saver-item-button btn-save">Save</span>
-			<span class="tab-saver-item-button btn-remove">✖︎</span>
+			<div class="tab-saver-item__item">
+				<span class="tab-saver-item__title">{saveName}</span>
+				<span class="tab-saver-item-button btn-open">Open</span>
+				<span class="tab-saver-item-button btn-save">Save</span>
+				<span class="tab-saver-item-button btn-remove">✖︎</span>
+			</div>
+			<div class="tab-saver-item__links"></div>
 		</div>
+	</template>
+	<template id="tab-saver-item__link">
+		<a class="tab-saver-item__link"></a>
 	</template>
 	<script src="/js/panel.js"></script>
 </body>

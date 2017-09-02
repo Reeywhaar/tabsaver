@@ -1,4 +1,4 @@
-import {live, sleep, oneOf} from "./utils.js";
+import {live, sleep, oneOf, findParent} from "./utils.js";
 import {data} from "./shared.js";
 
 const DOM = {
@@ -11,16 +11,42 @@ const DOM = {
 	export: document.querySelector(".prefs__export"),
 };
 
+const templates = [
+	"tab-saver-items",
+	"tab-saver-item",
+	"tab-saver-item__link",
+]
+.map(x => {
+	return [x, document.querySelector("#"+x).content.querySelector("."+x)];
+})
+.reduce((c, x) => {
+	c[x[0]] = x[1];
+	return c;
+}, {});
+
+function getTemplate(tpl){
+	return templates[tpl].cloneNode(true);
+}
+
+let getMangledURL = (x) => x;
+
 function render(data){
-	const items = document.querySelector("#tab-saver-items").content;
-	const item = document.querySelector("#tab-saver-item").content;
 	const itemsDOM = data.reverse().map(({key, data}) => {
-		const el = item.cloneNode(true);
-		el.querySelector(".tab-saver-item").dataset.name = key;
+		const el = getTemplate("tab-saver-item");
+		el.dataset.name = key;
 		el.querySelector(".tab-saver-item__title").innerText = key;
+		const linksContainer = el.querySelector(".tab-saver-item__links");
+		linksContainer.classList.add("hidden");
+		for(const tab of data){
+			const link = getTemplate("tab-saver-item__link");
+			link.href = getMangledURL(tab.url);
+			link.target = "_blank";
+			link.innerText = tab.url;
+			linksContainer.appendChild(link);
+		}
 		return el;
 	});
-	const container = items.cloneNode(true).querySelector(".tab-saver-items")
+	const container = getTemplate("tab-saver-items");
 	for(const item of itemsDOM){
 		container.appendChild(item);
 	}
@@ -52,6 +78,11 @@ function attachListeners(callback){
 			await callback("item:" + event, parent.dataset.name);
 		});
 	});
+	live(DOM.content, ".tab-saver-item__title", "click", async function() {
+		await sleep(20);
+		if(this.contentEditable === "true") return;
+		findParent(this, ".tab-saver-item").querySelector(".tab-saver-item__links").classList.toggle("hidden");
+	});
 	live(DOM.content, ".tab-saver-item__title", "dblclick", async function() {
 		this.contentEditable = true;
 		this.focus();
@@ -64,7 +95,7 @@ function attachListeners(callback){
 		async function(e) {
 			if (e.which === 13) {
 				e.preventDefault();
-				const oldv = this.parentElement.dataset.name;
+				const oldv = findParent(this, ".tab-saver-item").dataset.name;
 				const newv = this.textContent;
 				if (oldv !== newv && newv.length > 0) {
 					await callback("item:rename", [oldv, newv])
@@ -122,6 +153,7 @@ function renderItems(data){
 async function main(){
 	await expand(document.querySelector(".main"));
 	const bgpage = await browser.runtime.getBackgroundPage();
+	getMangledURL = bgpage.getMangledURL;
 	renderItems(await data.get());
 
 	attachListeners(async (event, payload = null)=>{

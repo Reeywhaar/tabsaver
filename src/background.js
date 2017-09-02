@@ -29,6 +29,8 @@ async function main(){
 		return url;
 	}
 
+	window.getMangledURL = getMangledURL;
+
 	function getUnmangledURL(url){
 		if(url.indexOf(extensionURL) === 0){
 			const qu = parseQuery("?" + strAfter(url, "handler.html?"));

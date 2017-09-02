@@ -151,3 +151,8 @@ export function parseQuery(query){
 		return c;
 	}, {});
 }
+
+export function findParent(el, selector){
+	while((el = el.parentElement) && !el.matches(selector) && el !== document){}
+	return el;
+}
