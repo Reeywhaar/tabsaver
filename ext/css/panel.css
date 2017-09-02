@@ -1,5 +1,5 @@
 :root{
-	--active-color: hsl(200, 60%, 50%);
+	--hover-color: hsl(200, 60%, 50%);
 }
 
 html, body{
@@ -8,7 +8,7 @@ html, body{
 }
 
 .main{
-	width: 30em;
+	width: 25em;
 }
 
 .save-new{
@@ -16,10 +16,16 @@ html, body{
 	padding: 4px 4px;
 }
 
-.save-new input{
+.save-new__input{
 	flex-grow: 10;
 	margin-right: 2px;
 	font-size: 1em;
+}
+
+.save-new__button{
+	padding-left: .2em;
+	padding-right: .2em;
+	font-size: 120%;
 }
 
 .tab-saver-items{
@@ -29,9 +35,20 @@ html, body{
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.tab-saver-items:empty::after{
+	content: "No TabSets";
+	display: block;
+	text-align: center;
+	font-size: 110%;
+	margin-top: .5em;
+	margin-bottom: .5em;
+}
+
 .tab-saver-item{
-	padding: 4px 4px;
-	background: hsl(200, 10%, 90%);
+	--padding-x: 6px;
+	--padding-y: 4px;
+	padding: var(--padding-y) var(--padding-x);
+	background: hsl(200, 10%, 96%);
 	display:flex;
 	flex-wrap: nowrap;
 	align-items:center;
@@ -49,7 +66,7 @@ html, body{
 }
 
 .tab-saver-item-button:hover{
-	color:var(--active-color);
+	color:var(--hover-color);
 }
 
 .tab-saver-item:not(:hover) .tab-saver-item-button{
@@ -79,6 +96,7 @@ html, body{
 	background: hsl(0, 0%, 95%);
 	-moz-user-select: none;
 	user-select: none;
+	border-top: 1px solid rgba(0,0,0,.1);
 }
 
 .prefs__export, .prefs__import{
@@ -88,7 +106,7 @@ html, body{
 }
 
 .prefs__export:hover, .prefs__import:hover{
-	color:var(--active-color);
+	color:var(--hover-color);
 }
 
 .prefs__export:active, .prefs__import:active{
@@ -102,10 +120,14 @@ html, body{
 	.save-new{
 		padding: 4px 0px;
 	}
+	.tab-saver-item{
+		--padding-x: 4px;
+	}
 	.prefs{
 		flex-wrap: wrap;
 		height: auto;
 		margin-top:.2em;
+		border-top: none;
 	}
 	.prefs__export, .prefs__import{
 		flex-basis: 100%;

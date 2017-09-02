@@ -4,8 +4,8 @@ import {data} from "./shared.js";
 const DOM = {
 	content: document.querySelector(".content"),
 	new: {
-		input: document.querySelector(".input__save-new"),
-		button: document.querySelector(".button__save-new"),
+		input: document.querySelector(".save-new__input"),
+		button: document.querySelector(".save-new__button"),
 	},
 	import: document.querySelector(".prefs__import"),
 	export: document.querySelector(".prefs__export"),
