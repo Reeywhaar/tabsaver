@@ -112,11 +112,10 @@ export function live(parent, selector, event, fn, capture = false) {
 }
 
 export function once(node, type, fn, capture = false) {
-	const fno = function(e) {
-		fn.call(node, e);
-		node.removeEventListener(e.type, fno);
-	};
-	node.addEventListener(type, fno, capture);
+	return node.addEventListener(type, function handler(e) {
+		node.removeEventListener(type, handler);
+		return fn.call(node, e);
+	}, capture);
 }
 
 export function oneOf(obj, ...subjs){
