@@ -209,7 +209,7 @@ async function main(){
 				const windowId = await bgpage.TabSet.open(name);
 				const currentWindow = await browser.windows.getCurrent();
 				if(windowId === currentWindow.id){
-					notify("Tabset is opened in current window");
+					notify("Tabset is open in current window");
 				}
 			},
 			"item:save": async (name) => {
