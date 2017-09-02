@@ -69,6 +69,7 @@ html, body{
 
 .tab-saver-item__title{
 	flex-grow: 10;
+	min-height: 1.2em;
 }
 
 .tab-saver-item__link{

@@ -1,5 +1,17 @@
-import {live, sleep, oneOf, findParent, withDefault} from "./utils.js";
-import {data, DEFAULT_COOKIE_STORE_ID} from "./shared.js";
+import {
+	live,
+	sleep,
+	oneOf,
+	findParent,
+	withDefault,
+} from "./utils.js";
+import {
+	DEFAULT_COOKIE_STORE_ID,
+	data,
+	openURL,
+	getMangledURL,
+	load as loadShared,
+} from "./shared.js";
 
 const DOM = {
 	content: document.querySelector(".content"),
@@ -27,9 +39,6 @@ const templates = [
 function getTemplate(tpl){
 	return templates[tpl].cloneNode(true);
 }
-
-//will be set in main function.
-let getMangledURL = (x) => x;
 
 async function renderTab(tab){
 	const identity = await browser.contextualIdentities.get(withDefault(tab.cookieStoreId, DEFAULT_COOKIE_STORE_ID));
@@ -104,12 +113,7 @@ function attachListeners(callback){
 	});
 	live(DOM.content, ".tab-saver-item__link", "click", async function(e) {
 		e.preventDefault();
-		const props = {
-			url: getMangledURL(this.href),
-			cookieStoreId: withDefault(this.dataset.identityId, DEFAULT_COOKIE_STORE_ID),
-		};
-		console.log(props);
-		await browser.tabs.create(props);
+		await openURL(this.href, this.dataset.identityId);
 	});
 	live(
 		DOM.content,
@@ -169,21 +173,24 @@ async function expand(el, em = 40){
 }
 
 async function renderItems(data){
-	clearNode(DOM.content);
-	DOM.content.appendChild(await render(data));
+	const el = DOM.content.querySelector(".tab-saver-items");
+	if(el){
+		DOM.content.replaceChild(await render(data), el);
+	} else {
+		DOM.content.appendChild(await render(data));
+	}
 }
 
 async function main(){
 	await expand(document.querySelector(".main"));
-	const bgpage = await browser.runtime.getBackgroundPage();
-	getMangledURL = bgpage.getMangledURL;
 	await renderItems(await data.get());
+	const bgpage = await browser.runtime.getBackgroundPage();
 
 	attachListeners(async (event, payload = null)=>{
 		const handlers = {
 			"new": async (name) => {
 				try{
-					const d = await bgpage.addTabSet(name, await getCurrentTabs());
+					const d = await bgpage.TabSet.add(name, await getCurrentTabs());
 					await renderItems(d)
 				} catch (e) {
 					if(oneOf(e.message, "Name exists", "TabSet is empty")){
@@ -199,7 +206,7 @@ async function main(){
 				}
 			},
 			"item:open": async (name) => {
-				const windowId = await bgpage.openTabSet(name);
+				const windowId = await bgpage.TabSet.open(name);
 				const currentWindow = await browser.windows.getCurrent();
 				if(windowId === currentWindow.id){
 					notify("Tabset is opened in current window");
@@ -207,7 +214,7 @@ async function main(){
 			},
 			"item:save": async (name) => {
 				try{
-					const d = await bgpage.saveTabSet(name, await getCurrentTabs());
+					const d = await bgpage.TabSet.save(name, await getCurrentTabs());
 					notify(`"${name}" saved`);
 					await renderItems(d);
 				} catch (e) {
@@ -221,7 +228,7 @@ async function main(){
 			},
 			"item:remove": async (name) => {
 				try{
-					const d = await bgpage.removeTabSet(name);
+					const d = await bgpage.TabSet.remove(name);
 					notify(`"${name}" removed`);
 					await renderItems(d);
 				} catch (e) {
@@ -235,7 +242,7 @@ async function main(){
 			},
 			"item:rename": async ([oldn, newn]) => {
 				try{
-					const d = await bgpage.renameTabSet(oldn, newn);
+					const d = await bgpage.TabSet.rename(oldn, newn);
 					await renderItems(d);
 				} catch (e) {
 					if(e.message === "Name already exists"){
