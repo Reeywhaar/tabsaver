@@ -50,7 +50,7 @@ async function main(){
 	function getDefaultTabSetName(){
 		const date = new Date();
 		const pl = padLeft.bind(null, 2, "0");
-		return `${date.getFullYear()}-${pl(date.getMonth())}-${pl(date.getDate())} ${pl(date.getHours())}:${pl(date.getMinutes())}`;
+		return `${date.getFullYear()}-${pl(date.getMonth()+1)}-${pl(date.getDate())} ${pl(date.getHours())}:${pl(date.getMinutes())}`;
 	}
 
 	window.import = async () => {
