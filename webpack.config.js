@@ -12,6 +12,6 @@ module.exports = {
     filename: '[name].js'
 	},
 	plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin()
+  	new webpack.optimize.ModuleConcatenationPlugin()
   ]
 };
