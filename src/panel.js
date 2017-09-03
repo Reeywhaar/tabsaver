@@ -50,6 +50,7 @@ async function renderTab(tab){
 	if(identity){
 		link.dataset.identityName = identity.name;
 		link.dataset.identityId = identity.cookieStoreId;
+		link.dataset.identityColor = identity.color;
 		link.style.setProperty("--color", identity.color);
 	};
 	return link;

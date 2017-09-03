@@ -114,14 +114,22 @@ html, body{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	word-break: keep-all;
-	color: var(--color);
+	color: Highlight;
 	text-decoration: none;
 }
 
 .tab-saver-item__link[data-identity-name]:before{
-	content: attr(data-identity-name)":";
+	content: attr(data-identity-name)"";
+	padding: .1em .3em;
+	border-radius: 2px;
 	margin-right: .2em;
 	font-size: 85%;
+	background-color: var(--color);
+	color: #fff;
+}
+
+.tab-saver-item__link[data-identity-color="yellow"]:before{
+	color:#777;
 }
 
 .tab-saver-item-button{
