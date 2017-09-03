@@ -13,6 +13,5 @@ Current state of Firefox WebExtension Api restricts opening of privileged urls (
 
 ### Screenshots
 
-![main](screenshots/main.png)
-![usage](screenshots/usage.png)
-![renaming](screenshots/renaming.png)
+![main](screenshots/main-assets/main.png)
+![tabs](screenshots/main-assets/tabs.png)
