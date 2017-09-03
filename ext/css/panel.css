@@ -7,6 +7,41 @@ html, body{
 	margin: 0;
 }
 
+.button{
+	padding-left: .4em;
+	padding-right: .4em;
+	line-height: 1em;
+	border-radius: 3px;
+	border: 1px solid rgba(0,0,0,.2);
+	background: #fff;
+	display: flex;
+	align-items: center;
+}
+
+.button:hover{
+	background: #eee;
+}
+
+.button:active{
+	background: #ccc;
+}
+
+.inline-button{
+	background: none;
+	border:none;
+	font:inherit;
+	padding:.2em .3em;
+	border-radius: .2em;
+}
+
+.inline-button:hover{
+	color:var(--hover-color);
+}
+
+.inline-button:active{
+	background: hsl(0, 0%, 85%);
+}
+
 .hidden{
 	display:none;
 }
@@ -27,8 +62,6 @@ html, body{
 }
 
 .save-new__button{
-	padding-left: .2em;
-	padding-right: .2em;
 	font-size: 120%;
 }
 
@@ -59,7 +92,7 @@ html, body{
 
 .tab-saver-item__item{
 	--padding-x: 6px;
-	--padding-y: 4px;
+	--padding-y: 0px;
 	padding: var(--padding-y) var(--padding-x);
 	background: hsla(200, 10%, 95%, .5);
 	display:flex;
@@ -69,7 +102,8 @@ html, body{
 
 .tab-saver-item__title{
 	flex-grow: 10;
-	min-height: 1.2em;
+	min-height: 1.4em;
+	line-height: 1.4em;
 }
 
 .tab-saver-item__link{
@@ -91,13 +125,7 @@ html, body{
 }
 
 .tab-saver-item-button{
-	margin-left:.2em;
-	margin-right:.2em;
 	transition: opacity .2s;
-}
-
-.tab-saver-item-button:hover{
-	color:var(--hover-color);
 }
 
 .tab-saver-item:not(:hover) .tab-saver-item-button{
@@ -134,14 +162,7 @@ html, body{
 	padding:.5em;
 	flex:1;
 	text-align: center;
-}
-
-.prefs__export:hover, .prefs__import:hover{
-	color:var(--hover-color);
-}
-
-.prefs__export:active, .prefs__import:active{
-	background: hsl(0, 0%, 85%);
+	border-radius: 0;
 }
 
 @media (max-width: 250px){

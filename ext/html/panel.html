@@ -8,13 +8,13 @@
 	<div class="main">
 		<div class="save-new">
 			<input class="save-new__input" type="text" value="" placeholder="Add TabSet"/>
-			<button class="save-new__button">+</button>
+			<button class="button save-new__button">+</button>
 		</div>
 		<div class="content"></div>
 		<div class="notification"></div>
 		<div class="prefs">
-			<span class="prefs__import">Import</span>
-			<span class="prefs__export">Export</span>
+			<button class="inline-button prefs__import">Import</button>
+			<button class="inline-button prefs__export">Export</button>
 		</div>
 	</div>
 	<template id="tab-saver-items">
@@ -24,9 +24,9 @@
 		<div class="tab-saver-item" data-name="{saveName}">
 			<div class="tab-saver-item__item">
 				<span class="tab-saver-item__title">{saveName}</span>
-				<span class="tab-saver-item-button btn-open">Open</span>
-				<span class="tab-saver-item-button btn-save">Save</span>
-				<span class="tab-saver-item-button btn-remove">✖︎</span>
+				<button class="inline-button tab-saver-item-button btn-open">Open</button>
+				<button class="inline-button tab-saver-item-button btn-save">Save</button>
+				<button class="inline-button tab-saver-item-button btn-remove">✖︎</button>
 			</div>
 			<div class="tab-saver-item__links"></div>
 		</div>
