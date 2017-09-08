@@ -156,3 +156,11 @@ export function findParent(el, selector){
 	while((el = el.parentElement) && !el.matches(selector) && el !== document){}
 	return el;
 }
+
+export async function tryOR(fn, def = null){
+	try{
+		return await fn();
+	} catch (e) {
+		return def;
+	}
+}
