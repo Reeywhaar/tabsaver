@@ -4,7 +4,8 @@
   "version": "0.0.14",
   "description": "Allows you to manage and save tabs",
   "icons": {
-    "48": "icons/icon.png"
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
 	},
 	"browser_action": {
     "default_icon": "icons/icon.svg",
