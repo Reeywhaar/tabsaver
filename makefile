@@ -1,6 +1,6 @@
 include ./.env
 
-build:
+build: ext/icons/icon.png ext/icons/icon.svg
 	webpack && make lint && web-ext build -s ext
 
 run:
@@ -15,5 +15,8 @@ sign:
 lint:
 	web-ext lint -s ext
 
-icon.png:
+ext/icons/icon.png: icon.psd
 	convert icon.psd[0] ext/icons/icon.png
+
+ext/icons/icon.svg: icon.svg.js
+	node icon.svg.js > ext/icons/icon.svg
