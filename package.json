@@ -16,7 +16,7 @@
     "url": "https://github.com/Reeywhaar/tabsaver/issues"
   },
   "homepage": "https://github.com/Reeywhaar/tabsaver#readme",
-  "dependencies": {
+  "devDependencies": {
     "@reeywhaar/svgmaker": "0.0.1"
   }
 }
