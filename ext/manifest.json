@@ -7,7 +7,7 @@
     "48": "icons/icon.png"
 	},
 	"browser_action": {
-    "default_icon": "icons/icon.png",
+    "default_icon": "icons/icon.svg",
     "default_title": "Tab Saver",
 		"default_popup": "html/panel.html",
 		"browser_style": true
