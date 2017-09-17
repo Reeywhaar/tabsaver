@@ -1,4 +1,4 @@
-![Logo](icon.png)
+![Logo](ext/icons/icon.svg)
 
 # Tab Saver
 
