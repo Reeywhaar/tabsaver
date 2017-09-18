@@ -3,8 +3,11 @@ const s = require("@reeywhaar/svgmaker");
 const size = 128;
 const piece = n => size/128*n;
 const prop = (x, n) => x/128*n;
-const borderWidth = piece(14);
+const borderWidth = piece(12);
 const smallWidth = size-(borderWidth*2);
+const height = piece(110);
+const topHeight = piece(26);
+const innerheight = height - topHeight - borderWidth;
 const radius = piece(18);
 const innerRadius = prop(radius, 60);
 const smallRadius = prop(radius, 20);
@@ -15,6 +18,10 @@ const circleGap = piece(4);
 const colors = {
 	white: "#fff",
 	black: "#000",
+}
+
+function format(str, ...replacements){
+	return str.replace(/\{\}/g, x => replacements.shift());
 }
 
 function* range(max){
@@ -43,32 +50,32 @@ const mask = s.e(
 			height: "100%",
 			fill: colors.black
 		}),
-		s.e("rect", {
-			width: size,
-			height: piece(110),
-			fill: colors.white,
-			rx: radius,
-			ry: radius,
-			y: piece(9),
-		}),
-		s.e("rect", {
-			width: smallWidth,
-			height: piece(70),
-			fill: colors.black,
-			rx: innerRadius,
-			ry: innerRadius,
-			x: borderWidth,
-			y: borderWidth+piece(21),
-		}),
-		s.e("rect", {
-			width: smallWidth,
-			height: piece(20),
-			fill: colors.black,
-			rx: smallRadius,
-			ry: smallRadius,
-			x: borderWidth,
-			y: borderWidth+piece(21),
-		}),
+		s.rrect(
+			0,
+			(piece(128) - height)/2,
+			size,
+			height,
+			radius,
+			radius,
+			radius,
+			radius,
+			{
+				fill: colors.white,
+			},
+		),
+		s.rrect(
+			borderWidth,
+			topHeight + (piece(128) - height)/2,
+			smallWidth,
+			innerheight,
+			smallRadius,
+			smallRadius,
+			innerRadius,
+			innerRadius,
+			{
+				fill: colors.black,
+			},
+		),
 		...circles(),
 	]
 )
