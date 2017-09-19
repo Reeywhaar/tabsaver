@@ -1,6 +1,6 @@
 include ./.env
 
-build: icon.png ext/icons/icon.svg
+build: icon.png
 	webpack && make lint && web-ext build -s ext
 
 run:

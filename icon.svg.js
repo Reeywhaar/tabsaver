@@ -96,4 +96,4 @@ const svg = s.svgFile(
 	]
 )
 
-console.log(svg.toString());
+module.exports = svg;
