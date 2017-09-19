@@ -30,7 +30,7 @@ module.exports = [
 		},
 		resolveLoader: {
 			alias: {
-				'svg-js-loader': path.join(__dirname, 'utils', 'svg-js-loader.js')
+				'svg-js-loader': path.join(__dirname, 'node_modules/@reeywhaar/svgmaker', 'loader.js')
 			}
 		},
 		module: {
