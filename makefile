@@ -14,6 +14,3 @@ sign:
 
 lint:
 	web-ext lint -s ext
-
-ext/icons/icon.svg: icon.svg.js
-	node icon.svg.js > ext/icons/icon.svg
