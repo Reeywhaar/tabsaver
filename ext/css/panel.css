@@ -46,10 +46,6 @@ html, body{
 	background: hsl(0, 0%, 85%);
 }
 
-.hidden{
-	display:none;
-}
-
 .main{
 	width: 25em;
 }
@@ -188,6 +184,10 @@ html, body{
 }
 
 .tab-saver-item[data-actions-collapsed="false"] .btn-more {
+	display: none;
+}
+
+.tab-saver-item[data-urls-collapsed="true"] .tab-saver-item__links {
 	display: none;
 }
 

@@ -69,7 +69,6 @@ async function render(data){
 			el.dataset.name = key;
 			el.querySelector(".tab-saver-item__title").innerText = key;
 			const linksContainer = el.querySelector(".tab-saver-item__links");
-			linksContainer.classList.add("hidden");
 			for(const tab of data){
 				linksContainer.appendChild(await renderTab(tab));
 			};
@@ -111,7 +110,8 @@ function attachListeners(callback){
 	live(DOM.content, ".tab-saver-item__title", "click", async function() {
 		await sleep(20);
 		if(this.contentEditable === "true") return;
-		findParent(this, ".tab-saver-item").querySelector(".tab-saver-item__links").classList.toggle("hidden");
+		const dataset = findParent(this, ".tab-saver-item").dataset;
+		dataset.urlsCollapsed = dataset.urlsCollapsed === "false" ? "true" : "false";
 	});
 	live(DOM.content, ".tab-saver-item__title", "dblclick", async function() {
 		this.contentEditable = true;
