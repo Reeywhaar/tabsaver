@@ -122,10 +122,12 @@ function attachListeners(callback){
 		await openURL(this.href, this.dataset.identityId);
 	});
 	live(DOM.content, ".tab-saver-item-button.btn-more", "click", async function(e) {
-		this.classList.add("hidden");
-		const parent = this.parentNode;
-		parent.querySelector(".btn-save").classList.remove("hidden");
-		parent.querySelector(".btn-remove").classList.remove("hidden");
+		const parent = findParent(this, ".tab-saver-item");
+		parent.dataset.actionsCollapsed = false;
+		parent.addEventListener("mouseleave", function handler(e){
+			parent.dataset.actionsCollapsed = true;
+			parent.removeEventListener("mouseleave", handler);
+		});
 	});
 	live(
 		DOM.content,

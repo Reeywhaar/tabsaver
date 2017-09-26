@@ -182,6 +182,15 @@ html, body{
 	top:-.25em;
 }
 
+.tab-saver-item[data-actions-collapsed="true"] .btn-save,
+.tab-saver-item[data-actions-collapsed="true"] .btn-remove {
+	display: none;
+}
+
+.tab-saver-item[data-actions-collapsed="false"] .btn-more {
+	display: none;
+}
+
 @media (max-width: 250px){
 	.main{
 		width: auto;
