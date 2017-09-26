@@ -14,3 +14,6 @@ sign:
 
 lint:
 	web-ext lint -s ext
+
+clear:
+	rm -rf ./ext/js && rm -rf ./ext/icons
