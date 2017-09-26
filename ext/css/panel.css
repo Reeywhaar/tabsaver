@@ -140,6 +140,32 @@ html, body{
 	opacity: 0;
 }
 
+.tab-saver-item__title[contenteditable=true]{
+	font-weight: bold;
+}
+
+.btn-more{
+	position: relative;
+	top:-.25em;
+}
+
+.btn-remove{
+	line-height: .3em;
+}
+
+.tab-saver-item[data-actions-collapsed="true"] .btn-save,
+.tab-saver-item[data-actions-collapsed="true"] .btn-remove {
+	display: none;
+}
+
+.tab-saver-item[data-actions-collapsed="false"] .btn-more {
+	display: none;
+}
+
+.tab-saver-item[data-urls-collapsed="true"] .tab-saver-item__links {
+	display: none;
+}
+
 .notification{
 	margin: 2px;
 	padding: 2px;
@@ -149,10 +175,6 @@ html, body{
 
 .notification:empty{
 	display: none;
-}
-
-.tab-saver-item__title[contenteditable=true]{
-	font-weight: bold;
 }
 
 .prefs{
@@ -171,24 +193,6 @@ html, body{
 	flex:1;
 	text-align: center;
 	border-radius: 0;
-}
-
-.btn-more{
-	position: relative;
-	top:-.25em;
-}
-
-.tab-saver-item[data-actions-collapsed="true"] .btn-save,
-.tab-saver-item[data-actions-collapsed="true"] .btn-remove {
-	display: none;
-}
-
-.tab-saver-item[data-actions-collapsed="false"] .btn-more {
-	display: none;
-}
-
-.tab-saver-item[data-urls-collapsed="true"] .tab-saver-item__links {
-	display: none;
 }
 
 @media (max-width: 250px){
