@@ -30,11 +30,8 @@ const templates = [
 	"tab-saver-item",
 	"tab-saver-item__link",
 ]
-.map(x => {
-	return [x, document.querySelector("#"+x).content.querySelector("."+x)];
-})
 .reduce((c, x) => {
-	c[x[0]] = x[1];
+	c[x] = document.querySelector("#"+x).content.querySelector("."+x);
 	return c;
 }, {});
 
