@@ -136,7 +136,7 @@ html, body{
 	transition: opacity .2s;
 }
 
-.tab-saver-item:not(:hover) .tab-saver-item-button{
+.tab-saver-item:not(:hover) .tab-saver-item__button{
 	opacity: 0;
 }
 
@@ -144,21 +144,21 @@ html, body{
 	font-weight: bold;
 }
 
-.btn-more{
+.tab-saver-item__button-more{
 	position: relative;
 	top:-.25em;
 }
 
-.btn-remove{
+.tab-saver-item__button-remove{
 	line-height: .3em;
 }
 
-.tab-saver-item[data-actions-collapsed="true"] .btn-save,
-.tab-saver-item[data-actions-collapsed="true"] .btn-remove {
+.tab-saver-item[data-actions-collapsed="true"] .tab-saver-item__button-save,
+.tab-saver-item[data-actions-collapsed="true"] .tab-saver-item__button-remove {
 	display: none;
 }
 
-.tab-saver-item[data-actions-collapsed="false"] .btn-more {
+.tab-saver-item[data-actions-collapsed="false"] .tab-saver-item__button-more {
 	display: none;
 }
 

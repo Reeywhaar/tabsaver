@@ -102,7 +102,7 @@ function attachListeners(callback){
 		if (e.which === 13) DOM.new.button.click();
 	});
 	["save", "open", "remove"].forEach(event => {
-		live(DOM.content, ".tab-saver-item .btn-" + event, "click", async function() {
+		live(DOM.content, ".tab-saver-item__button-" + event, "click", async function() {
 			let parent = findParent(this, ".tab-saver-item");
 			await callback("item:" + event, parent.dataset.name);
 		});
@@ -122,7 +122,7 @@ function attachListeners(callback){
 		e.preventDefault();
 		await openURL(this.href, this.dataset.identityId);
 	});
-	live(DOM.content, ".tab-saver-item-button.btn-more", "click", async function(e) {
+	live(DOM.content, ".tab-saver-item__button-more", "click", async function(e) {
 		const parent = findParent(this, ".tab-saver-item");
 		parent.dataset.actionsCollapsed = false;
 		parent.addEventListener("mouseleave", function handler(e){
