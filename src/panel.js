@@ -51,6 +51,7 @@ async function renderTab(tab){
 	link.href = tab.url;
 	link.target = "_blank";
 	link.innerText = tab.url;
+	link.title = tab.url;
 	if(identity){
 		link.dataset.identityName = identity.name;
 		link.dataset.identityId = identity.cookieStoreId;

@@ -8,13 +8,13 @@
 	<div class="main">
 		<div class="save-new">
 			<input class="save-new__input" type="text" value="" placeholder="Add TabSet"/>
-			<button class="button save-new__button">+</button>
+			<button class="button save-new__button" title="Add TabSet">+</button>
 		</div>
 		<div class="content"></div>
 		<div class="notification"></div>
 		<div class="prefs">
-			<button class="inline-button prefs__import">Import</button>
-			<button class="inline-button prefs__export">Export</button>
+			<button class="inline-button prefs__import" title="Import from file">Import</button>
+			<button class="inline-button prefs__export" title="Export to file">Export</button>
 		</div>
 	</div>
 	<template id="tab-saver-items">
@@ -24,10 +24,10 @@
 		<div class="tab-saver-item" data-name="{saveName}" data-actions-collapsed="true">
 			<div class="tab-saver-item__item">
 				<span class="tab-saver-item__title">{saveName}</span>
-				<button class="inline-button tab-saver-item-button btn-open">Open</button>
-				<button class="inline-button tab-saver-item-button btn-more">...</button>
-				<button class="inline-button tab-saver-item-button btn-save">Save</button>
-				<button class="inline-button tab-saver-item-button btn-remove">✖︎</button>
+				<button class="inline-button tab-saver-item-button btn-open" title="Open TabSet">Open</button>
+				<button class="inline-button tab-saver-item-button btn-more" title="Show additional actions">...</button>
+				<button class="inline-button tab-saver-item-button btn-save" title="Save current window under selected TabSet">Save</button>
+				<button class="inline-button tab-saver-item-button btn-remove" title="Remove TabSet">✖︎</button>
 			</div>
 			<div class="tab-saver-item__links"></div>
 		</div>
