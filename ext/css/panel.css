@@ -179,7 +179,7 @@ html, body{
 
 .btn-more{
 	position: relative;
-	top:-.3em;
+	top:-.25em;
 }
 
 @media (max-width: 250px){
