@@ -7,6 +7,10 @@ html, body{
 	margin: 0;
 }
 
+.hidden{
+	display:none;
+}
+
 .button{
 	padding-left: .4em;
 	padding-right: .4em;
@@ -171,6 +175,11 @@ html, body{
 	flex:1;
 	text-align: center;
 	border-radius: 0;
+}
+
+.btn-more{
+	position: relative;
+	top:-.3em;
 }
 
 @media (max-width: 250px){

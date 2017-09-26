@@ -121,6 +121,12 @@ function attachListeners(callback){
 		e.preventDefault();
 		await openURL(this.href, this.dataset.identityId);
 	});
+	live(DOM.content, ".tab-saver-item-button.btn-more", "click", async function(e) {
+		this.classList.add("hidden");
+		const parent = this.parentNode;
+		parent.querySelector(".btn-save").classList.remove("hidden");
+		parent.querySelector(".btn-remove").classList.remove("hidden");
+	});
 	live(
 		DOM.content,
 		".tab-saver-item__title[contenteditable=true]",
