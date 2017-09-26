@@ -230,6 +230,8 @@ async function main(){
 				} catch (e) {
 					if(e.message === "Unknown TabSet"){
 						notify(e.message);
+					} else if(e.message === "TabSet is empty") {
+						notify("Window have no tabs");
 					} else {
 						notify("Some error occured");
 						console.error(e);
