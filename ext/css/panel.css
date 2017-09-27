@@ -87,12 +87,12 @@ html, body{
 }
 
 .tab-saver-item{
+	--padding-x: 6px;
+	--padding-y: 0px;
 	margin-bottom: 1px;
 }
 
 .tab-saver-item__item{
-	--padding-x: 6px;
-	--padding-y: 0px;
 	padding: var(--padding-y) var(--padding-x);
 	background: hsla(200, 10%, 95%, .5);
 	display:flex;
@@ -107,10 +107,11 @@ html, body{
 }
 
 .tab-saver-item__link{
+	/* --color will be set in js */
 	--color: Highlight;
 	cursor: pointer;
 	display: block;
-	padding: .2em 10px;
+	padding: .2em calc(var(--padding-x) * 1.4);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	word-break: keep-all;
