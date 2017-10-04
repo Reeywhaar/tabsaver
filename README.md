@@ -1,4 +1,4 @@
-***Project looking for assistant to [test extension](#4) on "Firefox for Android"***
+***Project looking for assistant to [test extension](//github.com/Reeywhaar/tabsaver/issues/4) on "Firefox for Android"***
 
 ![Logo](ext/icons/icon.svg)
 
