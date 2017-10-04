@@ -1,3 +1,5 @@
+***Project looking for assistant to test extension on "Firefox for Android"***
+
 ![Logo](ext/icons/icon.svg)
 
 # Tab Saver
