@@ -16,6 +16,7 @@ import {
 
 export const TabSet = {
 	async save(name, tabs){
+		const includePinned = await data.getPinned();
 		const tabsData = tabs
 		.map(x => ({
 			url: x.url,
@@ -23,6 +24,7 @@ export const TabSet = {
 			cookieStoreId: x.cookieStoreId || DEFAULT_COOKIE_STORE_ID,
 		}))
 		.filter(x => {
+			if(!includePinned && x.pinned) return false;
 			return !oneOf(x.url, "about:blank", "about:newtab");
 		})
 		.map(x => {

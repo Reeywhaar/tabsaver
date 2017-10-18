@@ -17,6 +17,7 @@ import {
 
 const DOM = {
 	content: document.querySelector(".content"),
+	pinnedInput: document.querySelector(".prefs__pinned-input"),
 	new: {
 		input: document.querySelector(".save-new__input"),
 		button: document.querySelector(".save-new__button"),
@@ -97,6 +98,9 @@ function attachListeners(callback){
 	});
 	DOM.new.input.addEventListener("keydown", e => {
 		if (e.which === 13) DOM.new.button.click();
+	});
+	DOM.pinnedInput.addEventListener("change", function(e){
+		callback("pinned:change", this.checked);
 	});
 	["save", "open", "remove"].forEach(event => {
 		live(DOM.content, ".tab-saver-item__button-" + event, "click", async function() {
@@ -184,13 +188,14 @@ async function expand(el, em = 40){
 	el.removeChild(exp);
 }
 
-async function renderItems(data){
+async function renderItems(items){
 	const el = DOM.content.querySelector(".tab-saver-items");
 	if(el){
-		DOM.content.replaceChild(await render(data), el);
+		DOM.content.replaceChild(await render(items), el);
 	} else {
-		DOM.content.appendChild(await render(data));
+		DOM.content.appendChild(await render(items));
 	}
+	DOM.pinnedInput.checked = await data.getPinned();
 }
 
 async function main(){
@@ -266,6 +271,9 @@ async function main(){
 						console.error(e);
 					}
 				}
+			},
+			"pinned:change": async (val) => {
+				await data.setPinned(val);
 			},
 			"export settings": async () => {
 				bgpage.export();

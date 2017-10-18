@@ -180,13 +180,23 @@ html, body{
 
 .prefs{
 	display:flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-around;
 	background: hsl(0, 0%, 95%);
 	-moz-user-select: none;
 	user-select: none;
 	border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.prefs__pinned{
+	padding:.5em;
+}
+
+.prefs__pinned-input{
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: 0;
 }
 
 .prefs__export, .prefs__import{

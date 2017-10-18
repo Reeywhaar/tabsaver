@@ -10,17 +10,29 @@ import {
 
 export const DEFAULT_COOKIE_STORE_ID = "firefox-default";
 
+const storage = {
+	async get(key, def = null){
+		const req = await browser.storage.local.get(key);
+		if(!(key in req)) return def;
+		return req[key];
+	},
+	async set(key, value){
+		await browser.storage.local.set({[key]: value});
+	},
+}
+
 export const data = {
 	async set(data){
-		await browser.storage.local.set({
-			"tabs": data,
-		});
+		await storage.set("tabs", data);
 	},
 	async get(){
-		return await pipe(
-			browser.storage.local.get("tabs").then(x => x.tabs ? x.tabs : null),
-			x => withDefault(x, []),
-		);
+		return storage.get("tabs", []);
+	},
+	getPinned(){
+		return storage.get("includePinned", true);
+	},
+	setPinned(val){
+		return storage.set("includePinned", val);
 	},
 }
 
