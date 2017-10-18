@@ -131,6 +131,14 @@ function attachListeners(callback){
 			parent.removeEventListener("mouseleave", handler);
 		});
 	});
+	live(DOM.content, ".tab-saver-item__button-down", "click", async function(e) {
+		const parent = findParent(this, ".tab-saver-item");
+		callback("item:movedown", parent.dataset.name);
+	});
+	live(DOM.content, ".tab-saver-item__button-up", "click", async function(e) {
+		const parent = findParent(this, ".tab-saver-item");
+		callback("item:moveup", parent.dataset.name);
+	});
 	live(
 		DOM.content,
 		".tab-saver-item__title[contenteditable=true]",
@@ -271,6 +279,34 @@ async function main(){
 						console.error(e);
 					}
 				}
+			},
+			"item:moveup": async (name) => {
+				try{
+					await bgpage.TabSet.moveup(name);
+				} catch (e) {
+					switch (e.message){
+						case "Out of bound move":
+							notify("Cannot move top item");
+							break;
+						default:
+							notify("Some error occured");
+					}
+					console.error(e);
+				};
+			},
+			"item:movedown": async (name) => {
+				try{
+					await bgpage.TabSet.movedown(name);
+				} catch (e) {
+					switch (e.message){
+						case "Out of bound move":
+							notify("Cannot move bottom item");
+							break;
+						default:
+							notify("Some error occured");
+					}
+					console.error(e);
+				};
 			},
 			"pinned:change": async (val) => {
 				await data.setPinned(val);

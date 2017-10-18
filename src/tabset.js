@@ -3,6 +3,7 @@ import {
 	firstIndex,
 	oneOf,
 	getKey,
+	moveArrayItem,
 } from "./utils.js";
 import {
 	data,
@@ -138,6 +139,26 @@ export const TabSet = {
 		if(index === -1) throw new Error("Unknown TabSet");
 
 		d.splice(index, 1);
+		await data.set(d);
+		return await data.get();
+	},
+	async moveup(name){
+		const d = await data.get();
+		const index = firstIndex(d, x => {
+			return x.key === name;
+		});
+		if(index === -1) throw new Error("Unknown TabSet");
+		moveArrayItem(d, index, 1);
+		await data.set(d);
+		return await data.get();
+	},
+	async movedown(name){
+		const d = await data.get();
+		const index = firstIndex(d, x => {
+			return x.key === name;
+		});
+		if(index === -1) throw new Error("Unknown TabSet");
+		moveArrayItem(d, index, -1);
 		await data.set(d);
 		return await data.get();
 	},

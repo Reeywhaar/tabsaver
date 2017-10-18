@@ -164,3 +164,11 @@ export async function tryOR(fn, def = null){
 		return def;
 	}
 }
+
+export async function moveArrayItem(arr, index, offset){
+	if(offset < 0 && index + offset < 0) throw new Error("Out of bound move");
+	if(offset >= 0 && index + offset > arr.length - 1) throw new Error("Out of bound move");
+	const item = arr.splice(index, 1)[0];
+	arr.splice(index + offset, 0, item);
+	return arr;
+}
