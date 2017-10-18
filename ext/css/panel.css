@@ -210,6 +210,7 @@ html, body{
 }
 
 .prefs__pinned{
+	flex: 1;
 	padding:.5em;
 }
 
@@ -221,7 +222,6 @@ html, body{
 
 .prefs__export, .prefs__import{
 	padding:.5em;
-	flex:1;
 	text-align: center;
 	border-radius: 0;
 }
