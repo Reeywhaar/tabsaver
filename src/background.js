@@ -4,7 +4,6 @@ import {
 } from "./utils.js";
 import {
 	pinned,
-	load,
 	openURL,
 } from "./shared.js";
 import {

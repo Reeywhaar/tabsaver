@@ -11,9 +11,8 @@ import {
 	getMangledURL,
 	getUnmangledURL,
 	getDefaultTabSetName,
-	DEFAULT_COOKIE_STORE_ID,
 	tabSetsAreEqual,
-	load,
+	DEFAULT_COOKIE_STORE_ID,
 } from "./shared.js";
 
 const stringifyTab = tab => {

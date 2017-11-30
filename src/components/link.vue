@@ -28,7 +28,7 @@
 					return;
 				}
 
-				const contextualIdentity = await await browser.contextualIdentities.get(this.link.cookieStoreId);
+				const contextualIdentity = await browser.contextualIdentities.get(this.link.cookieStoreId);
 				this.$el.dataset.identityName = contextualIdentity.name;
 				this.$el.dataset.identityColor = contextualIdentity.color;
 				this.$el.style.setProperty("--color", contextualIdentity.color);

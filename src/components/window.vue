@@ -34,7 +34,6 @@
 <script>
 	import TabSetComponent from "./tabset.vue";
 	import {sleep, oneOf} from "../utils.js";
-	import {getCurrentTabs} from "../shared.js";
 
 	export default {
 		components: {
