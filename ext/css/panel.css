@@ -1,3 +1,8 @@
+@font-face {
+    font-family: IcoMoon;
+    src: url(/icons/icomoon-icons/icomoon.woff);
+}
+
 :root{
 	--hover-color: Highlight;
 }
@@ -5,6 +10,10 @@
 html, body{
 	padding: 0;
 	margin: 0;
+}
+
+.font-icon{
+	font-family: IcoMoon;
 }
 
 .hidden{
@@ -38,16 +47,20 @@ html, body{
 	border-radius: .2em;
 }
 
-.inline-button:hover{
+.inline-button:hover:not(:disabled){
 	color:var(--hover-color);
 }
 
-.inline-button:active{
+.inline-button:active:not(:disabled){
 	background: hsl(0, 0%, 85%);
 }
 
+.inline-button:disabled{
+	opacity: .2;
+}
+
 .main{
-	width: 25em;
+	width: 319px;
 }
 
 .save-new{
@@ -98,6 +111,7 @@ html, body{
 	display:flex;
 	flex-wrap: nowrap;
 	align-items:center;
+	line-height: 1.5em;
 }
 
 .tab-saver-item__title{
@@ -106,13 +120,37 @@ html, body{
 	line-height: 1.4em;
 }
 
+.tab-saver-item__link-container{
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	padding-left: calc(var(--padding-x) * 1.4);
+	padding-right: calc(var(--padding-x));
+	line-height: 1.2em;
+}
+
+.tab-saver-item__link-remove-button, .tab-saver-item__link-move{
+	opacity: .6;
+}
+
+.tab-saver-item__link-remove-button{
+	font-size: 70%;
+}
+
+.tab-saver-item__link-container:not(:hover) .tab-saver-item__link-remove-button,
+.tab-saver-item__link-container:not(:hover) .tab-saver-item__link-move{
+	display: none;
+}
+
 .tab-saver-item__link{
 	/* --color will be set in js */
 	--color: Highlight;
+	flex: 1;
 	cursor: pointer;
 	display: block;
-	padding: .2em calc(var(--padding-x) * 1.4);
 	overflow: hidden;
+	padding-top: .2em;
+	padding-bottom: .2em;
 	text-overflow: ellipsis;
 	word-break: keep-all;
 	color: Highlight;
@@ -125,7 +163,7 @@ html, body{
 	border-radius: 2px;
 	margin-right: .2em;
 	font-size: 85%;
-	background-color: var(--color);
+	background-color: var(--color, "grey");
 	color: #fff;
 }
 
@@ -133,7 +171,20 @@ html, body{
 	color:#777;
 }
 
-.tab-saver-item-button{
+.tab-saver-item__link-move{
+	font-size: 80%;
+	line-height: 1em;
+}
+
+.tab-saver-item__link-container:first-of-type .tab-saver-item__link-move-up,
+.tab-saver-item__link-container:last-of-type .tab-saver-item__link-move-down,
+.tab-saver-item__link-container:not(:first-of-type) .tab-saver-item__link-move-noup,
+.tab-saver-item__link-container:not(:last-of-type) .tab-saver-item__link-move-nodown{
+	display: none;
+}
+
+.tab-saver-item__button{
+	opacity: .6;
 	transition: opacity .2s;
 }
 
@@ -145,9 +196,20 @@ html, body{
 	font-weight: bold;
 }
 
+.tab-saver-item__button{
+	font-size: 130%;
+}
+
+.tab-saver-item__button-open, .tab-saver-item__button-add, .tab-saver-item__button-save{
+	padding: 0;
+}
+
+.tab-saver-item__button-remove{
+	font-size: 80%;
+}
+
 .tab-saver-item__button-up, .tab-saver-item__button-down,
 .tab-saver-item__button-noup, .tab-saver-item__button-nodown {
-	opacity: 0.6;
 	font-size: 80%;
 }
 
@@ -168,23 +230,6 @@ html, body{
 .tab-saver-item__button-more{
 	position: relative;
 	top:-.25em;
-}
-
-.tab-saver-item__button-remove{
-	line-height: .3em;
-}
-
-.tab-saver-item[data-actions-collapsed="true"] .tab-saver-item__button-save,
-.tab-saver-item[data-actions-collapsed="true"] .tab-saver-item__button-remove {
-	display: none;
-}
-
-.tab-saver-item[data-actions-collapsed="false"] .tab-saver-item__button-more {
-	display: none;
-}
-
-.tab-saver-item[data-urls-collapsed="true"] .tab-saver-item__links {
-	display: none;
 }
 
 .notification{

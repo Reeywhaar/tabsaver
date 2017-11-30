@@ -5,46 +5,7 @@
 	<link rel="stylesheet" href="/css/panel.css">
 </head>
 <body>
-	<div class="main">
-		<div class="save-new">
-			<input class="save-new__input" type="text" value="" placeholder="Add TabSet"/>
-			<button class="button save-new__button" title="Add TabSet">+</button>
-		</div>
-		<div class="content"></div>
-		<div class="notification"></div>
-		<div class="prefs">
-			<label class="prefs__pinned" title="Include pinned tabs"><input class="prefs__pinned-input" type="checkbox">Pinned</label>
-			<button class="inline-button prefs__import" title="Import from file">Import</button>
-			<button class="inline-button prefs__export" title="Export to file">Export</button>
-		</div>
-	</div>
-	<template id="tab-saver-items">
-		<div class="tab-saver-items"></div>
-	</template>
-	<template id="tab-saver-item">
-		<div
-			class="tab-saver-item"
-			data-name="{saveName}"
-			data-actions-collapsed="true"
-			data-urls-collapsed="true"
-		>
-			<div class="tab-saver-item__item">
-				<span class="tab-saver-item__title">{saveName}</span>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet">Open</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-more" title="Show additional actions">...</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet">Save</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet">✖︎</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-down" title="Move down">⬇︎</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-nodown">⬇︎</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-up" title="Move up">⬆︎</button>
-				<button class="inline-button tab-saver-item__button tab-saver-item__button-noup">⬆︎</button>
-			</div>
-			<div class="tab-saver-item__links"></div>
-		</div>
-	</template>
-	<template id="tab-saver-item__link">
-		<span class="tab-saver-item__link"></span>
-	</template>
-	<script src="/js/panel.js"></script>
+	<div class="main"></div>
+	<script src="/js/panel.js" async></script>
 </body>
 </html>

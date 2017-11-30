@@ -165,10 +165,31 @@ export async function tryOR(fn, def = null){
 	}
 }
 
-export async function moveArrayItem(arr, index, offset){
+export function moveArrayItem(arr, index, offset){
 	if(offset < 0 && index + offset < 0) throw new Error("Out of bound move");
 	if(offset >= 0 && index + offset > arr.length - 1) throw new Error("Out of bound move");
 	const item = arr.splice(index, 1)[0];
 	arr.splice(index + offset, 0, item);
 	return arr;
+}
+
+export function* reverse(iterable){
+	const len = iterable.length;
+	for(let i = len - 1; i >= 0; i--){
+		yield iterable[i];
+	}
+}
+
+//function to expand element's width.
+//Actually it's a hack because you have to deal with two panel's variants:
+//- in button
+//- in menu
+//so, while in button mode we must expand body, so it will not catch css small width query
+export async function expand(el, em = 40){
+	const exp = document.createElement("div");
+	exp.style.height = `1px`;
+	exp.style.width = `${em}em`;
+	el.appendChild(exp);
+	await sleep(50);
+	el.removeChild(exp);
 }

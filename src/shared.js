@@ -10,7 +10,7 @@ import {
 
 export const DEFAULT_COOKIE_STORE_ID = "firefox-default";
 
-const storage = {
+export const storage = {
 	async get(key, def = null){
 		const req = await browser.storage.local.get(key);
 		if(!(key in req)) return def;
@@ -21,23 +21,16 @@ const storage = {
 	},
 }
 
-export const data = {
-	async set(data){
-		await storage.set("tabs", data);
-	},
-	async get(){
-		return storage.get("tabs", []);
-	},
-	getPinned(){
+export const pinned = {
+	get(){
 		return storage.get("includePinned", true);
 	},
-	setPinned(val){
+	set(val){
 		return storage.set("includePinned", val);
 	},
 }
 
-//will be set in load
-let extensionURL;
+export const bgpage = () => browser.runtime.getBackgroundPage();
 
 export function isURLPrivileged(url){
 	if(url === "about:blank") return false;
@@ -51,7 +44,7 @@ export function getMangledURL(url){
 }
 
 export function getUnmangledURL(url){
-	if(url.indexOf(extensionURL) === 0){
+	if(url.indexOf(browser.extension.getURL("/html/handler.html")) === 0){
 		const qu = parseQuery("?" + strAfter(url, "handler.html?"));
 		return qu.url;
 	};
@@ -78,6 +71,6 @@ export function getDefaultTabSetName(){
 	return `${date.getFullYear()}-${pl(date.getMonth()+1)}-${pl(date.getDate())} ${pl(date.getHours())}:${pl(date.getMinutes())}`;
 }
 
-export async function load(){
-	extensionURL = browser.extension.getURL("/html/handler.html");
+export async function getCurrentTabs(){
+	return (await browser.windows.getLastFocused({populate: true})).tabs;
 }

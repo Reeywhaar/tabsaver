@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const InertEntryPlugin = require('inert-entry-webpack-plugin');
 const extractSVG = new ExtractTextPlugin("[name]");
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 
 module.exports = [
@@ -16,8 +17,22 @@ module.exports = [
 			path: path.resolve(__dirname, 'ext/js'),
 			filename: '[name].js'
 		},
+		module: {
+			rules: [
+				{
+					test: /\.vue$/,
+					use: "vue-loader"
+				},
+			]
+		},
 		plugins: [
-			new webpack.optimize.ModuleConcatenationPlugin()
+			new webpack.optimize.ModuleConcatenationPlugin(),
+			new webpack.DefinePlugin({
+				'process.env': {
+					NODE_ENV: '"production"'
+				}
+			}),
+			new MinifyPlugin(),
 		]
 	},
 	{
@@ -45,7 +60,7 @@ module.exports = [
 		},
 		plugins: [
 			extractSVG,
-			new InertEntryPlugin()
+			new InertEntryPlugin(),
 		]
 	}
 ];

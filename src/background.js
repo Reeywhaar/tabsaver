@@ -3,7 +3,7 @@ import {
 	saveFile,
 } from "./utils.js";
 import {
-	data,
+	pinned,
 	load,
 	openURL,
 } from "./shared.js";
@@ -12,19 +12,19 @@ import {
 } from "./tabset.js";
 
 async function main(){
-	await load();
-
 	window.import = async () => {
 		const imported = await readFileAsJson();
-		await data.set(imported);
+		await TabSet.saveAll(imported);
 	}
 
 	window.export = async () => {
-		const out = JSON.stringify(await data.get(), null, 2);
+		const out = JSON.stringify(await TabSet.getAll(), null, 2);
 		try{
 			await saveFile(out, "export.tabsaver.json");
 		} catch (e) {};
 	}
+
+	window.pinned = pinned;
 
 	window.TabSet = TabSet;
 	window.openURL = openURL;
