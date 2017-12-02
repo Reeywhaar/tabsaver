@@ -3,10 +3,10 @@
 </template>
 
 <script>
-	import {sleep} from "../utils.js";
+	import {sleep, abortablePromise} from "../utils.js";
 
 	export default {
-		props: ["delay", "color"],
+		props: ["delay", "color", "hold-after"],
 		data(){
 			return {
 				progress: 0,
@@ -19,6 +19,9 @@
 			colorWrapper(){
 				return this.color || "hsl(200, 50%, 80%)";
 			},
+			holdWrapper(){
+				return this.holdAfter || 200;
+			},
 			style(){
 				if(this.progress === 0) return {};
 				return {
@@ -28,27 +31,38 @@
 		},
 		methods: {
 			async hold(e){
-				const interval = setInterval(() => {
-					this.progress += 4;
-				}, this.delayWrapper / 50);
+				const progressWait = abortablePromise((resolve, reject, onAbort) => {
+					const i = setInterval(() => {
+						this.progress += 2;
+						if(this.progress >= 100){
+							clearInterval(i);
+							resolve();
+						};
+					}, this.delayWrapper / 50);
+					onAbort(() => {
+						clearInterval(i);
+						resolve("abort");
+					});
+				});
 				const left = new Promise(async resolve => {
 					const h = () => resolve("left");
 					this.$el.addEventListener("mouseleave", h);
-					await sleep(this.delayWrapper);
+					await sleep(this.delayWrapper + this.holdWrapper);
 					this.$el.removeEventListener("mouseleave", h);
 				});
 				const up = new Promise(async resolve => {
 					const h = () => resolve("up");
 					this.$el.addEventListener("mouseup", h);
-					await sleep(this.delayWrapper);
+					await sleep(this.delayWrapper + this.holdWrapper);
 					this.$el.removeEventListener("mouseup", h);
 				});
 				const hold = new Promise(async resolve => {
-					await sleep(this.delayWrapper)
+					await progressWait;
+					await sleep(this.holdWrapper);
 					resolve("hold");
 				});
 				const result = await Promise.race([left, up, hold])
-				clearInterval(interval);
+				progressWait.abort();
 				this.progress = 0;
 				if(result === "hold"){
 					this.$emit("click", e);

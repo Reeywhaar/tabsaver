@@ -193,3 +193,19 @@ export async function expand(el, em = 40){
 	await sleep(50);
 	el.removeChild(exp);
 }
+
+export function abortablePromise(fn){
+	const subscribe = {};
+	subscribe.on = (fn) => {
+		subscribe.listener = fn;
+	};
+	subscribe.fire = () => {
+		if(!subscribe.listener) return;
+		subscribe.listener();
+	}
+	const promise = new Promise((resolve, reject) => {
+		fn(resolve, reject, subscribe.on);
+	});
+	promise.abort = () => subscribe.fire();
+	return promise;
+}
