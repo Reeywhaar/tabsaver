@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="tab-saver-item"
+		@dragstart.self="onDrag($event)"
 	>
 		<div class="tab-saver-item__item">
 			<span
@@ -8,6 +9,7 @@
 				@click="toggleCollapse"
 				@dblclick="setEditable"
 				@keydown.enter.prevent="rename()"
+				@focusout.stop="rename()"
 				:contenteditable="editable"
 				title="Click to show stored tabs, double click to edit name"
 			>{{tabset.key}}</span>
@@ -15,36 +17,36 @@
 			<button @click="addCurrentTab" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
 			<hold-button @click="save" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
 			<hold-button @click="remove" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
-			<button @click="moveDown" class="inline-button tab-saver-item__button tab-saver-item__button-down" title="Move down"><icon icon="arrow-down"></icon></button>
-			<button class="inline-button tab-saver-item__button tab-saver-item__button-nodown" disabled><icon icon="arrow-down"></icon></button>
-			<button @click="moveUp" class="inline-button tab-saver-item__button tab-saver-item__button-up" title="Move up"><icon icon="arrow-up"></icon></button>
-			<button class="inline-button tab-saver-item__button tab-saver-item__button-noup" disabled><icon icon="arrow-up"></icon></button>
 		</div>
 		<div class="tab-saver-item__links" v-if="!collapsed">
-			<div class="tab-saver-item__link-container" v-for="link in tabset.data" :key="link.url">
-				<tabset-url
+			<div
+				class="tab-saver-item__link-container"
+				v-for="tab in tabset.data"
+				:key="tab.url"
+				draggable="true"
+				@dragover.stop="onTabDragover($event)"
+				@dragstart.stop="onTabDrag($event, tab)"
+				@drop.stop="onTabDrop($event, tab)"
+			>
+				<tabset-tab
 					class="tab-saver-item__link"
-					:link="link"
-				></tabset-url>
-				<hold-button class="inline-button tab-saver-item__link-remove-button" @click="removeTab(link)"><icon icon="cross"></icon></hold-button>
-				<button @click="moveTabDown(link)" class="inline-button tab-saver-item__link-move tab-saver-item__link-move-down" title="Move down"><icon icon="arrow-down"></icon></button>
-				<button class="inline-button tab-saver-item__link-move tab-saver-item__link-move-nodown" disabled><icon icon="arrow-down"></icon></button>
-				<button @click="moveTabUp(link)" class="inline-button tab-saver-item__link-move tab-saver-item__link-move-up" title="Move up"><icon icon="arrow-up"></icon></button>
-				<button class="inline-button tab-saver-item__link-move tab-saver-item__link-move-noup" disabled><icon icon="arrow-up"></icon></button>
+					:link="tab"
+				></tabset-tab>
+				<hold-button class="inline-button tab-saver-item__link-remove-button" @click="removeTab(tab)"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	import {sleep} from "../utils.js";
-	import TabsetUrlComponent from "./link.vue";
+	import TabsetTabComponent from "./tabset-tab.vue";
 	import HoldButtonComponent from "./hold-button.vue";
 	import IconComponent from "./icon.vue";
 
 	export default {
 		props: ["tabset"],
 		components: {
-			"tabset-url": TabsetUrlComponent,
+			"tabset-tab": TabsetTabComponent,
 			"hold-button": HoldButtonComponent,
 			"icon": IconComponent,
 		},
@@ -57,6 +59,43 @@
 		mounted(){
 		},
 		methods: {
+			onDrag(e){
+				this.collapse();
+			},
+			onTabDrag(e, tab){
+				if(!e.target.querySelector(".tab-saver-item__link").matches(".tab-saver-item__link:hover")){
+					e.preventDefault();
+					return;
+				};
+				e.dataTransfer.setData('tabsaver/tabset/key', this.tabset.key);
+				e.dataTransfer.setData('tabsaver/tabset/tab', JSON.stringify(tab));
+				e.dataTransfer.setData('text/plain', tab.url);
+			},
+			onTabDrop(e, tab){
+				const key = e.dataTransfer.getData("tabsaver/tabset/key");
+				const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
+				if(!key) throw new Error("Can't find tab's TabSet");
+				if(!serializedTab) throw new Error("Can't find tab");
+				if(key === this.tabset.key && serializedTab === JSON.stringify(tab)) return;
+
+				const after = (() => {
+					const rect = e.currentTarget.getBoundingClientRect();
+					const y = e.clientY - rect.y;
+					const proportion = y / rect.height * 100;
+					return proportion >= 50 ? true : false;
+				})();
+
+				this.$store.dispatch("tabsetMoveTab", [
+					key,
+					JSON.parse(serializedTab),
+					this.tabset.key,
+					tab,
+					after,
+				]);
+			},
+			onTabDragover(e){
+				e.preventDefault();
+			},
 			async toggleCollapse(){
 				await sleep(30)
 				if(this.editable) return;
@@ -114,6 +153,7 @@
 					this.setUneditable();
 					await sleep(30);
 					this.$el.querySelector(".tab-saver-item__title").blur();
+					window.getSelection().removeAllRanges();
 				} catch (e) {
 					if(e.message === "Name already exists"){
 						this.$store.dispatch("notify", e.message);
@@ -139,34 +179,6 @@
 						console.error(e);
 					}
 				}
-			},
-			async moveUp(){
-				try{
-					await this.$store.dispatch("tabsetMoveup", this.tabset.key);
-				} catch (e) {
-					switch (e.message){
-						case "Out of bound move":
-							this.$store.dispatch("notify", "Cannot move top item");
-							break;
-						default:
-							this.$store.dispatch("notify", "Some error occured");
-					}
-					console.error(e);
-				};
-			},
-			async moveDown(){
-				try{
-					await this.$store.dispatch("tabsetMovedown", this.tabset.key);
-				} catch (e) {
-					switch (e.message){
-						case "Out of bound move":
-							this.$store.dispatch("notify", "Cannot move bottom item");
-							break;
-						default:
-							this.$store.dispatch("notify", "Some error occured");
-					}
-					console.error(e);
-				};
 			},
 			async addCurrentTab(){
 				try{

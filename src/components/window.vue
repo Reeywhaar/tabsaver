@@ -20,6 +20,13 @@
 					v-for="tabset in items"
 					:tabset="tabset"
 					:key="tabset.key"
+					class="tab-saver-items__tabset"
+					draggable="true"
+					@dragover.native.stop="onTabSetDragover($event)"
+					@dragstart.native.stop="onTabSetDrag($event, tabset)"
+					@drop.native.stop="onTabSetDrop($event, tabset)"
+					@dragenter.native.stop="onTabSetDragenter($event, tabset)"
+					@dragleave.native.stop="onTabSetDragleave($event, tabset)"
 				></tabset>
 			</div>
 		</div>
@@ -33,7 +40,7 @@
 </template>
 <script>
 	import TabSetComponent from "./tabset.vue";
-	import {sleep, oneOf} from "../utils.js";
+	import {sleep, oneOf, first} from "../utils.js";
 
 	export default {
 		components: {
@@ -42,8 +49,6 @@
 		data(){
 			return {
 				newTabSetName: "",
-				notificationCounter: 0,
-				notificationMessage: "",
 			}
 		},
 		computed: {
@@ -60,6 +65,33 @@
 		async mounted(){
 		},
 		methods: {
+			onTabSetDrag(e, tabset){
+				if(!e.target.querySelector(".tab-saver-item__title") || !e.target.querySelector(".tab-saver-item__title").matches(".tab-saver-item__title:hover")){
+					e.preventDefault();
+					return;
+				};
+				e.dataTransfer.setData('tabsaver/tabset', tabset.key);
+			},
+			onTabSetDrop(e, tabset){
+				const key = e.dataTransfer.getData("tabsaver/tabset");
+				if(!key || key === tabset.key) return;
+
+				const after = (() => {
+					const rect = e.currentTarget.getBoundingClientRect();
+					const y = e.clientY - rect.y;
+					const proportion = y / rect.height * 100;
+					return proportion >= 50 ? true : false;
+				})();
+
+				this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
+			},
+			onTabSetDragover(e){
+				e.preventDefault();
+			},
+			onTabSetDragenter(e, tabset){
+			},
+			onTabSetDragleave(e, tabset){
+			},
 			async importData(){
 				this.$store.dispatch("import");
 			},

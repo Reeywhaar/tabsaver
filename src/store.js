@@ -75,12 +75,8 @@ export default async() => {
 				await api.TabSet.remove(name);
 				context.dispatch("updateItems");
 			},
-			async tabsetMoveup(context, name){
-				await api.TabSet.moveup(name);
-				context.dispatch("updateItems");
-			},
-			async tabsetMovedown(context, name){
-				await api.TabSet.movedown(name);
+			async tabsetMove(context, [tabsetName, targetName, after = true]){
+				await api.TabSet.moveTabSet(tabsetName, targetName, after);
 				context.dispatch("updateItems");
 			},
 			async tabsetAppend(context, name){
@@ -91,12 +87,8 @@ export default async() => {
 				await api.TabSet.removeTab(tabsetName, tab);
 				context.dispatch("updateItems");
 			},
-			async tabsetMoveTabUp(context, [tabsetName, tab]){
-				await api.TabSet.moveTabUp(tabsetName, tab);
-				context.dispatch("updateItems");
-			},
-			async tabsetMoveTabDown(context, [tabsetName, tab]){
-				await api.TabSet.moveTabDown(tabsetName, tab);
+			async tabsetMoveTab(context, [tabsetName, tab, targetTabsetName, targetTab, after = true]){
+				await api.TabSet.moveTab(tabsetName, tab, targetTabsetName, targetTab, after);
 				context.dispatch("updateItems");
 			},
 			async openUrl(context, [url, identity]){

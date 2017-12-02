@@ -83,21 +83,7 @@ html, body{
 	overflow-y: scroll;
 }
 
-.tab-saver-items{
-	display:flex;
-	flex-flow: column;
-	position: relative;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-.tab-saver-items:empty::after{
-	content: "No TabSets";
-	display: block;
-	text-align: center;
-	font-size: 110%;
-	margin-top: .5em;
-	margin-bottom: .5em;
-}
+/* tab-saver-item */
 
 .tab-saver-item{
 	--padding-x: 6px;
@@ -176,13 +162,6 @@ html, body{
 	line-height: 1em;
 }
 
-.tab-saver-item__link-container:first-of-type .tab-saver-item__link-move-up,
-.tab-saver-item__link-container:last-of-type .tab-saver-item__link-move-down,
-.tab-saver-item__link-container:not(:first-of-type) .tab-saver-item__link-move-noup,
-.tab-saver-item__link-container:not(:last-of-type) .tab-saver-item__link-move-nodown{
-	display: none;
-}
-
 .tab-saver-item__button{
 	opacity: .6;
 	transition: opacity .2s;
@@ -208,29 +187,34 @@ html, body{
 	font-size: 80%;
 }
 
-.tab-saver-item__button-up, .tab-saver-item__button-down,
-.tab-saver-item__button-noup, .tab-saver-item__button-nodown {
-	font-size: 80%;
-}
-
-.tab-saver-item:first-child .tab-saver-item__button-up,
-.tab-saver-item:last-child .tab-saver-item__button-down {
-	display: none;
-}
-
-.tab-saver-item__button-noup, .tab-saver-item__button-nodown {
-	opacity: 0.2;
-}
-
-.tab-saver-item:not(:first-child) .tab-saver-item__button-noup,
-.tab-saver-item:not(:last-child) .tab-saver-item__button-nodown{
-	display: none;
-}
-
 .tab-saver-item__button-more{
 	position: relative;
 	top:-.25em;
 }
+
+/* tab-saver-items */
+
+.tab-saver-items{
+	display:flex;
+	flex-flow: column;
+	position: relative;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.tab-saver-items:empty::after{
+	content: "No TabSets";
+	display: block;
+	text-align: center;
+	font-size: 110%;
+	margin-top: .5em;
+	margin-bottom: .5em;
+}
+
+.tab-saver-items__item-dragmode:hover{
+	background: red;
+}
+
+/* notification */
 
 .notification{
 	margin: 2px;

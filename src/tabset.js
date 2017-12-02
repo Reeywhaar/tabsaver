@@ -16,11 +16,15 @@ import {
 } from "./shared.js";
 
 const stringifyTab = tab => {
-	return `${tab.url}||${tab.pinned}||${tab.cookieStoreId}`;
+	return `${tab.url}||${tab.pinned}||${tab.cookieStoreId || DEFAULT_COOKIE_STORE_ID}`;
 }
 
 const tabsEqual = (a, b) => {
 	return stringifyTab(a) === stringifyTab(b);
+}
+
+const findTabSet = (tabsets, name) => {
+	return first(tabsets, x => x.key === name);
 }
 
 export const TabSet = {
@@ -62,7 +66,6 @@ export const TabSet = {
 			});
 		}
 		await TabSet.saveAll(d);
-		return await TabSet.getAll();
 	},
 	async add(name, tabs){
 		if(name === null || name === ""){
@@ -83,61 +86,6 @@ export const TabSet = {
 			}
 		};
 		return await this.save(name, tabs);
-	},
-	async appendTab(tabsetName){
-		const tab = (await browser.tabs.query({active: true}))[0];
-		if(tab.id === browser.tabs.TAB_ID_NONE){
-			throw new Error("Invalid tab");
-		}
-		if(oneOf(tab.url, "about:blank", "about:newtab")){
-			throw new Error("Trying to add blank page");
-		}
-		const tabData = {
-			"url": tab.url,
-			"pinned": tab.pinned,
-			"cookieStoreId": tab.cookieStoreId,
-		};
-
-		const d = await TabSet.getAll();
-		const tabset = first(d, x => x.key === tabsetName);
-		if(!tabset){
-			throw new Error("TabSet doesn't exist");
-		};
-		if(first(tabset.data, x => tabsEqual(x, tabData))){
-			throw new Error("Tab already exists");
-		};
-		tabset.data.push(tabData);
-		await TabSet.saveAll(d);
-	},
-	async removeTab(tabsetName, tab){
-		const d = await TabSet.getAll();
-		const tabset = first(d, x => x.key === tabsetName);
-		const index = firstIndex(tabset.data, x => tabsEqual(x, tab));
-		if(index === -1){
-			throw new Error("Tab doesn't exist");
-		};
-		tabset.data.splice(index, 1);
-		await TabSet.saveAll(d);
-	},
-	async moveTabUp(tabsetName, tab){
-		const d = await TabSet.getAll();
-		const tabset = first(d, x => x.key === tabsetName);
-		const index = firstIndex(tabset.data, x => tabsEqual(x, tab));
-		if(index === -1){
-			throw new Error("Tab doesn't exist");
-		};
-		moveArrayItem(tabset.data, index, -1);
-		await TabSet.saveAll(d);
-	},
-	async moveTabDown(tabsetName, tab){
-		const d = await TabSet.getAll();
-		const tabset = first(d, x => x.key === tabsetName);
-		const index = firstIndex(tabset.data, x => tabsEqual(x, tab));
-		if(index === -1){
-			throw new Error("Tab doesn't exist");
-		};
-		moveArrayItem(tabset.data, index, 1);
-		await TabSet.saveAll(d);
 	},
 	async open(name){
 		const tabset = first(await TabSet.getAll(), x => x.key === name);
@@ -198,7 +146,6 @@ export const TabSet = {
 
 		d[index].key = newn;
 		await TabSet.saveAll(d);
-		return await TabSet.getAll();
 	},
 	async remove(name){
 		const d = await TabSet.getAll();
@@ -209,26 +156,70 @@ export const TabSet = {
 
 		d.splice(index, 1);
 		await TabSet.saveAll(d);
-		return await TabSet.getAll();
 	},
-	async moveup(name){
+	async moveTabSet(tabsetName, targetName, after = true){
+		if(tabsetName === targetName) return;
 		const d = await TabSet.getAll();
-		const index = firstIndex(d, x => {
-			return x.key === name;
-		});
-		if(index === -1) throw new Error("Unknown TabSet");
-		moveArrayItem(d, index, 1);
+		const a = findTabSet(d, tabsetName)
+		if(!a) throw new Error("Original doesn't exists");
+		const b = findTabSet(d, targetName)
+		if(!b) throw new Error("Target doesn't exists");
+		const cut = d.splice(d.indexOf(a), 1);
+		d.splice(d.indexOf(b) + (after ? 0 : 1), 0, cut[0]);
 		await TabSet.saveAll(d);
-		return await TabSet.getAll();
 	},
-	async movedown(name){
+	async appendTab(tabsetName){
+		const tab = (await browser.tabs.query({active: true}))[0];
+		if(tab.id === browser.tabs.TAB_ID_NONE){
+			throw new Error("Invalid tab");
+		}
+		if(oneOf(tab.url, "about:blank", "about:newtab")){
+			throw new Error("Trying to add blank page");
+		}
+		const tabData = {
+			"url": tab.url,
+			"pinned": tab.pinned,
+			"cookieStoreId": tab.cookieStoreId,
+		};
+
 		const d = await TabSet.getAll();
-		const index = firstIndex(d, x => {
-			return x.key === name;
-		});
-		if(index === -1) throw new Error("Unknown TabSet");
-		moveArrayItem(d, index, -1);
+		const tabset = first(d, x => x.key === tabsetName);
+		if(!tabset){
+			throw new Error("TabSet doesn't exist");
+		};
+		if(first(tabset.data, x => tabsEqual(x, tabData))){
+			throw new Error("Tab already exists");
+		};
+		tabset.data.push(tabData);
 		await TabSet.saveAll(d);
-		return await TabSet.getAll();
+	},
+	async removeTab(tabsetName, tab){
+		const d = await TabSet.getAll();
+		const tabset = first(d, x => x.key === tabsetName);
+		const index = firstIndex(tabset.data, x => tabsEqual(x, tab));
+		if(index === -1){
+			throw new Error("Tab doesn't exist");
+		};
+		tabset.data.splice(index, 1);
+		await TabSet.saveAll(d);
+	},
+	async moveTab(donorTabsetKey, donorTab, targetTabsetKey, targetTab, after = true){
+		if(donorTabsetKey === targetTabsetKey && tabsEqual(donorTab, targetTab)) return;
+		const d = await TabSet.getAll();
+		const donorTabset = findTabSet(d, donorTabsetKey);
+		if(!donorTabset) throw new Error("Original TabSet doesn't exists");
+		const targetTabset = donorTabsetKey === targetTabsetKey ? donorTabset : findTabSet(d, targetTabsetKey);
+		if(!targetTabset) throw new Error("Target TabSet doesn't exists");
+		const donor = first(donorTabset.data, tab => tabsEqual(tab, donorTab));
+		if(!donor) throw new Error("Original tab doesn't exists");
+		if(donorTabsetKey !== targetTabsetKey){
+			const duplicate = first(targetTabset.data, tab => tabsEqual(tab, donor));
+			if(duplicate) throw new Error("TabSet already have that tab");
+		};
+		const target = first(targetTabset.data, tab => tabsEqual(tab, targetTab));
+		if(!target) throw new Error("Target tab doesn't exists");
+		const cut = donorTabset.data.splice(donorTabset.data.indexOf(donor), 1);
+		targetTabset.data.splice(targetTabset.data.indexOf(target) + (after ? 1 : 0), 0, cut[0]);
+		await TabSet.saveAll(d);
 	},
 }
