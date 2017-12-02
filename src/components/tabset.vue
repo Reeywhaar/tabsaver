@@ -32,7 +32,7 @@
 				draggable="true"
 				@dragover.stop="onTabDragover($event)"
 				@dragstart.stop="onTabDrag($event, tab)"
-				@drop.stop="onTabDrop($event, tab)"
+				@drop="onTabDrop($event, tab)"
 			>
 				<tabset-tab
 					class="tab-saver-item__link"
@@ -81,9 +81,12 @@
 				try {
 					const key = e.dataTransfer.getData("tabsaver/tabset/key");
 					const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
+					if(!key && !serializedTab) return e;
 					if(!key) throw new Error("Can't find tab's TabSet");
 					if(!serializedTab) throw new Error("Can't find tab");
 					if(key === this.tabset.key && serializedTab === JSON.stringify(tab)) return;
+
+					e.stopPropagation();
 
 					const after = (() => {
 						const rect = e.currentTarget.getBoundingClientRect();

@@ -24,9 +24,7 @@
 					draggable="true"
 					@dragover.native.stop="onTabSetDragover($event)"
 					@dragstart.native.stop="onTabSetDrag($event, tabset)"
-					@drop.native.stop="onTabSetDrop($event, tabset)"
-					@dragenter.native.stop="onTabSetDragenter($event, tabset)"
-					@dragleave.native.stop="onTabSetDragleave($event, tabset)"
+					@drop.native="onTabSetDrop($event, tabset)"
 				></tabset>
 			</div>
 		</div>
@@ -77,6 +75,8 @@
 					const key = e.dataTransfer.getData("tabsaver/tabset");
 					if(!key || key === tabset.key) return;
 
+					e.stopPropagation();
+
 					const after = (() => {
 						const rect = e.currentTarget.getBoundingClientRect();
 						const y = e.clientY - rect.y;
@@ -92,10 +92,6 @@
 			},
 			onTabSetDragover(e){
 				e.preventDefault();
-			},
-			onTabSetDragenter(e, tabset){
-			},
-			onTabSetDragleave(e, tabset){
 			},
 			async importData(){
 				this.$store.dispatch("import");

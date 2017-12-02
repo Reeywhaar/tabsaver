@@ -14,7 +14,7 @@
 		},
 		computed: {
 			delayWrapper(){
-				return (parseFloat(this.delay) || .5) * 1000;
+				return (parseFloat(this.delay) || .4) * 1000;
 			},
 			colorWrapper(){
 				return this.color || "hsl(200, 50%, 80%)";
