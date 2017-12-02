@@ -77,42 +77,52 @@
 				e.dataTransfer.setData('tabsaver/tabset/tab', JSON.stringify(tab));
 				e.dataTransfer.setData('text/plain', tab.url);
 			},
-			onTabDrop(e, tab){
-				const key = e.dataTransfer.getData("tabsaver/tabset/key");
-				const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
-				if(!key) throw new Error("Can't find tab's TabSet");
-				if(!serializedTab) throw new Error("Can't find tab");
-				if(key === this.tabset.key && serializedTab === JSON.stringify(tab)) return;
+			async onTabDrop(e, tab){
+				try {
+					const key = e.dataTransfer.getData("tabsaver/tabset/key");
+					const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
+					if(!key) throw new Error("Can't find tab's TabSet");
+					if(!serializedTab) throw new Error("Can't find tab");
+					if(key === this.tabset.key && serializedTab === JSON.stringify(tab)) return;
 
-				const after = (() => {
-					const rect = e.currentTarget.getBoundingClientRect();
-					const y = e.clientY - rect.y;
-					const proportion = y / rect.height * 100;
-					return proportion >= 50 ? true : false;
-				})();
+					const after = (() => {
+						const rect = e.currentTarget.getBoundingClientRect();
+						const y = e.clientY - rect.y;
+						const proportion = y / rect.height * 100;
+						return proportion >= 50 ? true : false;
+					})();
 
-				this.$store.dispatch("tabsetMoveTab", [
-					key,
-					JSON.parse(serializedTab),
-					this.tabset.key,
-					tab,
-					after,
-				]);
+					await this.$store.dispatch("tabsetMoveTab", [
+						key,
+						JSON.parse(serializedTab),
+						this.tabset.key,
+						tab,
+						after,
+					]);
+				} catch (e) {
+					this.$store.dispatch("notify", e.message);
+					console.error(e);
+				};
 			},
 			async onEmptyTabDrop(e){
-				const key = e.dataTransfer.getData("tabsaver/tabset/key");
-				const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
-				if(!key) throw new Error("Can't find tab's TabSet");
-				if(!serializedTab) throw new Error("Can't find tab");
+				try{
+					const key = e.dataTransfer.getData("tabsaver/tabset/key");
+					const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
+					if(!key) throw new Error("Can't find tab's TabSet");
+					if(!serializedTab) throw new Error("Can't find tab");
 
-				await this.$store.dispatch("tabsetAppend", [
-					this.tabset.key,
-					JSON.parse(serializedTab),
-				]);
-				await this.$store.dispatch("tabsetRemoveTab", [
-					key,
-					JSON.parse(serializedTab),
-				]);
+					await this.$store.dispatch("tabsetAppend", [
+						this.tabset.key,
+						JSON.parse(serializedTab),
+					]);
+					await this.$store.dispatch("tabsetRemoveTab", [
+						key,
+						JSON.parse(serializedTab),
+					]);
+				} catch (e) {
+					this.$store.dispatch("notify", e.message);
+					console.error(e);
+				};
 			},
 			onTabDragover(e){
 				e.preventDefault();

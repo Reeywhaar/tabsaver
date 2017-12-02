@@ -217,7 +217,7 @@ export const TabSet = {
 		if(!donor) throw new Error("Original tab doesn't exists");
 		if(donorTabsetKey !== targetTabsetKey){
 			const duplicate = first(targetTabset.data, tab => tabsEqual(tab, donor));
-			if(duplicate) throw new Error("TabSet already have that tab");
+			if(duplicate) throw new Error("TabSet already have this tab");
 		};
 		const target = first(targetTabset.data, tab => tabsEqual(tab, targetTab));
 		if(!target) throw new Error("Target tab doesn't exists");

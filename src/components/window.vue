@@ -72,18 +72,23 @@
 				};
 				e.dataTransfer.setData('tabsaver/tabset', tabset.key);
 			},
-			onTabSetDrop(e, tabset){
-				const key = e.dataTransfer.getData("tabsaver/tabset");
-				if(!key || key === tabset.key) return;
+			async onTabSetDrop(e, tabset){
+				try {
+					const key = e.dataTransfer.getData("tabsaver/tabset");
+					if(!key || key === tabset.key) return;
 
-				const after = (() => {
-					const rect = e.currentTarget.getBoundingClientRect();
-					const y = e.clientY - rect.y;
-					const proportion = y / rect.height * 100;
-					return proportion >= 50 ? true : false;
-				})();
+					const after = (() => {
+						const rect = e.currentTarget.getBoundingClientRect();
+						const y = e.clientY - rect.y;
+						const proportion = y / rect.height * 100;
+						return proportion >= 50 ? true : false;
+					})();
 
-				this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
+					await this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
+				} catch (e) {
+					this.$store.dispatch("notify", e.message);
+					console.error(e);
+				};
 			},
 			onTabSetDragover(e){
 				e.preventDefault();
