@@ -80,7 +80,11 @@ export default async() => {
 				context.dispatch("updateItems");
 			},
 			async tabsetAppend(context, name){
-				await api.TabSet.appendTab(name);
+				if(Array.isArray(name)){
+					await api.TabSet.appendTab(...name);
+				} else {
+					await api.TabSet.appendTab(name);
+				}
 				context.dispatch("updateItems");
 			},
 			async tabsetRemoveTab(context, [tabsetName, tab]){

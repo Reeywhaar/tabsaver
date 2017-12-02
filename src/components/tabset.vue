@@ -20,6 +20,12 @@
 		</div>
 		<div class="tab-saver-item__links" v-if="!collapsed">
 			<div
+				v-if="tabset.data.length === 0"
+				class="tab-saver-item__links-empty"
+				@dragover.stop="onTabDragover($event)"
+				@drop.stop="onEmptyTabDrop($event)"
+			>No Tabs</div>
+			<div
 				class="tab-saver-item__link-container"
 				v-for="tab in tabset.data"
 				:key="tab.url"
@@ -93,6 +99,21 @@
 					after,
 				]);
 			},
+			async onEmptyTabDrop(e){
+				const key = e.dataTransfer.getData("tabsaver/tabset/key");
+				const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
+				if(!key) throw new Error("Can't find tab's TabSet");
+				if(!serializedTab) throw new Error("Can't find tab");
+
+				await this.$store.dispatch("tabsetAppend", [
+					this.tabset.key,
+					JSON.parse(serializedTab),
+				]);
+				await this.$store.dispatch("tabsetRemoveTab", [
+					key,
+					JSON.parse(serializedTab),
+				]);
+			},
 			onTabDragover(e){
 				e.preventDefault();
 			},
@@ -122,10 +143,19 @@
 				this.$emit("uneditable", this.tabset);
 			},
 			async open(){
-				const windowId = await this.$store.dispatch("tabsetOpen", this.tabset.key);
-				const currentWindow = await browser.windows.getCurrent();
-				if(windowId === currentWindow.id){
-					this.$store.dispatch("notify", "Tabset is open in current window");
+				try{
+					const windowId = await this.$store.dispatch("tabsetOpen", this.tabset.key);
+					const currentWindow = await browser.windows.getCurrent();
+					if(windowId === currentWindow.id){
+						this.$store.dispatch("notify", "Tabset is open in current window");
+					};
+				} catch (e) {
+					if(e.message === "Trying to open empty TabSet"){
+						this.$store.dispatch("notify", e.message);
+						return;
+					};
+					this.$store.dispatch("notify", "Some error occured");
+					console.error(e);
 				};
 			},
 			async save(){

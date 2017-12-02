@@ -106,6 +106,9 @@ export const TabSet = {
 			x.url = getMangledURL(x.url);
 			return x;
 		});
+		if(allowedTabs.length === 0){
+			throw new Error("Trying to open empty TabSet");
+		};
 		const window = await browser.windows.create();
 		const tabNeedToBeClosed = window.tabs[0];
 		for(const [index, tab] of allowedTabs.entries()){
@@ -168,8 +171,8 @@ export const TabSet = {
 		d.splice(d.indexOf(b) + (after ? 0 : 1), 0, cut[0]);
 		await TabSet.saveAll(d);
 	},
-	async appendTab(tabsetName){
-		const tab = (await browser.tabs.query({active: true}))[0];
+	async appendTab(tabsetName, passedTab = null){
+		const tab = passedTab || (await browser.tabs.query({active: true}))[0];
 		if(tab.id === browser.tabs.TAB_ID_NONE){
 			throw new Error("Invalid tab");
 		}
