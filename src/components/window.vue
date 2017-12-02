@@ -68,6 +68,10 @@
 					e.preventDefault();
 					return;
 				};
+				this.$children.forEach(ch => {
+					console.log(ch);
+					if(ch.tabset) ch.collapse();
+				});
 				e.dataTransfer.setData('tabsaver/tabset', tabset.key);
 			},
 			async onTabSetDrop(e, tabset){

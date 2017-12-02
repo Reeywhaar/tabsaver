@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="tab-saver-item"
-		@dragstart.self="onDrag($event)"
-	>
+	<div class="tab-saver-item">
 		<div class="tab-saver-item__item">
 			<span
 				class="tab-saver-item__title"
@@ -65,9 +62,6 @@
 		mounted(){
 		},
 		methods: {
-			onDrag(e){
-				this.collapse();
-			},
 			onTabDrag(e, tab){
 				if(!e.target.querySelector(".tab-saver-item__link").matches(".tab-saver-item__link:hover")){
 					e.preventDefault();
