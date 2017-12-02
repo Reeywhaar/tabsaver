@@ -10,10 +10,6 @@
 
 	export default {
 		props: ["link"],
-		data(){
-			return {
-			}
-		},
 		mounted(){
 			this.updateContainerProps();
 		},
