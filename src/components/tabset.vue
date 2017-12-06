@@ -12,8 +12,8 @@
 			>{{tabset.key}}</span>
 			<button @click="open" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
 			<button @click="addCurrentTab" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
-			<hold-button @click="save" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
-			<hold-button @click="remove" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
+			<hold-button @click="save" @cancel="onHoldCancel('save')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
+			<hold-button @click="remove" @cancel="onHoldCancel('remove')" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
 		</div>
 		<div class="tab-saver-item__links" v-if="!collapsed">
 			<div
@@ -35,7 +35,7 @@
 					class="tab-saver-item__link"
 					:link="tab"
 				></tabset-tab>
-				<hold-button class="inline-button tab-saver-item__link-remove-button" @click="removeTab(tab)"><icon icon="cross"></icon></hold-button>
+				<hold-button class="inline-button tab-saver-item__link-remove-button" @click="removeTab(tab)" @cancel="onHoldCancel('remove')"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
 	</div>
@@ -123,6 +123,9 @@
 			},
 			onTabDragover(e){
 				e.preventDefault();
+			},
+			onHoldCancel(type){
+				this.$store.dispatch("notify", `Click and hold button to ${type}`);
 			},
 			async toggleCollapse(){
 				await sleep(30)

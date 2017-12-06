@@ -66,6 +66,8 @@
 				this.progress = 0;
 				if(result === "hold"){
 					this.$emit("click", e);
+				} else {
+					this.$emit("cancel", e);
 				};
 			},
 		},
