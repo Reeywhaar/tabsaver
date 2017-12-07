@@ -11,10 +11,6 @@ With this extension you can save tabs in current window and open them later.
 
 Current state of Firefox WebExtension Api restricts opening of privileged urls (such as `file:///`, `chrome:`, `about:`, etc..) so placeholder page will be opened where you can copy link to clipboard and manually paste it into the location bar. Sad.
 
-### In Plans
-
-* TabSet tabs editing feature
-
 ### Screenshots
 
 ![main](screenshots/main-assets/main.png)
