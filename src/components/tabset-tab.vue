@@ -11,14 +11,6 @@
 
 	export default {
 		props: ["link"],
-		computed: {
-			title(){
-				if(this.link.title && this.link.title !== "" && this.link.title !== this.link.url){
-					return `${this.link.title} | ${this.link.url}`;
-				};
-				return this.link.url;
-			},
-		},
 		mounted(){
 			this.updateContainerProps();
 		},
