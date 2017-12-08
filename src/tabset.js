@@ -38,6 +38,7 @@ export const TabSet = {
 		const includePinned = await pinned.get();
 		const tabsData = tabs
 		.map(x => ({
+			title: x.title,
 			url: x.url,
 			pinned: x.pinned,
 			cookieStoreId: x.cookieStoreId || DEFAULT_COOKIE_STORE_ID,
@@ -180,6 +181,7 @@ export const TabSet = {
 			throw new Error("Trying to add blank page");
 		}
 		const tabData = {
+			"title": tab.title,
 			"url": tab.url,
 			"pinned": tab.pinned,
 			"cookieStoreId": tab.cookieStoreId,

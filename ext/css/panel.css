@@ -147,6 +147,7 @@ html, body{
 	padding-top: .2em;
 	padding-bottom: .2em;
 	text-overflow: ellipsis;
+	white-space: nowrap;
 	word-break: keep-all;
 	color: Highlight;
 	text-decoration: none;
