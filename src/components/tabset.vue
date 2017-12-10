@@ -223,6 +223,7 @@
 			async addCurrentTab(){
 				try{
 					await this.$store.dispatch("tabsetAppend", this.tabset.key);
+					this.$store.dispatch("notify", `Tab added to "${this.tabset.key}"`);
 				} catch (e) {
 					this.$store.dispatch("notify", e.message);
 					console.error(e);

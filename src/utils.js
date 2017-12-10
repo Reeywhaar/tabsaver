@@ -209,3 +209,8 @@ export function abortablePromise(fn){
 	promise.abort = () => subscribe.fire();
 	return promise;
 }
+
+export function cutString(str, len, ellipsis = ""){
+	if(str.length <= len) return str;
+	return str.substr(0, len - ellipsis.length) + ellipsis;
+}
