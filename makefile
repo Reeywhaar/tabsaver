@@ -20,3 +20,6 @@ lint:
 
 clear:
 	rm -rf ./ext/js && rm -rf ./ext/icons/icon.svg
+
+test_data:
+	node make-test-data.js > private/test-data.json

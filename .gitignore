@@ -3,3 +3,4 @@ web-ext-artifacts
 .env
 .web-extension-id
 ext/js
+private
