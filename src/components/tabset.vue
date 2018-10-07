@@ -10,10 +10,12 @@
 				:contenteditable="editable"
 				title="Click to show stored tabs, double click to edit name"
 			>{{tabset.key}}</span>
-			<button @click="open" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
-			<button @click="addCurrentTab" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
-			<hold-button @click="save" @cancel="onHoldCancel('save TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
-			<hold-button @click="remove" @cancel="onHoldCancel('remove TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
+			<div class="tab-saver-item__controls">
+				<button @click="open" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
+				<button @click="addCurrentTab" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
+				<hold-button @click="save" @cancel="onHoldCancel('save TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
+				<hold-button @click="remove" @cancel="onHoldCancel('remove TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
+			</div>
 		</div>
 		<div class="tab-saver-item__links" v-if="!collapsed">
 			<div

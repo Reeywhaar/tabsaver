@@ -73,6 +73,7 @@ body {
 	flex-grow: 10;
 	margin-right: 2px;
 	font-size: 1em;
+	min-width: 10em;
 }
 
 .save-new__button {
@@ -186,17 +187,30 @@ body {
 	line-height: 1em;
 }
 
-.tab-saver-item__button {
-	opacity: 0.6;
-	transition: opacity 0.2s;
-}
-
-.tab-saver-item:not(:hover) .tab-saver-item__button {
-	opacity: 0;
-}
-
 .tab-saver-item__title[contenteditable="true"] {
 	font-weight: bold;
+}
+
+.tab-saver-item__controls {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	line-height: 1.5em;
+	position: absolute;
+	right: 0;
+	padding-left: 0.2em;
+	padding-right: 1em;
+	background: #fff;
+
+	border-top-left-radius: 0.3em;
+	border-bottom-left-radius: 0.3em;
+
+	transition: opacity 0.2s;
+	line-height: 1.2em;
+}
+
+.tab-saver-item:not(:hover) .tab-saver-item__controls {
+	opacity: 0;
 }
 
 .tab-saver-item__button {
@@ -273,9 +287,17 @@ body {
 @media (max-width: 250px) {
 	.main {
 		width: auto;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
 	}
+
+	.content {
+		max-height: 100vh;
+	}
+
 	.save-new {
-		padding: 4px 0px;
+		padding: 2px;
 	}
 	.tab-saver-item {
 		--padding-x: 4px;
@@ -283,8 +305,6 @@ body {
 	.prefs {
 		flex-wrap: wrap;
 		height: auto;
-		margin-top: 0.2em;
-		border-top: none;
 	}
 	.prefs__pinned {
 		text-align: center;

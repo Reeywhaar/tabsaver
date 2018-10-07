@@ -195,9 +195,9 @@ export function* reverse(iterable) {
  *- in menu
  *so, while in button mode we must expand body, so it will not catch css small width query
  */
-export async function expand(el, em = 40) {
+export async function expand(el, em = 40, hem = 40) {
 	const exp = document.createElement("div");
-	exp.style.height = `1px`;
+	exp.style.height = `${hem}em`;
 	exp.style.width = `${em}em`;
 	el.appendChild(exp);
 	await sleep(50);
