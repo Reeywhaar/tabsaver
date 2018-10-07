@@ -70,7 +70,7 @@ export default {
 			if (!this.tabset.color) return null;
 			switch (this.tabset.color) {
 				case "hsl(40, 100%, 70%)":
-				case "hsl(60, 90%, 70%)":
+				case "hsl(60, 100%, 70%)":
 				case "hsl(120, 90%, 70%)":
 					return null;
 				default:
