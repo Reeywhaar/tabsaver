@@ -61,7 +61,7 @@ body {
 }
 
 .main {
-	width: 319px;
+	min-width: 319px;
 }
 
 .save-new {
@@ -88,6 +88,7 @@ body {
 /* toggle-button */
 
 .toggle-button {
+	display: inline-block;
 	padding: 0.2em 0.6em;
 	border-radius: 0.2em;
 	background-color: rgba(0, 0, 0, 0.1);
@@ -286,7 +287,7 @@ body {
 
 @media (max-width: 250px) {
 	.main {
-		width: auto;
+		min-width: 100px;
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
@@ -312,6 +313,12 @@ body {
 	.prefs__export,
 	.prefs__import {
 		flex-basis: 100%;
+	}
+
+	.prefs__pinned,
+	.prefs__export,
+	.prefs__import {
+		padding: 0.2em;
 	}
 }
 

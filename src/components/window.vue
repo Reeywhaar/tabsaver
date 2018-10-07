@@ -31,7 +31,7 @@
 		<div class="notification">{{notification}}</div>
 		<div class="prefs">
 			<div class="prefs__pinned" title="Include pinned tabs when saving">
-				<toggle-button class="prefs__pinned-button" :value="pinned" @input="togglePinned" color="hsl(200, 50%, 70%)">Save Pinned</toggle-button>
+				<toggle-button class="prefs__pinned-button" :value="pinned" @input="togglePinned" color="hsl(200, 60%, 80%)">Save Pinned</toggle-button>
 			</div>
 			<button @click="importData" class="inline-button prefs__import" title="Import from file">Import</button>
 			<button @click="exportData" class="inline-button prefs__export" title="Export to file">Export</button>
