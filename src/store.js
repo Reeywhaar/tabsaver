@@ -1,8 +1,7 @@
-import Vuex from "vuex";
-import {bgpage, getCurrentTabs} from "./shared.js";
-import {reverse, sleep} from "./utils.js";
+import { bgpage, getCurrentTabs } from "./shared.js";
+import { reverse, sleep } from "./utils.js";
 
-export default async() => {
+export default async () => {
 	const api = await bgpage();
 	const [items, pinned] = await Promise.all([
 		api.TabSet.getAll(),
@@ -17,87 +16,97 @@ export default async() => {
 			notificationCounter: 0,
 		},
 		getters: {
-			itemsReversed(state){
+			itemsReversed(state) {
 				return Array.from(reverse(state.items));
-			}
+			},
 		},
 		mutations: {
-			togglePinned(state){
+			togglePinned(state) {
 				state.pinned = !state.pinned;
 			},
-			setNotification(state, message){
+			setNotification(state, message) {
 				state.notification = message;
 			},
-			incrementNotificationCounter(state, amount){
+			incrementNotificationCounter(state, amount) {
 				state.notificationCounter += amount;
 			},
-			updateItems(state, items){
+			updateItems(state, items) {
 				state.items = items;
 			},
 		},
 		actions: {
-			async import(){
+			async import() {
 				await api.import();
 			},
-			async export(){
+			async export() {
 				await api.export();
 			},
-			async notify(context, message){
+			async notify(context, message) {
 				context.commit("setNotification", message);
 				context.commit("incrementNotificationCounter", 1);
 				await sleep(3000);
 				context.commit("incrementNotificationCounter", -1);
-				if(context.state.notificationCounter === 0) context.commit("setNotification", "");
+				if (context.state.notificationCounter === 0)
+					context.commit("setNotification", "");
 			},
-			async togglePinned(context){
+			async togglePinned(context) {
 				await api.pinned.set(!context.state.pinned);
 				context.commit("togglePinned");
 			},
-			async updateItems(context){
+			async updateItems(context) {
 				context.commit("updateItems", await api.TabSet.getAll());
 			},
-			async tabsetOpen(context, name = null){
+			async tabsetOpen(context, name = null) {
 				return await api.TabSet.open(name);
 			},
-			async tabsetCreate(context, name = null){
+			async tabsetCreate(context, name = null) {
 				await api.TabSet.add(name, await getCurrentTabs());
 				context.dispatch("updateItems");
 			},
-			async tabsetSave(context, name = null){
+			async tabsetSave(context, name = null) {
 				await api.TabSet.save(name, await getCurrentTabs());
 				context.dispatch("updateItems");
 			},
-			async tabsetRename(context, [oldn, newn]){
+			async tabsetRename(context, [oldn, newn]) {
 				await api.TabSet.rename(oldn, newn);
 				context.dispatch("updateItems");
 			},
-			async tabsetRemove(context, name){
+			async tabsetRemove(context, name) {
 				await api.TabSet.remove(name);
 				context.dispatch("updateItems");
 			},
-			async tabsetMove(context, [tabsetName, targetName, after = true]){
+			async tabsetMove(context, [tabsetName, targetName, after = true]) {
 				await api.TabSet.moveTabSet(tabsetName, targetName, after);
 				context.dispatch("updateItems");
 			},
-			async tabsetAppend(context, name){
-				if(Array.isArray(name)){
+			async tabsetAppend(context, name) {
+				if (Array.isArray(name)) {
 					await api.TabSet.appendTab(...name);
 				} else {
 					await api.TabSet.appendTab(name);
 				}
 				context.dispatch("updateItems");
 			},
-			async tabsetRemoveTab(context, [tabsetName, tab]){
+			async tabsetRemoveTab(context, [tabsetName, tab]) {
 				await api.TabSet.removeTab(tabsetName, tab);
 				context.dispatch("updateItems");
 			},
-			async tabsetMoveTab(context, [tabsetName, tab, targetTabsetName, targetTab, after = true]){
-				await api.TabSet.moveTab(tabsetName, tab, targetTabsetName, targetTab, after);
+			async tabsetMoveTab(
+				context,
+				[tabsetName, tab, targetTabsetName, targetTab, after = true]
+			) {
+				await api.TabSet.moveTab(
+					tabsetName,
+					tab,
+					targetTabsetName,
+					targetTab,
+					after
+				);
 				context.dispatch("updateItems");
 			},
-			async openUrl(context, [url, identity]){
+			async openUrl(context, [url, identity]) {
 				await api.openURL(url, identity);
 			},
 		},
-	}
-}
+	};
+};

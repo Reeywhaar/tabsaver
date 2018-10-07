@@ -1,27 +1,19 @@
-import {
-	readFileAsJson,
-	saveFile,
-} from "./utils.js";
-import {
-	pinned,
-	openURL,
-} from "./shared.js";
-import {
-	TabSet,
-} from "./tabset.js";
+import { readFileAsJson, saveFile } from "./utils.js";
+import { pinned, openURL } from "./shared.js";
+import { TabSet } from "./tabset.js";
 
-async function main(){
+async function main() {
 	window.import = async () => {
 		const imported = await readFileAsJson();
 		await TabSet.saveAll(imported);
-	}
+	};
 
 	window.export = async () => {
 		const out = JSON.stringify(await TabSet.getAll(), null, 2);
-		try{
+		try {
 			await saveFile(out, "export.tabsaver.json");
-		} catch (e) {};
-	}
+		} catch (e) {}
+	};
 
 	window.pinned = pinned;
 

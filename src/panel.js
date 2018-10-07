@@ -1,12 +1,11 @@
 import "./globals.js";
-import {expand} from "./utils.js";
-import {bgpage} from "./shared.js";
+import { expand } from "./utils.js";
 import Vue from "vue/dist/vue.runtime.esm.js";
 import Vuex from "vuex/dist/vuex.esm.js";
 import getStore from "./store.js";
 import WindowComponent from "./components/window.vue";
 
-async function main(){
+async function main() {
 	expand(document.querySelector(".main"));
 	Vue.config.devtools = false;
 	Vue.use(Vuex);
