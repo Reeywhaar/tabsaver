@@ -30,19 +30,23 @@
 		</div>
 		<div class="notification">{{notification}}</div>
 		<div class="prefs">
-			<label class="prefs__pinned" title="Include pinned tabs when saving"><input class="prefs__pinned-input" :checked="pinned" @change="togglePinned" type="checkbox">Pinned</label>
+			<div class="prefs__pinned" title="Include pinned tabs when saving">
+				<toggle-button class="prefs__pinned-button" :value="pinned" @input="togglePinned" color="hsl(200, 50%, 70%)">Save Pinned</toggle-button>
+			</div>
 			<button @click="importData" class="inline-button prefs__import" title="Import from file">Import</button>
 			<button @click="exportData" class="inline-button prefs__export" title="Export to file">Export</button>
 		</div>
 	</div>
 </template>
 <script>
+import ToggleButtonComponent from "./toggle-button.vue";
 import TabSetComponent from "./tabset.vue";
 import { sleep, oneOf, first } from "../utils.js";
 
 export default {
 	components: {
 		tabset: TabSetComponent,
+		toggleButton: ToggleButtonComponent,
 	},
 	data() {
 		return {

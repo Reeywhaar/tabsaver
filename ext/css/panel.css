@@ -84,6 +84,18 @@ body {
 	overflow-y: scroll;
 }
 
+/* toggle-button */
+
+.toggle-button {
+	padding: 0.2em 0.6em;
+	border-radius: 0.2em;
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.toggle-button[data-state="off"] {
+	color: rgba(0, 0, 0, 0.7);
+}
+
 /* tab-saver-item */
 
 .tab-saver-item {
@@ -251,12 +263,6 @@ body {
 	padding: 0.5em;
 }
 
-.prefs__pinned-input {
-	margin-top: 0;
-	margin-bottom: 0;
-	margin-left: 0;
-}
-
 .prefs__export,
 .prefs__import {
 	padding: 0.5em;
@@ -279,6 +285,9 @@ body {
 		height: auto;
 		margin-top: 0.2em;
 		border-top: none;
+	}
+	.prefs__pinned {
+		text-align: center;
 	}
 	.prefs__export,
 	.prefs__import {
