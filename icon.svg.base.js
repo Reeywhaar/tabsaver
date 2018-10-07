@@ -4,12 +4,12 @@ module.exports = function icon(fill = "#4c4c4c") {
 	const size = 128;
 	const piece = n => (size / 128) * n;
 	const prop = (x, n) => (x / 128) * n;
-	const borderWidth = piece(12);
+	const borderWidth = piece(16);
 	const smallWidth = size - borderWidth * 2;
 	const height = piece(110);
 	const topHeight = piece(26);
 	const innerheight = height - topHeight - borderWidth;
-	const radius = piece(18);
+	const radius = piece(22);
 	const innerRadius = prop(radius, 60);
 	const smallRadius = prop(radius, 20);
 	const circleRadius = piece(6);
