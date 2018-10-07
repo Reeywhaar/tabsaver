@@ -10,7 +10,7 @@ async function main() {
 	Vue.config.devtools = false;
 	Vue.use(Vuex);
 
-	WindowComponent.store = new Vuex.Store(await getStore());
+	WindowComponent.store = await getStore();
 	const appConstructor = Vue.extend(WindowComponent);
 	const app = new appConstructor();
 	app.$mount(".main");

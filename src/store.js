@@ -1,5 +1,6 @@
 import { bgpage, getCurrentTabs } from "./shared.js";
 import { reverse, sleep } from "./utils.js";
+import Vuex from "vuex/dist/vuex.esm.js";
 
 export default async () => {
 	const api = await bgpage();
@@ -8,7 +9,7 @@ export default async () => {
 		api.pinned.get(),
 	]);
 
-	return {
+	const store = new Vuex.Store({
 		state: {
 			items,
 			pinned,
@@ -21,6 +22,9 @@ export default async () => {
 			},
 		},
 		mutations: {
+			setPinned(state, value) {
+				state.pinned = value;
+			},
 			togglePinned(state) {
 				state.pinned = !state.pinned;
 			},
@@ -48,6 +52,13 @@ export default async () => {
 				context.commit("incrementNotificationCounter", -1);
 				if (context.state.notificationCounter === 0)
 					context.commit("setNotification", "");
+			},
+			async setPinned(context, value) {
+				if (context.state.pinned === value) {
+					return;
+				}
+				await api.pinned.set(value);
+				context.commit("setPinned", value);
 			},
 			async togglePinned(context) {
 				await api.pinned.set(!context.state.pinned);
@@ -108,5 +119,16 @@ export default async () => {
 				await api.openURL(url, identity);
 			},
 		},
-	};
+	});
+
+	api.storage.subscribe((key, value) => {
+		if (key === "tabs") {
+			store.dispatch("updateItems");
+		}
+		if (key === "includePinned") {
+			store.dispatch("setPinned", value);
+		}
+	});
+
+	return store;
 };

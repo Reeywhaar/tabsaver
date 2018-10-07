@@ -2,6 +2,8 @@ import { setsAreEqual, oneOf, strAfter, padLeft, parseQuery } from "./utils.js";
 
 export const DEFAULT_COOKIE_STORE_ID = "firefox-default";
 
+const storageListeners = [];
+
 export const storage = {
 	async get(key, def = null) {
 		const req = await browser.storage.local.get(key);
@@ -10,6 +12,22 @@ export const storage = {
 	},
 	async set(key, value) {
 		await browser.storage.local.set({ [key]: value });
+		let failedcbs = [];
+		for (let cb of storageListeners) {
+			try {
+				cb(key, value);
+			} catch (e) {
+				if (e.message === "can't access dead object") {
+					failedcbs.push(cb);
+				}
+			}
+		}
+		for (let fcb of failedcbs) {
+			storageListeners.splice(storageListeners.indexOf(fcb), 1);
+		}
+	},
+	subscribe(fn) {
+		storageListeners.push(fn);
 	},
 };
 
