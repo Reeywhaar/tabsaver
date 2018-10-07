@@ -41,6 +41,7 @@ module.exports = (h, args) => {
 		{
 			entry: {
 				"icon.svg": "./icon.svg.js",
+				"icon-light.svg": "./icon-light.svg.js",
 			},
 			output: {
 				path: path.resolve(__dirname, "ext/icons"),

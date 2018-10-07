@@ -11,7 +11,12 @@
     "default_icon": "icons/icon.svg",
     "default_title": "Tab Saver",
 		"default_popup": "html/panel.html",
-		"browser_style": true
+		"browser_style": true,
+		"theme_icons": [{
+			"light": "icons/icon-light.svg",
+			"dark": "icons/icon.svg",
+			"size": 32
+		}]
   },
 	"background":{
 		"page": "html/background.html"
