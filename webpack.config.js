@@ -57,7 +57,7 @@ module.exports = (h, args) => {
 					{
 						test: /\.svg\.js$/,
 						use: extractSVG.extract({
-							use: ["svg-js-loader", "extract-loader"],
+							use: ["svg-js-loader"],
 						}),
 					},
 				],
