@@ -9,6 +9,7 @@ module.exports = (h, args) => {
 		{
 			entry: {
 				panel: "./src/panel.js",
+				options: "./src/options.js",
 				background: "./src/background.js",
 				handler: "./src/handler.js",
 			},

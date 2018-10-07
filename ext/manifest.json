@@ -21,6 +21,10 @@
 	"background":{
 		"page": "html/background.html"
 	},
+	"options_ui": {
+		"page": "html/options.html",
+		"browser_style": true
+	},
 	"permissions": [
 		"storage",
 		"tabs",
