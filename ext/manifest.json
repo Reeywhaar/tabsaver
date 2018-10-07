@@ -28,5 +28,12 @@
 			"id": "{3c764d86-a50a-4f5c-b773-cb84bea924e7}",
 			"strict_min_version": "54.0"
 		}
+	},
+	"sidebar_action": {
+		"default_icon": "icons/icon.svg",
+		"default_title": "TabSaver",
+		"default_panel": "html/panel.html",
+		"browser_style": true,
+		"open_at_install": false
 	}
 }
