@@ -1,73 +1,67 @@
 const path = require("path");
 const webpack = require("webpack");
+const InertEntryPlugin = require("inert-entry-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const InertEntryPlugin = require('inert-entry-webpack-plugin');
 const extractSVG = new ExtractTextPlugin("[name]");
-const MinifyPlugin = require("babel-minify-webpack-plugin");
-
-
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 module.exports = (h, args) => {
-	const additionalPlugins = [];
-	if(!args.watch){
-		additionalPlugins.push(new MinifyPlugin());
-	};
-
 	return [
 		{
 			entry: {
-				panel: './src/panel.js',
+				panel: "./src/panel.js",
 				background: "./src/background.js",
 				handler: "./src/handler.js",
 			},
 			output: {
-				path: path.resolve(__dirname, 'ext/js'),
-				filename: '[name].js'
+				path: path.resolve(__dirname, "ext/js"),
+				filename: "[name].js",
 			},
 			module: {
 				rules: [
 					{
 						test: /\.vue$/,
-						use: "vue-loader"
+						use: "vue-loader",
 					},
-				]
+				],
 			},
 			plugins: [
+				new VueLoaderPlugin(),
 				new webpack.optimize.ModuleConcatenationPlugin(),
 				new webpack.DefinePlugin({
-					'process.env': {
-						NODE_ENV: '"production"'
-					}
+					"process.env": {
+						NODE_ENV: '"production"',
+					},
 				}),
-				...additionalPlugins,
-			]
+			],
+			optimization: {
+				minimize: args.mode !== "development",
+			},
+			devtool: false,
 		},
 		{
 			entry: {
 				"icon.svg": "./icon.svg.js",
 			},
 			output: {
-				path: path.resolve(__dirname, 'ext/icons'),
-				filename: '[name]'
+				path: path.resolve(__dirname, "ext/icons"),
+				filename: "[name]",
 			},
 			resolveLoader: {
 				alias: {
-					'svg-js-loader': '@reeywhaar/svgmaker/loader.js',
-				}
+					"svg-js-loader": "@reeywhaar/svgmaker/loader.js",
+				},
 			},
 			module: {
 				rules: [
 					{
 						test: /\.svg\.js$/,
 						use: extractSVG.extract({
-							use: "svg-js-loader"
+							use: ["svg-js-loader", "extract-loader"],
 						}),
 					},
-				]
+				],
 			},
-			plugins: [
-				extractSVG,
-				new InertEntryPlugin(),
-			]
-		}
+			plugins: [extractSVG, new InertEntryPlugin()],
+		},
 	];
 };

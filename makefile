@@ -1,10 +1,10 @@
 include ./.env
 
 build:
-	webpack && make lint && web-ext build -s ext
+	./node_modules/.bin/webpack --mode production && make lint && web-ext build -s ext
 
 watch:
-	webpack --watch
+	./node_modules/.bin/webpack --mode development --watch
 
 run:
 	make watch & web-ext run -s ext --bc --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
