@@ -47,7 +47,7 @@ export const TabSet = {
 			listeners.splice(listeners.indexOf(fcb), 1);
 		}
 	},
-	async save(name, tabs) {
+	async save(name, tabs, color = null) {
 		const includePinned = await pinned.get();
 		const tabsData = tabs
 			.map(x => ({
@@ -73,10 +73,12 @@ export const TabSet = {
 		});
 		if (index > -1) {
 			d[index].data = tabsData;
+			d[index].color = color;
 		} else {
 			d.push({
 				key: name,
 				data: tabsData,
+				color,
 			});
 		}
 		await TabSet.saveAll(d);

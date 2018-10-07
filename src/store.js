@@ -74,8 +74,8 @@ export default async () => {
 				await api.TabSet.add(name, await getCurrentTabs());
 				context.dispatch("updateItems");
 			},
-			async tabsetSave(context, name = null) {
-				await api.TabSet.save(name, await getCurrentTabs());
+			async tabsetSave(context, { name, color }) {
+				await api.TabSet.save(name, await getCurrentTabs(), color);
 				context.dispatch("updateItems");
 			},
 			async tabsetRename(context, [oldn, newn]) {

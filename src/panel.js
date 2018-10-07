@@ -6,7 +6,7 @@ import getStore from "./store.js";
 import WindowComponent from "./components/window.vue";
 
 async function main() {
-	expand(document.querySelector(".main"));
+	expand(document.querySelector(".main"), 20);
 	Vue.config.devtools = false;
 	Vue.use(Vuex);
 

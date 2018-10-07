@@ -1,6 +1,6 @@
 <template>
 	<div class="tab-saver-item">
-		<div class="tab-saver-item__item">
+		<div class="tab-saver-item__item" :style="{'background-color': tabset.color}">
 			<span
 				class="tab-saver-item__title"
 				@click="toggleCollapse"
@@ -9,8 +9,10 @@
 				@focusout.stop="rename()"
 				:contenteditable="editable"
 				title="Click to show stored tabs, double click to edit name"
+				:style="{'color': titleColor}"
 			>{{tabset.key}}</span>
 			<div class="tab-saver-item__controls">
+				<color-select class="tab-saver-item__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
 				<button @click="open" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
 				<button @click="addCurrentTab" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
 				<hold-button @click="save" @cancel="onHoldCancel('save TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
@@ -45,6 +47,7 @@
 <script>
 import { sleep } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
+import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
 import IconComponent from "./icon.vue";
 
@@ -53,6 +56,7 @@ export default {
 	components: {
 		"tabset-tab": TabsetTabComponent,
 		"hold-button": HoldButtonComponent,
+		"color-select": ColorSelectComponent,
 		icon: IconComponent,
 	},
 	data() {
@@ -61,7 +65,19 @@ export default {
 			editable: false,
 		};
 	},
-	mounted() {},
+	computed: {
+		titleColor() {
+			if (!this.tabset.color) return null;
+			switch (this.tabset.color) {
+				case "hsl(40, 100%, 70%)":
+				case "hsl(60, 90%, 70%)":
+				case "hsl(120, 90%, 70%)":
+					return null;
+				default:
+					return "#fff";
+			}
+		},
+	},
 	methods: {
 		onTabDrag(e, tab) {
 			if (
@@ -179,7 +195,10 @@ export default {
 		},
 		async save() {
 			try {
-				await this.$store.dispatch("tabsetSave", this.tabset.key);
+				await this.$store.dispatch("tabsetSave", {
+					name: this.tabset.key,
+					color: this.tabset.color,
+				});
 				this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
 			} catch (e) {
 				if (e.message === "Unknown TabSet") {
@@ -261,6 +280,10 @@ export default {
 				this.$store.dispatch("notify", e.message);
 				console.error(e);
 			}
+		},
+		async setColor(color) {
+			this.tabset.color = color;
+			await this.save();
 		},
 	},
 };
