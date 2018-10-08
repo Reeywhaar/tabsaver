@@ -13,10 +13,10 @@
 			>{{tabset.key}}</span>
 			<div class="tab-saver-item__controls">
 				<color-select class="tab-saver-item__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
-				<button @click="open" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
-				<button @click="addCurrentTab" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
-				<hold-button @click="save" @cancel="onHoldCancel('save TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
-				<hold-button @click="remove" @cancel="onHoldCancel('remove TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
+				<button @click="open()" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
+				<button @click="addCurrentTab()" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
+				<hold-button @click="save()" @cancel="onHoldCancel('save TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
+				<hold-button @click="remove()" @cancel="onHoldCancel('remove TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
 		<div class="tab-saver-item__links" v-if="!collapsed">
@@ -193,11 +193,12 @@ export default {
 				console.error(e);
 			}
 		},
-		async save() {
+		async save(tabs = null) {
 			try {
 				await this.$store.dispatch("tabsetSave", {
 					name: this.tabset.key,
 					color: this.tabset.color,
+					tabs,
 				});
 				this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
 			} catch (e) {
@@ -283,7 +284,7 @@ export default {
 		},
 		async setColor(color) {
 			this.tabset.color = color;
-			await this.save();
+			await this.save(this.tabset.data);
 		},
 	},
 };

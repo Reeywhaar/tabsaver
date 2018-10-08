@@ -91,8 +91,10 @@ export default async () => {
 				await api.TabSet.add(name, await getCurrentTabs());
 				context.dispatch("updateItems");
 			},
-			async tabsetSave(context, { name, color }) {
-				await api.TabSet.save(name, await getCurrentTabs(), color);
+			async tabsetSave(context, { name, color, tabs = null }) {
+				tabs = tabs || (await getCurrentTabs());
+				console.log("tabs", tabs);
+				await api.TabSet.save(name, tabs, color);
 				context.dispatch("updateItems");
 			},
 			async tabsetRename(context, [oldn, newn]) {
