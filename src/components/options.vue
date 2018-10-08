@@ -11,28 +11,27 @@
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showTitles">Show tabs' titles</label>
 		</div>
 		<div class="options__section">
-			<label><input class="options__left-checkbox" type="checkbox" v-model="useHistory"/>Use history</label>
-			<div class="options__section indent-1" :class="{'disabled': !useHistory}">
-				<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="2" max="100" value="10"/></label>
-			</div>
-		</div>
-		<div class="options__section indent-1">
 			<span>Theme&ensp;</span><select class="browser-style" v-model="theme">
 				<option value="light">Light</option>
 				<option value="dark">Dark</option>
 			</select>
 		</div>
-		<div class="options__section indent-1">
+		<div class="options__section">
 			<span>Show controls overlay at&ensp;</span><select class="browser-style" v-model="overlayPosition">
 				<option value="right">Right</option>
 				<option value="left">Left</option>
 			</select>
 		</div>
+		<div class="options__section">
+			<label><input class="options__left-checkbox" type="checkbox" v-model="useHistory"/>Use history</label>
+			<div class="options__section indent-1" :class="{'disabled': !useHistory}">
+				<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="2" max="100" v-model="numberOfHistoryStates"/></label>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
 import ToggleButtonComponent from "./toggle-button.vue";
-import TabSetComponent from "./tabset.vue";
 import { sleep, oneOf, first } from "../utils.js";
 
 function createProperty(prop) {
@@ -51,19 +50,14 @@ function createProperty(prop) {
 
 export default {
 	components: {
-		tabset: TabSetComponent,
 		toggleButton: ToggleButtonComponent,
-	},
-	data() {
-		return {
-			newTabSetName: "",
-		};
 	},
 	computed: {
 		includePinned: createProperty("includePinned"),
 		showFavicons: createProperty("showFavicons"),
 		showTitles: createProperty("showTitles"),
 		useHistory: createProperty("useHistory"),
+		numberOfHistoryStates: createProperty("numberOfHistoryStates"),
 		theme: createProperty("theme"),
 		overlayPosition: createProperty("overlayPosition"),
 	},

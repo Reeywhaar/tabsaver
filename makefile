@@ -7,10 +7,10 @@ watch:
 	./node_modules/.bin/webpack --mode development --watch
 
 run:
-	make watch & web-ext run -s ext --bc --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+	make watch & web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
 
 runNightly:
-	make watch & web-ext run -f nightly -s ext --bc --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+	make watch & web-ext run -f nightly -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
 
 sign: build
 	web-ext sign -s ext --api-key ${APIKEY} --api-secret ${APISECRET}
