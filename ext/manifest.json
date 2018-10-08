@@ -41,7 +41,7 @@
 	"sidebar_action": {
 		"default_icon": "icons/icon.svg",
 		"default_title": "TabSaver",
-		"default_panel": "html/panel.html",
+		"default_panel": "html/sidebar.html",
 		"browser_style": true,
 		"open_at_install": false
 	}

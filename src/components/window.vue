@@ -1,5 +1,5 @@
 <template>
-	<div class="main">
+	<div class="main" :class="mainClass">
 		<div class="save-new">
 			<input
 				class="save-new__input"
@@ -14,7 +14,7 @@
 				@click="createTabSet"
 			>+</button>
 		</div>
-		<div class="content">
+		<div class="content" :style="contentStyle">
 			<div class="tab-saver-items">
 				<tabset
 					v-for="tabset in items"
@@ -31,7 +31,7 @@
 		<div class="notification">{{notification}}</div>
 		<div class="prefs">
 			<div class="prefs__pinned" title="Include pinned tabs when saving">
-				<toggle-button class="prefs__pinned-button" :value="pinned" @input="togglePinned" color="hsl(200, 60%, 80%)">Save Pinned</toggle-button>
+				<toggle-button class="prefs__pinned-button" v-model="pinned" color="hsl(200, 60%, 80%)">Save Pinned</toggle-button>
 			</div>
 			<button @click="importData" class="inline-button prefs__import" title="Import from file">Import</button>
 			<button @click="exportData" class="inline-button prefs__export" title="Export to file">Export</button>
@@ -57,11 +57,27 @@ export default {
 		items() {
 			return this.$store.getters.itemsReversed;
 		},
-		pinned() {
-			return this.$store.state.pinned;
+		pinned: {
+			get() {
+				return this.$store.state.settings.includePinned;
+			},
+			set(value) {
+				this.$store.dispatch("setSetting", {
+					key: "includePinned",
+					value,
+				});
+			},
 		},
 		notification() {
 			return this.$store.state.notification;
+		},
+		mainClass() {
+			return [`main-theme-${this.$store.state.settings.theme}`];
+		},
+		contentStyle() {
+			return {
+				minHeight: `${Math.min(this.$store.state.items.length, 15)}em`,
+			};
 		},
 	},
 	methods: {
@@ -108,9 +124,6 @@ export default {
 		},
 		async exportData() {
 			this.$store.dispatch("export");
-		},
-		async togglePinned() {
-			this.$store.dispatch("togglePinned");
 		},
 		async createTabSet() {
 			try {

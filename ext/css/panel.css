@@ -5,12 +5,46 @@
 
 :root {
 	--hover-color: Highlight;
+	--prefs-bg-color: hsl(0, 0%, 95%);
+	--overlay-color: #fff;
+	--text-color: #444;
+	--border-color: rgba(0, 0, 0, 0.2);
+	--shadow-color: rgba(0, 0, 0, 0.2);
+	--tab-header-color: hsla(200, 10%, 95%, 0.5);
+	--transparent-overlay-color: rgba(0, 0, 0, 0.1);
+	--title-border-color: #fff;
+	--link-color: Highlight;
+}
+
+.main-theme-dark {
+	background: #444;
+	color: #fff;
+	--hover-color: hsl(200, 60%, 60%);
+	--prefs-bg-color: #444;
+	--overlay-color: #444;
+	--text-color: #fff;
+	--border-color: rgba(255, 255, 255, 0.6);
+	--shadow-color: rgba(255, 255, 255, 0.9);
+	--tab-header-color: hsla(200, 10%, 95%, 0.2);
+	--transparent-overlay-color: rgba(255, 255, 255, 0.1);
+	--title-border-color: rgba(255, 255, 255, 0.2);
+	--link-color: hsl(200, 60%, 80%);
 }
 
 html,
 body {
 	padding: 0;
 	margin: 0;
+}
+
+body.popup {
+	width: 25em;
+	min-height: 10em;
+}
+
+button {
+	color: inherit;
+	background-color: inherit;
 }
 
 .font-icon {
@@ -26,10 +60,10 @@ body {
 	padding-right: 0.4em;
 	line-height: 1em;
 	border-radius: 3px;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	background: #fff;
+	border: 1px solid var(--border-color);
 	display: flex;
 	align-items: center;
+	color: inherit;
 }
 
 .button:hover {
@@ -77,7 +111,7 @@ body {
 }
 
 .color-select__item:first-child {
-	box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 0px 1px var(--shadow-color);
 }
 
 .color-select__item:not(:last-child) {
@@ -92,11 +126,24 @@ body {
 }
 
 .color-select__item-current {
-	border-color: rgba(0, 0, 0, 0.6);
+	border-color: var(--text-color);
 }
 
 .main {
-	max-width: 330px;
+	min-width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+body.popup .main {
+	max-height: 40em;
+	box-sizing: border-box;
+}
+
+body.sidebar .main {
+	max-height: 100vh;
+	box-sizing: border-box;
 }
 
 .save-new {
@@ -109,6 +156,10 @@ body {
 	margin-right: 2px;
 	font-size: 1em;
 	min-width: 10em;
+	background: inherit;
+	color: inherit;
+	border: 1px solid var(--border-color);
+	padding: 0.2em 0.4em;
 }
 
 .save-new__button {
@@ -116,7 +167,7 @@ body {
 }
 
 .content {
-	max-height: 500px;
+	flex: 1;
 	overflow-y: scroll;
 }
 
@@ -126,28 +177,30 @@ body {
 	display: inline-block;
 	padding: 0.2em 0.6em;
 	border-radius: 0.2em;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: var(--transparent-overlay-color);
 }
 
 .toggle-button[data-state="off"] {
-	color: rgba(0, 0, 0, 0.7);
+	opacity: 0.8;
 }
 
 /* tab-saver-item */
 
 .tab-saver-item {
-	--padding-x: 6px;
-	--padding-y: 0px;
-	margin-bottom: 1px;
+	--padding-y: 0.2em;
+	--padding-x: 0.2em;
+	/* margin-bottom: 1px; */
 }
 
 .tab-saver-item__item {
 	padding: var(--padding-y) var(--padding-x);
-	background: hsla(200, 10%, 95%, 0.5);
+	background: var(--tab-header-color);
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
 	line-height: 1.5em;
+	position: relative;
+	border-bottom: 1px solid var(--title-border-color);
 }
 
 .tab-saver-item__title {
@@ -201,7 +254,7 @@ body {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	word-break: keep-all;
-	color: Highlight;
+	color: var(--link-color);
 	text-decoration: none;
 }
 
@@ -234,16 +287,32 @@ body {
 	align-items: center;
 	line-height: 1.5em;
 	position: absolute;
+	top: calc(var(--padding-y) / 2);
+	background: var(--overlay-color);
+
+	line-height: 1.2em;
+}
+
+.tab-saver-item__controls-right {
 	right: 0;
+
 	padding-left: 0.3em;
 	padding-right: 1em;
-	background: #fff;
 
 	border-top-left-radius: 0.3em;
 	border-bottom-left-radius: 0.3em;
+}
 
-	transition: opacity 0.2s;
-	line-height: 1.2em;
+.tab-saver-item__controls-left {
+	left: 0;
+
+	flex-direction: row-reverse;
+
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+
+	border-top-right-radius: 0.3em;
+	border-bottom-right-radius: 0.3em;
 }
 
 .tab-saver-item:not(:hover) .tab-saver-item__controls {
@@ -311,7 +380,7 @@ body {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-around;
-	background: hsl(0, 0%, 95%);
+	background: var(--prefs-bg-color);
 	-moz-user-select: none;
 	user-select: none;
 	border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -330,17 +399,6 @@ body {
 }
 
 @media (max-width: 250px) {
-	.main {
-		min-width: 100px;
-		display: flex;
-		flex-direction: column;
-		height: 100vh;
-	}
-
-	.content {
-		max-height: 100vh;
-	}
-
 	.save-new {
 		padding: 2px;
 	}
@@ -357,6 +415,7 @@ body {
 	.prefs__export,
 	.prefs__import {
 		flex-basis: 100%;
+		border-radius: 0;
 	}
 
 	.prefs__pinned,
@@ -364,8 +423,4 @@ body {
 	.prefs__import {
 		padding: 0.2em;
 	}
-}
-
-button {
-	padding: 0;
 }

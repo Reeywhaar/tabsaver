@@ -59,12 +59,10 @@ export const TabSet = {
 			listeners.splice(listeners.indexOf(fcb), 1);
 		}
 	},
-	async save(name, tabs, color = null) {
-		const includePinned = await pinned.get();
+	async save(key, tabs, color = null) {
 		const tabsData = tabs
 			.map(x => serializeTab(x))
 			.filter(x => {
-				if (!includePinned && x.pinned) return false;
 				return !oneOf(x.url, "about:blank", "about:newtab");
 			})
 			.map(x => {
@@ -76,28 +74,28 @@ export const TabSet = {
 		}
 		const d = await TabSet.getAll();
 		const index = firstIndex(d, x => {
-			return x.key === name;
+			return x.key === key;
 		});
 		if (index > -1) {
 			d[index].data = tabsData;
 			d[index].color = color;
 		} else {
 			d.push({
-				key: name,
+				key,
 				data: tabsData,
 				color,
 			});
 		}
 		await TabSet.saveAll(d);
 	},
-	async add(name, tabs) {
-		if (name === null || name === "") {
-			name = getDefaultTabSetName();
+	async add(key, tabs) {
+		if (key === null || key === "") {
+			key = getDefaultTabSetName();
 		}
 		const d = await TabSet.getAll();
 		if (
 			first(d, x => {
-				return x.key === name;
+				return x.key === key;
 			}) !== null
 		) {
 			throw new Error("Name exists");
@@ -112,10 +110,10 @@ export const TabSet = {
 				throw new Error(`Set exists under name "${set.key}"`);
 			}
 		}
-		return await this.save(name, tabs);
+		return await this.save(key, tabs);
 	},
-	async open(name) {
-		const tabset = first(await TabSet.getAll(), x => x.key === name);
+	async open(key) {
+		const tabset = first(await TabSet.getAll(), x => x.key === key);
 		if (tabset === null) {
 			throw new Error("Unknown TabSet");
 		}

@@ -33,27 +33,23 @@ export const storage = {
 	},
 };
 
-export const pinned = {
-	get() {
-		return storage.get("includePinned", true);
-	},
-	set(val) {
-		return storage.set("includePinned", val);
-	},
-};
-
 const settingsListeners = [];
 const settingsDefault = {
+	includePinned: true,
 	showFavicons: false,
 	showTitles: false,
 	useHistory: true,
 	numberOfHistoryStates: 10,
 	theme: "light",
+	overlayPosition: "right",
 };
+const settingsKeys = Object.keys(settingsDefault);
 
 export const settings = {
 	get(key) {
-		return storage.get(`settings:${key}`);
+		if (settingsKeys.indexOf(key) === -1)
+			throw new Error(`Unknown Preferences key: ${key}`);
+		return storage.get(`settings:${key}`, settingsDefault[key]);
 	},
 	async getAll() {
 		let keys = Object.keys(settingsDefault);

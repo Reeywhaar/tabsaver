@@ -11,7 +11,7 @@
 				title="Click to show stored tabs, double click to edit name"
 				:style="{'color': titleColor}"
 			>{{tabset.key}}</span>
-			<div class="tab-saver-item__controls">
+			<div class="tab-saver-item__controls" :class="overlayClasses">
 				<color-select class="tab-saver-item__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
 				<button @click="open()" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
 				<button @click="addCurrentTab()" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
@@ -72,10 +72,16 @@ export default {
 				case "hsl(40, 100%, 70%)":
 				case "hsl(60, 100%, 70%)":
 				case "hsl(120, 90%, 70%)":
-					return null;
+					return "#444";
 				default:
 					return "#fff";
 			}
+		},
+		overlayPosition() {
+			return this.$store.state.settings.overlayPosition;
+		},
+		overlayClasses() {
+			return [`tab-saver-item__controls-${this.overlayPosition}`];
 		},
 	},
 	methods: {
@@ -196,7 +202,7 @@ export default {
 		async save(tabs = null) {
 			try {
 				await this.$store.dispatch("tabsetSave", {
-					name: this.tabset.key,
+					key: this.tabset.key,
 					color: this.tabset.color,
 					tabs,
 				});

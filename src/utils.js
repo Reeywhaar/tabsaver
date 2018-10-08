@@ -187,23 +187,6 @@ export function* reverse(iterable) {
 	}
 }
 
-/**
- *
- *function to expand element's width.
- *Actually it's a hack because you have to deal with two panel's variants:
- *- in button
- *- in menu
- *so, while in button mode we must expand body, so it will not catch css small width query
- */
-export async function expand(el, em = 40, hem = 40) {
-	const exp = document.createElement("div");
-	exp.style.height = `${hem}em`;
-	exp.style.width = `${em}em`;
-	el.appendChild(exp);
-	await sleep(50);
-	el.removeChild(exp);
-}
-
 export function abortablePromise(fn) {
 	const subscribe = {};
 	subscribe.on = fn => {

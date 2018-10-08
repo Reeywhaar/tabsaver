@@ -16,10 +16,9 @@ async function main() {
 	};
 
 	window.storage = storage;
-	window.pinned = pinned;
 	window.settings = settings;
-
 	window.TabSet = TabSet;
+
 	window.openURL = openURL;
 }
 
