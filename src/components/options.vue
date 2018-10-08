@@ -5,7 +5,7 @@
 		</div>
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showFavicons">Show tabs' favicons</label>
-			<div class="comment">* favicons caching is not implemented yet, which results in multiple request while rendering TabSet tab. Also may be a privacy concern</div>
+			<div class="comment">* favicons caching is not implemented yet, which results in multiple requests while rendering TabSet tab. Also may be a privacy concern</div>
 		</div>
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showTitles">Show tabs' titles</label>

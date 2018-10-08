@@ -6,6 +6,7 @@
 :root {
 	--hover-color: Highlight;
 	--prefs-bg-color: hsl(0, 0%, 95%);
+	--prefs-border-color: rgba(0, 0, 0, 0.1);
 	--overlay-color: #fff;
 	--text-color: #444;
 	--border-color: rgba(0, 0, 0, 0.2);
@@ -20,7 +21,8 @@
 	background: #444;
 	color: #fff;
 	--hover-color: hsl(200, 60%, 60%);
-	--prefs-bg-color: #444;
+	--prefs-bg-color: #666;
+	--prefs-border-color: rgba(255, 255, 255, 0.1);
 	--overlay-color: #444;
 	--text-color: #fff;
 	--border-color: rgba(255, 255, 255, 0.6);
@@ -107,7 +109,7 @@ button {
 	display: inline-block;
 	border: 1px solid transparent;
 	transition: width 0.4s, border-width 0.4s, margin-right 0.4s;
-	transition-delay: 0s;
+	transition-delay: 0.2s;
 }
 
 .color-select__item:first-child {
@@ -383,7 +385,7 @@ body.sidebar .main {
 	background: var(--prefs-bg-color);
 	-moz-user-select: none;
 	user-select: none;
-	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	border-top: 1px solid var(--prefs-border-color);
 }
 
 .prefs__pinned {
@@ -412,15 +414,12 @@ body.sidebar .main {
 	.prefs__pinned {
 		text-align: center;
 	}
-	.prefs__export,
-	.prefs__import {
-		flex-basis: 100%;
-		border-radius: 0;
-	}
 
 	.prefs__pinned,
 	.prefs__export,
 	.prefs__import {
+		flex-basis: 100%;
 		padding: 0.2em;
+		border-radius: 0;
 	}
 }
