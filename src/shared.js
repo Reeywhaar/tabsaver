@@ -120,7 +120,21 @@ export function tabSetsAreEqual(setA, setB) {
 }
 
 export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
-	return await browser.tabs.create({ url: getMangledURL(url), cookieStoreId });
+	try {
+		return await browser.tabs.create({
+			url: getMangledURL(url),
+			cookieStoreId,
+		});
+	} catch (e) {
+		if (e.message.substr(0, 27) === "No cookie store exists with") {
+			return await browser.tabs.create({
+				url: getMangledURL(url),
+				cookieStoreId: DEFAULT_COOKIE_STORE_ID,
+			});
+		} else {
+			throw e;
+		}
+	}
 }
 
 export function getDefaultTabSetName() {
