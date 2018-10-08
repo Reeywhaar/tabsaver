@@ -11,6 +11,9 @@ const links = [
 	"http://amazon.com",
 	"http://facebook.com",
 	"http://dddd.com",
+	"http://wikipedia.org",
+	"http://hn.yc.com",
+	"http://habr.com",
 ];
 
 const words = [
@@ -48,7 +51,7 @@ function* getRandomWord(n) {
 
 function generateTabset() {
 	const name = Array.from(getRandomWord(getRandomInt(4, 7))).join(" ");
-	const links = Array.from(getRandomLinks(getRandomInt(2, 9))).map(x => {
+	const links = Array.from(getRandomLinks(getRandomInt(3, 20))).map(x => {
 		return {
 			url: x,
 			pinned: getRandomInt(0, 4) === 0 ? false : true,
@@ -61,7 +64,7 @@ function generateTabset() {
 }
 
 async function main() {
-	const data = new Array(80).fill(0).map(x => generateTabset());
+	const data = new Array(50).fill(0).map(x => generateTabset());
 	console.log(JSON.stringify(data, null, "\t"));
 }
 
