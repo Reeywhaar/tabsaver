@@ -284,6 +284,14 @@ body {
 	margin-bottom: 0.5em;
 }
 
+/* tabsaver__tab */
+
+.tabsaver__tab-title-favicon {
+	width: 1em;
+	height: 1em;
+	vertical-align: bottom;
+}
+
 /* notification */
 
 .notification {

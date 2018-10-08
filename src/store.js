@@ -4,9 +4,10 @@ import Vuex from "vuex/dist/vuex.esm.js";
 
 export default async () => {
 	const api = await bgpage();
-	const [items, pinned] = await Promise.all([
+	const [items, pinned, settings] = await Promise.all([
 		api.TabSet.getAll(),
 		api.pinned.get(),
+		api.settings.getAll(),
 	]);
 
 	const store = new Vuex.Store({
@@ -15,6 +16,15 @@ export default async () => {
 			pinned,
 			notification: "",
 			notificationCounter: 0,
+			settings: Object.assign(
+				{
+					showTitles: false,
+					useHistory: true,
+					numberOfHistoryStates: 10,
+					theme: "light",
+				},
+				settings
+			),
 		},
 		getters: {
 			itemsReversed(state) {
@@ -30,6 +40,9 @@ export default async () => {
 			},
 			setNotification(state, message) {
 				state.notification = message;
+			},
+			setSetting(state, { key, value }) {
+				state.settings[key] = value;
 			},
 			incrementNotificationCounter(state, amount) {
 				state.notificationCounter += amount;
@@ -66,6 +79,10 @@ export default async () => {
 			},
 			async updateItems(context) {
 				context.commit("updateItems", await api.TabSet.getAll());
+			},
+			async setSetting(context, { key, value }) {
+				await api.settings.set(key, value);
+				context.commit("setSetting", { key, value });
 			},
 			async tabsetOpen(context, name = null) {
 				return await api.TabSet.open(name);
@@ -127,6 +144,9 @@ export default async () => {
 		}
 		if (key === "includePinned") {
 			store.dispatch("setPinned", value);
+		}
+		if (key.indexOf("settings:") === 0) {
+			store.dispatch("setSetting", key.substr(9), value);
 		}
 	});
 

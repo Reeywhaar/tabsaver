@@ -1,15 +1,19 @@
 <template>
-	<div class="panel-section panel-section-formElements options ">
-		<div class="panel-formElements-item options__section">
-			<label><input type="checkbox" name="choices" value="op1"/>Show tabs' titles</label>
+	<div class="options">
+		<div class="options__section">
+			<label><input class="options__left-checkbox" type="checkbox" name="choices" value="op1"/>Show tabs' favicons</label>
+			<div class="comment">* favicons caching is not implemented yet, which results in multiple request while rendering TabSet tab. Also may be a privacy concern</div>
 		</div>
-		<div class="panel-formElements-item options__section">
-			<label><input type="checkbox" name="choices" value="op1"/>Use history</label>
+		<div class="options__section">
+			<label><input class="options__left-checkbox" type="checkbox" name="choices" value="op1"/>Show tabs' titles</label>
 		</div>
-		<div class="panel-formElements-item options__section indent-1">
-			<label>Number of history states <input type="number" name="choices" min="2" max="100" value="10"/></label>
+		<div class="options__section">
+			<label><input class="options__left-checkbox" type="checkbox" name="choices" value="op1"/>Use history</label>
+			<div class="options__section indent-1 disabled">
+				<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="2" max="100" value="10"/></label>
+			</div>
 		</div>
-		<div class="panel-formElements-item options__section">
+		<div class="options__section">
 			<span>Theme&ensp;</span><select class="browser-style" name="select">
 				<option value="value1">Light</option>
 			</select>

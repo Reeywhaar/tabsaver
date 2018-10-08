@@ -36,6 +36,9 @@ module.exports = (h, args) => {
 			],
 			optimization: {
 				minimize: args.mode !== "development",
+				splitChunks: {
+					chunks: "all",
+				},
 			},
 			devtool: false,
 		},

@@ -19,6 +19,8 @@ export const storage = {
 			} catch (e) {
 				if (e.message === "can't access dead object") {
 					failedcbs.push(cb);
+				} else {
+					throw e;
 				}
 			}
 		}
@@ -37,6 +39,54 @@ export const pinned = {
 	},
 	set(val) {
 		return storage.set("includePinned", val);
+	},
+};
+
+const settingsListeners = [];
+const settingsDefault = {
+	showFavicons: true,
+	showTitles: true,
+	useHistory: true,
+	numberOfHistoryStates: 10,
+	theme: "light",
+};
+
+export const settings = {
+	get(key) {
+		return storage.get(`settings:${key}`);
+	},
+	async getAll() {
+		let keys = Object.keys(settingsDefault).map(x => `settings:${x}`);
+		let settings = (await Promise.all(
+			keys.map(x => storage.get(`settings:${x}`).then(setting => [x, setting]))
+		)).reduce((c, [key, value]) => {
+			if (value !== null) {
+				c[key.substr(9)] = value;
+			}
+			return c;
+		}, {});
+		return Object.assign({}, settingsDefault, settings);
+	},
+	async set(val) {
+		await storage.set(`settings:${key}`, val);
+		let failedcbs = [];
+		for (let cb of settingsListeners) {
+			try {
+				cb(key, value);
+			} catch (e) {
+				if (e.message === "can't access dead object") {
+					failedcbs.push(cb);
+				} else {
+					throw e;
+				}
+			}
+		}
+		for (let fcb of failedcbs) {
+			settingsListeners.splice(settingsListeners.indexOf(fcb), 1);
+		}
+	},
+	subscribe(fn) {
+		settingsListeners.push(fn);
 	},
 };
 

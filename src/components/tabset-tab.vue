@@ -3,7 +3,7 @@
 		:title="link.url"
 		class="tabsaver__tab-title"
 		@click="openUrl"
-	>{{link.url}}</span>
+	><img :src="link.fav" class="tabsaver__tab-title-favicon" @error="hideFavicon" v-if="showFavicons"> {{title}}</span>
 </template>
 
 <script>
@@ -17,7 +17,32 @@ export default {
 	updated() {
 		this.updateContainerProps();
 	},
+	data() {
+		return { faviconError: false };
+	},
+	computed: {
+		showFavicons() {
+			return (
+				this.$store.state.settings.showFavicons &&
+				this.$props.link.fav &&
+				!this.faviconError
+			);
+		},
+		title() {
+			if (
+				this.$store.state.settings.showTitles &&
+				this.$props.link.title &&
+				this.$props.link.title.length > 0
+			) {
+				return `${this.$props.link.title} (${this.$props.link.url})`;
+			}
+			return this.$props.link.url;
+		},
+	},
 	methods: {
+		hideFavicon() {
+			this.faviconError = true;
+		},
 		async updateContainerProps() {
 			if (
 				!this.link.cookieStoreId ||

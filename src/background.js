@@ -1,5 +1,5 @@
 import { readFileAsJson, saveFile } from "./utils.js";
-import { pinned, openURL, storage } from "./shared.js";
+import { pinned, openURL, storage, settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
 
 async function main() {
@@ -17,6 +17,7 @@ async function main() {
 
 	window.storage = storage;
 	window.pinned = pinned;
+	window.settings = settings;
 
 	window.TabSet = TabSet;
 	window.openURL = openURL;

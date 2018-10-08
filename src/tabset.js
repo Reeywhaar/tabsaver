@@ -14,6 +14,16 @@ const stringifyTab = tab => {
 		DEFAULT_COOKIE_STORE_ID}`;
 };
 
+const serializeTab = tab => {
+	return {
+		title: tab.title,
+		url: tab.url,
+		fav: tab.favIconUrl,
+		pinned: tab.pinned,
+		cookieStoreId: tab.cookieStoreId || DEFAULT_COOKIE_STORE_ID,
+	};
+};
+
 const tabsEqual = (a, b) => {
 	return stringifyTab(a) === stringifyTab(b);
 };
@@ -40,6 +50,8 @@ export const TabSet = {
 			} catch (e) {
 				if (e.message === "can't access dead object") {
 					failedcbs.push(cb);
+				} else {
+					throw e;
 				}
 			}
 		}
@@ -50,12 +62,7 @@ export const TabSet = {
 	async save(name, tabs, color = null) {
 		const includePinned = await pinned.get();
 		const tabsData = tabs
-			.map(x => ({
-				title: x.title,
-				url: x.url,
-				pinned: x.pinned,
-				cookieStoreId: x.cookieStoreId || DEFAULT_COOKIE_STORE_ID,
-			}))
+			.map(x => serializeTab(x))
 			.filter(x => {
 				if (!includePinned && x.pinned) return false;
 				return !oneOf(x.url, "about:blank", "about:newtab");
@@ -204,13 +211,8 @@ export const TabSet = {
 		if (oneOf(tab.url, "about:blank", "about:newtab")) {
 			throw new Error("Trying to add blank page");
 		}
-		const tabData = {
-			title: tab.title,
-			url: tab.url,
-			pinned: tab.pinned,
-			cookieStoreId: tab.cookieStoreId,
-		};
 
+		const tabData = serializeTab(tab);
 		const d = await TabSet.getAll();
 		const tabset = first(d, x => x.key === tabsetName);
 		if (!tabset) {
