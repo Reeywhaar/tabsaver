@@ -177,6 +177,7 @@ body {
 .tab-saver-item__link-remove-button,
 .tab-saver-item__link-move {
 	opacity: 0.6;
+	margin-right: 0.9em;
 }
 
 .tab-saver-item__link-remove-button {
