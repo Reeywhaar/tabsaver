@@ -93,7 +93,6 @@ export default async () => {
 			},
 			async tabsetSave(context, { name, color, tabs = null }) {
 				tabs = tabs || (await getCurrentTabs());
-				console.log("tabs", tabs);
 				await api.TabSet.save(name, tabs, color);
 				context.dispatch("updateItems");
 			},

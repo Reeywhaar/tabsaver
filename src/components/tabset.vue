@@ -200,7 +200,7 @@ export default {
 					color: this.tabset.color,
 					tabs,
 				});
-				this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
+				// this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
 			} catch (e) {
 				if (e.message === "Unknown TabSet") {
 					this.$store.dispatch("notify", e.message);
