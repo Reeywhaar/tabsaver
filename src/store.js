@@ -16,15 +16,7 @@ export default async () => {
 			pinned,
 			notification: "",
 			notificationCounter: 0,
-			settings: Object.assign(
-				{
-					showTitles: false,
-					useHistory: true,
-					numberOfHistoryStates: 10,
-					theme: "light",
-				},
-				settings
-			),
+			settings,
 		},
 		getters: {
 			itemsReversed(state) {
@@ -34,9 +26,6 @@ export default async () => {
 		mutations: {
 			setPinned(state, value) {
 				state.pinned = value;
-			},
-			togglePinned(state) {
-				state.pinned = !state.pinned;
 			},
 			setNotification(state, message) {
 				state.notification = message;
@@ -67,15 +56,11 @@ export default async () => {
 					context.commit("setNotification", "");
 			},
 			async setPinned(context, value) {
-				if (context.state.pinned === value) {
-					return;
-				}
 				await api.pinned.set(value);
 				context.commit("setPinned", value);
 			},
 			async togglePinned(context) {
-				await api.pinned.set(!context.state.pinned);
-				context.commit("togglePinned");
+				await context.dispatch("setPinned", !context.state.pinned);
 			},
 			async updateItems(context) {
 				context.commit("updateItems", await api.TabSet.getAll());
@@ -142,12 +127,11 @@ export default async () => {
 	api.storage.subscribe((key, value) => {
 		if (key === "tabs") {
 			store.dispatch("updateItems");
-		}
-		if (key === "includePinned") {
-			store.dispatch("setPinned", value);
-		}
-		if (key.indexOf("settings:") === 0) {
-			store.dispatch("setSetting", key.substr(9), value);
+		} else if (key === "includePinned") {
+			store.commit("setPinned", value);
+		} else if (key.indexOf("settings:") === 0) {
+			key = key.substr(9);
+			store.commit("setSetting", { key, value });
 		}
 	});
 

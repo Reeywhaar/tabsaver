@@ -64,7 +64,6 @@ export default {
 			return this.$store.state.notification;
 		},
 	},
-	async mounted() {},
 	methods: {
 		onTabSetDrag(e, tabset) {
 			if (

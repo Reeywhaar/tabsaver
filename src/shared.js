@@ -44,8 +44,8 @@ export const pinned = {
 
 const settingsListeners = [];
 const settingsDefault = {
-	showFavicons: true,
-	showTitles: true,
+	showFavicons: false,
+	showTitles: false,
 	useHistory: true,
 	numberOfHistoryStates: 10,
 	theme: "light",
@@ -56,18 +56,19 @@ export const settings = {
 		return storage.get(`settings:${key}`);
 	},
 	async getAll() {
-		let keys = Object.keys(settingsDefault).map(x => `settings:${x}`);
-		let settings = (await Promise.all(
-			keys.map(x => storage.get(`settings:${x}`).then(setting => [x, setting]))
+		let keys = Object.keys(settingsDefault);
+		let rsettings = (await Promise.all(
+			keys.map(x => settings.get(x).then(setting => [x, setting]))
 		)).reduce((c, [key, value]) => {
 			if (value !== null) {
-				c[key.substr(9)] = value;
+				c[key] = value;
 			}
 			return c;
 		}, {});
-		return Object.assign({}, settingsDefault, settings);
+		return Object.assign({}, settingsDefault, rsettings);
 	},
-	async set(val) {
+	async set(key, val) {
+		if ((await settings.get(key)) === val) return;
 		await storage.set(`settings:${key}`, val);
 		let failedcbs = [];
 		for (let cb of settingsListeners) {

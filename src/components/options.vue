@@ -1,11 +1,11 @@
 <template>
 	<div class="options">
 		<div class="options__section">
-			<label><input class="options__left-checkbox" type="checkbox" name="choices" value="op1"/>Show tabs' favicons</label>
+			<label><input class="options__left-checkbox" type="checkbox" v-model="showFavicons">Show tabs' favicons</label>
 			<div class="comment">* favicons caching is not implemented yet, which results in multiple request while rendering TabSet tab. Also may be a privacy concern</div>
 		</div>
 		<div class="options__section">
-			<label><input class="options__left-checkbox" type="checkbox" name="choices" value="op1"/>Show tabs' titles</label>
+			<label><input class="options__left-checkbox" type="checkbox" v-model="showTitles">Show tabs' titles</label>
 		</div>
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" name="choices" value="op1"/>Use history</label>
@@ -36,8 +36,27 @@ export default {
 		};
 	},
 	computed: {
-		items() {
-			return this.$store.getters.itemsReversed;
+		showFavicons: {
+			get() {
+				return this.$store.state.settings.showFavicons;
+			},
+			set(value) {
+				this.$store.dispatch("setSetting", {
+					key: "showFavicons",
+					value,
+				});
+			},
+		},
+		showTitles: {
+			get() {
+				return this.$store.state.settings.showTitles;
+			},
+			set(value) {
+				this.$store.dispatch("setSetting", {
+					key: "showTitles",
+					value,
+				});
+			},
 		},
 		pinned() {
 			return this.$store.state.pinned;
