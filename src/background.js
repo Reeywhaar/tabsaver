@@ -29,7 +29,7 @@ async function main() {
 	storage.subscribeBefore(async (key, value) => {
 		if (key === "tabs" && trackHistory) {
 			if (!(await settings.get("useHistory"))) return;
-			let tabs = await storage.get("tabs");
+			let tabs = await storage.get("tabs", []);
 			const tabsdiff = diff(value, tabs);
 			History.push(tabsdiff);
 		}

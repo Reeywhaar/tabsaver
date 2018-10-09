@@ -7,7 +7,7 @@ webpackProd:
 	./node_modules/.bin/webpack --mode production
 
 build:
-	./node_modules/.bin/webpack --mode production && make lint && web-ext build -s ext
+	rm -r ext/dist && ./node_modules/.bin/webpack --mode production && make lint && web-ext build -s ext
 
 watch:
 	./node_modules/.bin/webpack --mode development --watch

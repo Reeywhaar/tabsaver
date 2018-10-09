@@ -126,7 +126,7 @@ export default async () => {
 					host.trackHistory = false;
 					let last = await host.Undo.pop();
 					let target = JSON.parse(JSON.stringify(context.state.items));
-					for (let change of last.reverse()) {
+					for (let change of last) {
 						applyChange(target, target, change);
 					}
 					await host.storage.set("tabs", target);
