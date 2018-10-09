@@ -121,12 +121,12 @@ export function isURLPrivileged(url) {
 
 export function getMangledURL(url) {
 	if (isURLPrivileged(url))
-		return `/html/handler.html?url=${encodeURIComponent(url)}`;
+		return `/dist/handler.html?url=${encodeURIComponent(url)}`;
 	return url;
 }
 
 export function getUnmangledURL(url) {
-	if (url.indexOf(browser.extension.getURL("/html/handler.html")) === 0) {
+	if (url.indexOf(browser.extension.getURL("/dist/handler.html")) === 0) {
 		const qu = parseQuery("?" + strAfter(url, "handler.html?"));
 		return qu.url;
 	}

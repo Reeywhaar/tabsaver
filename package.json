@@ -21,6 +21,7 @@
     "css-loader": "^1.0.0",
     "deep-diff": "^1.0.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "^4.0.0-beta.1",
     "inert-entry-webpack-plugin": "^4.0.2",
     "vue": "^2.5.17",
     "vue-loader": "^15.4.2",

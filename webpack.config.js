@@ -4,6 +4,8 @@ const InertEntryPlugin = require("inert-entry-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const extractSVG = new ExtractTextPlugin("[name]");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = (h, args) => {
 	return [
 		{
@@ -14,8 +16,9 @@ module.exports = (h, args) => {
 				handler: "./src/handler.js",
 			},
 			output: {
-				path: path.resolve(__dirname, "ext/js"),
+				path: path.resolve(__dirname, "ext/dist"),
 				filename: "[name].js",
+				publicPath: "/dist/",
 			},
 			module: {
 				rules: [
@@ -32,6 +35,35 @@ module.exports = (h, args) => {
 					"process.env": {
 						NODE_ENV: '"production"',
 					},
+				}),
+				...[
+					{
+						name: "panel",
+						chunks: ["panel"],
+					},
+					{
+						name: "sidebar",
+						chunks: ["panel"],
+					},
+					{
+						name: "options",
+						chunks: ["options"],
+					},
+					{
+						name: "background",
+						chunks: ["background"],
+					},
+					{
+						name: "handler",
+						chunks: ["handler"],
+					},
+				].map(item => {
+					return new HtmlWebpackPlugin({
+						chunks: item.chunks,
+						filename: `${item.name}.html`,
+						title: `TabSaver ${item.name}`,
+						template: `html_templates/${item.name}.html`,
+					});
 				}),
 			],
 			optimization: {

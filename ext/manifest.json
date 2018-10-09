@@ -10,7 +10,7 @@
 	"browser_action": {
     "default_icon": "icons/icon.svg",
     "default_title": "Tab Saver",
-		"default_popup": "html/panel.html",
+		"default_popup": "dist/panel.html",
 		"browser_style": true,
 		"theme_icons": [{
 			"light": "icons/icon-light.svg",
@@ -19,10 +19,10 @@
 		}]
   },
 	"background":{
-		"page": "html/background.html"
+		"page": "dist/background.html"
 	},
 	"options_ui": {
-		"page": "html/options.html",
+		"page": "dist/options.html",
 		"browser_style": true
 	},
 	"permissions": [
@@ -42,7 +42,7 @@
 	"sidebar_action": {
 		"default_icon": "icons/icon.svg",
 		"default_title": "TabSaver",
-		"default_panel": "html/sidebar.html",
+		"default_panel": "dist/sidebar.html",
 		"browser_style": true,
 		"open_at_install": false
 	}
