@@ -30,7 +30,8 @@
 		"tabs",
 		"downloads",
 		"cookies",
-		"contextualIdentities"
+		"contextualIdentities",
+		"unlimitedStorage"
 	],
 	"applications": {
 		"gecko": {

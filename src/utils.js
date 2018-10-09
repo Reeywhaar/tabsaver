@@ -207,3 +207,17 @@ export function cutString(str, len, ellipsis = "") {
 	if (str.length <= len) return str;
 	return str.substr(0, len - ellipsis.length) + ellipsis;
 }
+
+export function debounce(fn, delay, immediate) {
+	let timeout;
+	return (...args) => {
+		const cb = () => {
+			timeout = null;
+			if (!immediate) fn(...args);
+		};
+		const callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(cb, delay);
+		if (callNow) fn(...args);
+	};
+}

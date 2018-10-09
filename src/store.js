@@ -1,18 +1,20 @@
 import { bgpage, getCurrentTabs } from "./shared.js";
-import { reverse, sleep } from "./utils.js";
+import { reverse, sleep, debounce } from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
 
 export default async () => {
 	const api = await bgpage();
-	const [items, settings] = await Promise.all([
+	const [items, settings, statesCount] = await Promise.all([
 		api.TabSet.getAll(),
 		api.settings.getAll(),
+		api.Undo.count(),
 	]);
 
 	const store = new Vuex.Store({
 		state: {
 			items,
 			settings,
+			statesCount,
 			notification: "",
 			notificationCounter: 0,
 		},
@@ -33,6 +35,9 @@ export default async () => {
 			},
 			incrementNotificationCounter(state, amount) {
 				state.notificationCounter += amount;
+			},
+			updateStatesCount(state, count) {
+				state.statesCount = count;
 			},
 		},
 		actions: {
@@ -106,6 +111,10 @@ export default async () => {
 			async openUrl(context, [url, identity]) {
 				await api.openURL(url, identity);
 			},
+			async updateStatesCount(context) {
+				const count = await api.Undo.count();
+				context.commit("updateStatesCount", count);
+			},
 		},
 	});
 
@@ -117,6 +126,8 @@ export default async () => {
 		} else if (key.indexOf("settings:") === 0) {
 			key = key.substr(9);
 			store.commit("setSetting", { key, value });
+		} else if (key.indexOf("history:states") === 0) {
+			store.dispatch("updateStatesCount");
 		}
 	});
 

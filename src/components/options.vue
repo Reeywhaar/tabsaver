@@ -26,8 +26,13 @@
 		</div>
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="useHistory"/>Use history</label>
-			<div class="options__section indent-1" :class="{'disabled': !useHistory}">
-				<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="2" max="100" v-model="numberOfHistoryStates"/></label>
+			<div class="history-options indent-1" :class="{'disabled': !useHistory}">
+				<div class="options__section">
+					<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="2" max="100" v-model.number="numberOfHistoryStates"/></label>
+				</div>
+				<div class="history-options__states-count">States count: {{statesCount}}</div>
+				<div class="comment">* Lot of states may abuse your hard drive, especially if you have a lot TabSets with a lot of tabs in them.</div>
+				<div class="comment">Value between 5 and 10 is optimal</div>
 			</div>
 		</div>
 	</div>
@@ -62,6 +67,9 @@ export default {
 		numberOfHistoryStates: createProperty("numberOfHistoryStates"),
 		theme: createProperty("theme"),
 		overlayPosition: createProperty("overlayPosition"),
+		statesCount() {
+			return this.$store.state.statesCount;
+		},
 	},
 };
 </script>

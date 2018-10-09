@@ -1,6 +1,7 @@
 import { readFileAsJson, saveFile } from "./utils.js";
-import { pinned, openURL, storage, settings } from "./shared.js";
+import { openURL, storage, settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
+import { History } from "./history.js";
 
 async function main() {
 	window.import = async () => {
@@ -18,8 +19,23 @@ async function main() {
 	window.storage = storage;
 	window.settings = settings;
 	window.TabSet = TabSet;
+	window.Undo = History;
 
 	window.openURL = openURL;
+
+	storage.subscribeBefore(async (key, value) => {
+		if (key === "tabs") {
+			if (!(await settings.get("useHistory"))) return;
+			let tabs = await storage.get("tabs");
+			History.push(tabs);
+		}
+	});
+
+	storage.subscribe(async (key, value) => {
+		if (key === "settings:useHistory" && value == false) {
+			History.clear();
+		}
+	});
 }
 
 main().catch(err => console.error(err));

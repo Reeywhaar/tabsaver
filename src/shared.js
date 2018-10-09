@@ -3,6 +3,7 @@ import { setsAreEqual, oneOf, strAfter, padLeft, parseQuery } from "./utils.js";
 export const DEFAULT_COOKIE_STORE_ID = "firefox-default";
 
 const storageListeners = [];
+const storageBeforeListeners = [];
 
 export const storage = {
 	async get(key, def = null) {
@@ -11,39 +12,61 @@ export const storage = {
 		return req[key];
 	},
 	async set(key, value) {
-		await browser.storage.local.set({ [key]: value });
-		let failedcbs = [];
-		for (let cb of storageListeners) {
-			try {
-				cb(key, value);
-			} catch (e) {
-				if (e.message === "can't access dead object") {
-					failedcbs.push(cb);
-				} else {
-					throw e;
+		{
+			let failedcbs = [];
+			for (let cb of storageBeforeListeners) {
+				try {
+					await cb(key, value);
+				} catch (e) {
+					if (e.message === "can't access dead object") {
+						failedcbs.push(cb);
+					} else {
+						throw e;
+					}
 				}
 			}
+			for (let fcb of failedcbs) {
+				storageBeforeListeners.splice(storageBeforeListeners.indexOf(fcb), 1);
+			}
 		}
-		for (let fcb of failedcbs) {
-			storageListeners.splice(storageListeners.indexOf(fcb), 1);
+		await browser.storage.local.set({ [key]: value });
+		{
+			let failedcbs = [];
+			for (let cb of storageListeners) {
+				try {
+					cb(key, value);
+				} catch (e) {
+					if (e.message === "can't access dead object") {
+						failedcbs.push(cb);
+					} else {
+						throw e;
+					}
+				}
+			}
+			for (let fcb of failedcbs) {
+				storageListeners.splice(storageListeners.indexOf(fcb), 1);
+			}
 		}
+	},
+	subscribeBefore(fn) {
+		storageBeforeListeners.push(fn);
 	},
 	subscribe(fn) {
 		storageListeners.push(fn);
 	},
 };
 
-const settingsListeners = [];
 const settingsDefault = {
 	includePinned: true,
 	showFavicons: false,
 	showTitles: false,
 	useHistory: true,
-	numberOfHistoryStates: 10,
+	numberOfHistoryStates: 5,
 	theme: "light",
 	overlayPosition: "right",
 };
 const settingsKeys = Object.keys(settingsDefault);
+const settingsListeners = [];
 
 export const settings = {
 	get(key) {
@@ -64,22 +87,23 @@ export const settings = {
 		return Object.assign({}, settingsDefault, rsettings);
 	},
 	async set(key, val) {
-		if ((await settings.get(key)) === val) return;
 		await storage.set(`settings:${key}`, val);
-		let failedcbs = [];
-		for (let cb of settingsListeners) {
-			try {
-				cb(key, value);
-			} catch (e) {
-				if (e.message === "can't access dead object") {
-					failedcbs.push(cb);
-				} else {
-					throw e;
+		{
+			let failedcbs = [];
+			for (let cb of settingsListeners) {
+				try {
+					await cb(key, value);
+				} catch (e) {
+					if (e.message === "can't access dead object") {
+						failedcbs.push(cb);
+					} else {
+						throw e;
+					}
 				}
 			}
-		}
-		for (let fcb of failedcbs) {
-			settingsListeners.splice(settingsListeners.indexOf(fcb), 1);
+			for (let fcb of failedcbs) {
+				settingsListeners.splice(settingsListeners.indexOf(fcb), 1);
+			}
 		}
 	},
 	subscribe(fn) {
