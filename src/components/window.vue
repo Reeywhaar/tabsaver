@@ -49,9 +49,18 @@ export default {
 		toggleButton: ToggleButtonComponent,
 	},
 	data() {
+		const hours = new Date().getHours;
+		const daytime = hours >= 7 && hours < 20 ? "light" : "dark";
 		return {
 			newTabSetName: "",
+			daytime,
 		};
+	},
+	mounted() {
+		setInterval(() => {
+			const hours = new Date().getHours;
+			this.daytime = hours >= 7 && hours < 20 ? "light" : "dark";
+		}, 1000 * 60 * 10);
 	},
 	computed: {
 		items() {
@@ -73,9 +82,7 @@ export default {
 		},
 		mainClass() {
 			if (this.$store.state.settings.theme === "daytime") {
-				const hours = new Date().getHours;
-				const theme = hours >= 7 && hours < 20 ? "light" : "dark";
-				return [`main-theme-${theme}`];
+				return [`main-theme-${this.daytime}`];
 			}
 			return [`main-theme-${this.$store.state.settings.theme}`];
 		},
