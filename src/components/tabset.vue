@@ -289,6 +289,7 @@ export default {
 			}
 		},
 		async setColor(color) {
+			if (color === this.tabset.color) return;
 			this.tabset.color = color;
 			await this.save(this.tabset.data);
 		},
