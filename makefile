@@ -9,6 +9,9 @@ watch:
 run:
 	make watch & web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
 
+runProd:
+	./node_modules/.bin/webpack --mode production && web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE}
+
 runNightly:
 	make watch & web-ext run -f nightly -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
 
