@@ -25,13 +25,17 @@ async function main() {
 	window.openURL = openURL;
 
 	window.trackHistory = true;
+	window.preChangeTabs = null;
 
 	storage.subscribeBefore(async (key, value) => {
-		if (key === "tabs" && trackHistory) {
+		if (key === "tabs" && window.trackHistory) {
 			if (!(await settings.get("useHistory"))) return;
-			let tabs = await storage.get("tabs", []);
-			const tabsdiff = diff(value, tabs);
-			History.push(tabsdiff);
+			window.preChangeTabs =
+				window.preChangeTabs || (await storage.get("tabs", []));
+			const tabsdiff = diff(value, window.preChangeTabs);
+			History.push(tabsdiff, () => {
+				window.preChangeTabs = null;
+			});
 		}
 	});
 

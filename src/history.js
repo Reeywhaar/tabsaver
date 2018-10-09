@@ -1,6 +1,8 @@
 import { storage, settings } from "./shared.js";
 import { debounce } from "./utils.js";
 
+let cachedTabs = null;
+
 export const History = {
 	async permittedNumberOfStates() {
 		const [use, length] = await Promise.all([
@@ -34,7 +36,7 @@ export const History = {
 			storage.set("history:count", 0),
 		]);
 	},
-	push: debounce(async state => {
+	push: debounce(async (state, callback = () => {}) => {
 		let capacity = await History.permittedNumberOfStates();
 		if (capacity === 0) return;
 		const states = await History.getAll();
@@ -47,7 +49,8 @@ export const History = {
 			storage.set("history:states", states),
 			storage.set("history:count", states.length),
 		]);
-	}, 500),
+		callback();
+	}, 1000),
 	async count() {
 		return await storage.get("history:count", 0);
 	},
