@@ -72,6 +72,11 @@ export default {
 			return this.$store.state.notification;
 		},
 		mainClass() {
+			if (this.$store.state.settings.theme === "daytime") {
+				const hours = new Date().getHours;
+				const theme = hours >= 7 && hours < 20 ? "light" : "dark";
+				return [`main-theme-${theme}`];
+			}
 			return [`main-theme-${this.$store.state.settings.theme}`];
 		},
 		contentStyle() {

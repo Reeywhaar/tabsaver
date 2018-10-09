@@ -10,7 +10,6 @@
 	display: block;
 	font-style: italic;
 	opacity: 0.8;
-	margin-left: 1.2em;
 }
 
 .disabled {
@@ -18,7 +17,7 @@
 	pointer-events: none;
 }
 
-.options__section + .options__section {
+.options__section+.options__section {
 	margin-top: 1em;
 	padding-top: 0.5em;
 }

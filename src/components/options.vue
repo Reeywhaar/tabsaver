@@ -5,7 +5,7 @@
 		</div>
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showFavicons">Show tabs' favicons</label>
-			<div class="comment">* favicons caching is not implemented yet, which results in multiple requests while rendering TabSet tab. Also may be a privacy concern</div>
+			<div class="comment indent-1">* favicons caching is not implemented yet, which results in multiple requests while rendering TabSet tab. Also may be a privacy concern</div>
 		</div>
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showTitles">Show tabs' titles</label>
@@ -14,7 +14,9 @@
 			<span>Theme&ensp;</span><select class="browser-style" v-model="theme">
 				<option value="light">Light</option>
 				<option value="dark">Dark</option>
+				<option value="daytime">Based on day time</option>
 			</select>
+			<div class="comment">* Day time based theme is light from 7am to 8pm, otherwise it's dark</div>
 		</div>
 		<div class="options__section">
 			<span>Show controls overlay at&ensp;</span><select class="browser-style" v-model="overlayPosition">
