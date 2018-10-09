@@ -1,13 +1,15 @@
 import { bgpage, getCurrentTabs } from "./shared.js";
-import { reverse, sleep, debounce } from "./utils.js";
+import { reverse, sleep, waitUntil } from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
 
 export default async () => {
-	const api = await bgpage();
+	const host = await bgpage();
+	await waitUntil(() => host.loaded === true);
+
 	const [items, settings, statesCount] = await Promise.all([
-		api.TabSet.getAll(),
-		api.settings.getAll(),
-		api.Undo.count(),
+		host.TabSet.getAll(),
+		host.settings.getAll(),
+		host.Undo.count(),
 	]);
 
 	const store = new Vuex.Store({
@@ -42,10 +44,10 @@ export default async () => {
 		},
 		actions: {
 			async import() {
-				await api.import();
+				await host.import();
 			},
 			async export() {
-				await api.export();
+				await host.export();
 			},
 			async notify(context, message) {
 				context.commit("setNotification", message);
@@ -56,17 +58,17 @@ export default async () => {
 					context.commit("setNotification", "");
 			},
 			async updateItems(context) {
-				context.commit("updateItems", await api.TabSet.getAll());
+				context.commit("updateItems", await host.TabSet.getAll());
 			},
 			async setSetting(context, { key, value }) {
-				await api.settings.set(key, value);
+				await host.settings.set(key, value);
 				context.commit("setSetting", { key, value });
 			},
 			async tabsetOpen(context, key = null) {
-				return await api.TabSet.open(key);
+				return await host.TabSet.open(key);
 			},
 			async tabsetCreate(context, key = null) {
-				await api.TabSet.add(key, await getCurrentTabs());
+				await host.TabSet.add(key, await getCurrentTabs());
 			},
 			async tabsetSave(context, { key, color, tabs = null }) {
 				if (tabs === null) {
@@ -75,32 +77,32 @@ export default async () => {
 						tabs = tabs.filter(x => !x.pinned);
 					}
 				}
-				await api.TabSet.save(key, tabs, color);
+				await host.TabSet.save(key, tabs, color);
 			},
 			async tabsetRename(context, [oldkey, newkey]) {
-				await api.TabSet.rename(oldkey, newkey);
+				await host.TabSet.rename(oldkey, newkey);
 			},
 			async tabsetRemove(context, key) {
-				await api.TabSet.remove(key);
+				await host.TabSet.remove(key);
 			},
 			async tabsetMove(context, [tabsetKey, targetKey, after = true]) {
-				await api.TabSet.moveTabSet(tabsetKey, targetKey, after);
+				await host.TabSet.moveTabSet(tabsetKey, targetKey, after);
 			},
 			async tabsetAppend(context, key) {
 				if (Array.isArray(key)) {
-					await api.TabSet.appendTab(...key);
+					await host.TabSet.appendTab(...key);
 				} else {
-					await api.TabSet.appendTab(key);
+					await host.TabSet.appendTab(key);
 				}
 			},
 			async tabsetRemoveTab(context, [tabsetKey, tab]) {
-				await api.TabSet.removeTab(tabsetKey, tab);
+				await host.TabSet.removeTab(tabsetKey, tab);
 			},
 			async tabsetMoveTab(
 				context,
 				[tabsetKey, tab, targetTabsetKey, targetTab, after = true]
 			) {
-				await api.TabSet.moveTab(
+				await host.TabSet.moveTab(
 					tabsetKey,
 					tab,
 					targetTabsetKey,
@@ -109,16 +111,16 @@ export default async () => {
 				);
 			},
 			async openUrl(context, [url, identity]) {
-				await api.openURL(url, identity);
+				await host.openURL(url, identity);
 			},
 			async updateStatesCount(context) {
-				const count = await api.Undo.count();
+				const count = await host.Undo.count();
 				context.commit("updateStatesCount", count);
 			},
 		},
 	});
 
-	api.storage.subscribe((key, value) => {
+	host.storage.subscribe((key, value) => {
 		if (key === "tabs") {
 			store.dispatch("updateItems");
 		} else if (key === "includePinned") {

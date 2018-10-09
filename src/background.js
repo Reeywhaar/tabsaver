@@ -36,6 +36,8 @@ async function main() {
 			History.clear();
 		}
 	});
+
+	window.loaded = true;
 }
 
 main().catch(err => console.error(err));

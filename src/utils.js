@@ -221,3 +221,9 @@ export function debounce(fn, delay, immediate) {
 		if (callNow) fn(...args);
 	};
 }
+
+export async function waitUntil(predicate, interval = 100) {
+	while (!predicate) {
+		await sleep(interval);
+	}
+}
