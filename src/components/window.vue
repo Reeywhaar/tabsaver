@@ -34,8 +34,6 @@
 				<toggle-button class="prefs__pinned-button" v-model="pinned">Save Pinned</toggle-button>
 			</div>
 			<button @click="undo" class="inline-button prefs__undo" v-if="undoAvailable" title="Undo">Undo</button>
-			<button @click="importData" class="inline-button prefs__import" title="Import from file">Import</button>
-			<button @click="exportData" class="inline-button prefs__export" title="Export to file">Export</button>
 		</div>
 	</div>
 </template>

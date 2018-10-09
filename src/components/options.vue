@@ -36,6 +36,8 @@
 			</div>
 		</div>
 		<div class="options__section clear-section">
+			<button class="button" @click="importTabsets">Import TabSets</button>
+			<button class="button" @click="exportTabsets">Export TabSets</button>
 			<hold-button class="button clear-tabsets-button" color="hsla(10, 90%, 50%)" delay="2" @click="clearTabsets">Clear TabSets</hold-button>
 		</div>
 		<div class="options__section credits">
@@ -83,6 +85,12 @@ export default {
 		},
 	},
 	methods: {
+		importTabsets() {
+			this.$store.dispatch("import");
+		},
+		exportTabsets() {
+			this.$store.dispatch("export");
+		},
 		clearTabsets() {
 			this.$store.dispatch("clearTabsets");
 		},

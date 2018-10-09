@@ -405,11 +405,10 @@ body.sidebar .main {
 	background-color: var(--hover-color);
 }
 
-.prefs__export,
-.prefs__import {
+.prefs__undo {
 	padding: 0.5em;
-	text-align: center;
-	border-radius: 0;
+	margin-right: 0.5em;
+	opacity: 0.5;
 }
 
 @media (max-width: 250px) {
@@ -422,16 +421,5 @@ body.sidebar .main {
 	.prefs {
 		flex-wrap: wrap;
 		height: auto;
-	}
-	.prefs__pinned {
-		text-align: center;
-	}
-
-	.prefs__pinned,
-	.prefs__export,
-	.prefs__import {
-		flex-basis: 100%;
-		padding: 0.2em;
-		border-radius: 0;
 	}
 }
