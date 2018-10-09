@@ -30,3 +30,26 @@
 	width: 4em;
 	text-align: right;
 }
+
+.credits-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.credits-list__item::before {
+	content: "- ";
+}
+
+.button {
+	background: rgba(0, 0, 0, 0.04);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	padding: 0.4em 0.8em;
+	font: inherit;
+	border-radius: 0.2em;
+}
+
+.clear-tabsets-button {
+	background: hsla(10, 90%, 50%);
+	color: #fff;
+}

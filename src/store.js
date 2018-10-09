@@ -1,6 +1,7 @@
 import { bgpage, getCurrentTabs } from "./shared.js";
 import { reverse, sleep, waitUntil } from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
+import { applyChange } from "deep-diff";
 
 export default async () => {
 	const host = await bgpage();
@@ -110,12 +111,28 @@ export default async () => {
 					after
 				);
 			},
+			async clearTabsets(context) {
+				await host.storage.set("tabs", []);
+			},
 			async openUrl(context, [url, identity]) {
 				await host.openURL(url, identity);
 			},
 			async updateStatesCount(context) {
 				const count = await host.Undo.count();
 				context.commit("updateStatesCount", count);
+			},
+			async undo(context) {
+				try {
+					host.trackHistory = false;
+					let last = await host.Undo.pop();
+					let target = JSON.parse(JSON.stringify(context.state.items));
+					for (let change of last.reverse()) {
+						applyChange(target, target, change);
+					}
+					await host.storage.set("tabs", target);
+				} finally {
+					host.trackHistory = true;
+				}
 			},
 		},
 	});

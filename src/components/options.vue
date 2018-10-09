@@ -28,17 +28,28 @@
 			<label><input class="options__left-checkbox" type="checkbox" v-model="useHistory"/>Use history</label>
 			<div class="history-options indent-1" :class="{'disabled': !useHistory}">
 				<div class="options__section">
-					<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="2" max="100" v-model.number="numberOfHistoryStates"/></label>
+					<label>Number of history states <input class="options__states-counter" type="number" name="choices" min="1" max="100" v-model.number="numberOfHistoryStates"/></label>
 				</div>
 				<div class="history-options__states-count">States count: {{statesCount}}</div>
 				<div class="comment">* Lot of states may abuse your hard drive, especially if you have a lot TabSets with a lot of tabs in them.</div>
-				<div class="comment">Value between 5 and 10 is optimal</div>
+				<div class="comment">Value between 10 and 30 is optimal</div>
 			</div>
+		</div>
+		<div class="options__section">
+			<hold-button class="button clear-tabsets-button" color="hsla(10, 90%, 50%)" delay="2" @click="clearTabsets">Clear TabSets</hold-button>
+		</div>
+		<div class="options__section credits">
+			<h3>Credits</h3>
+			<p>This project takes best of these products:</p>
+			<ul class="credits-list">
+				<li class="credits-list__item"><a href="https://vuejs.org/"><strong>Vue.js</strong></a> reactive framework</li>
+				<li class="credits-list__item"><a href="https://github.com/flitbit/diff"><strong>deep-diff</strong></a> library</li>
+			</ul>
 		</div>
 	</div>
 </template>
 <script>
-import ToggleButtonComponent from "./toggle-button.vue";
+import HoldButton from "./hold-button.vue";
 import { sleep, oneOf, first } from "../utils.js";
 
 function createProperty(prop) {
@@ -57,7 +68,7 @@ function createProperty(prop) {
 
 export default {
 	components: {
-		toggleButton: ToggleButtonComponent,
+		HoldButton,
 	},
 	computed: {
 		includePinned: createProperty("includePinned"),
@@ -69,6 +80,11 @@ export default {
 		overlayPosition: createProperty("overlayPosition"),
 		statesCount() {
 			return this.$store.state.statesCount;
+		},
+	},
+	methods: {
+		clearTabsets() {
+			this.$store.dispatch("clearTabsets");
 		},
 	},
 };

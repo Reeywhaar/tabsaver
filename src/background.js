@@ -2,6 +2,7 @@ import { readFileAsJson, saveFile } from "./utils.js";
 import { openURL, storage, settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
 import { History } from "./history.js";
+import { diff } from "deep-diff";
 
 async function main() {
 	window.import = async () => {
@@ -23,11 +24,14 @@ async function main() {
 
 	window.openURL = openURL;
 
+	window.trackHistory = true;
+
 	storage.subscribeBefore(async (key, value) => {
-		if (key === "tabs") {
+		if (key === "tabs" && trackHistory) {
 			if (!(await settings.get("useHistory"))) return;
 			let tabs = await storage.get("tabs");
-			History.push(tabs);
+			const tabsdiff = diff(value, tabs);
+			History.push(tabsdiff);
 		}
 	});
 

@@ -18,8 +18,21 @@ export const History = {
 		if (states.length === 0) return null;
 		return states[states.length - 1];
 	},
+	async pop() {
+		const states = await storage.get("history:states", []);
+		if (states.length === 0) return null;
+		const last = states.pop();
+		await Promise.all([
+			storage.set("history:states", states),
+			storage.set("history:count", states.length),
+		]);
+		return last;
+	},
 	async clear() {
-		storage.set("history:states", []);
+		Promise.all([
+			storage.set("history:states", []),
+			storage.set("history:count", 0),
+		]);
 	},
 	push: debounce(async state => {
 		let capacity = await History.permittedNumberOfStates();
@@ -30,10 +43,12 @@ export const History = {
 			states.splice(0, overflow);
 		}
 		states.push(state);
-		return storage.set("history:states", states);
-	}, 1000),
+		await Promise.all([
+			storage.set("history:states", states),
+			storage.set("history:count", states.length),
+		]);
+	}, 500),
 	async count() {
-		const states = await storage.get("history:states", []);
-		return states.length;
+		return await storage.get("history:count", 0);
 	},
 };

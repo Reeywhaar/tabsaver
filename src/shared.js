@@ -61,7 +61,7 @@ const settingsDefault = {
 	showFavicons: false,
 	showTitles: false,
 	useHistory: true,
-	numberOfHistoryStates: 5,
+	numberOfHistoryStates: 15,
 	theme: "light",
 	overlayPosition: "right",
 };
