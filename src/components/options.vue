@@ -35,7 +35,7 @@
 				<div class="comment">Value between 10 and 30 is optimal</div>
 			</div>
 		</div>
-		<div class="options__section">
+		<div class="options__section clear-section">
 			<hold-button class="button clear-tabsets-button" color="hsla(10, 90%, 50%)" delay="2" @click="clearTabsets">Clear TabSets</hold-button>
 		</div>
 		<div class="options__section credits">

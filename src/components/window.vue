@@ -50,7 +50,7 @@ export default {
 		toggleButton: ToggleButtonComponent,
 	},
 	data() {
-		const hours = new Date().getHours;
+		const hours = new Date().getHours();
 		const daytime = hours >= 7 && hours < 20 ? "light" : "dark";
 		return {
 			newTabSetName: "",
@@ -59,7 +59,7 @@ export default {
 	},
 	mounted() {
 		setInterval(() => {
-			const hours = new Date().getHours;
+			const hours = new Date().getHours();
 			this.daytime = hours >= 7 && hours < 20 ? "light" : "dark";
 		}, 1000 * 60 * 10);
 	},

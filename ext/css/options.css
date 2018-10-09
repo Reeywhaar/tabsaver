@@ -49,6 +49,10 @@
 	border-radius: 0.2em;
 }
 
+.options__section.clear-section {
+	margin-top: 4em;
+}
+
 .clear-tabsets-button {
 	background: hsla(10, 90%, 50%);
 	color: #fff;
