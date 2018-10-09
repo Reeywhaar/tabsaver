@@ -21,13 +21,13 @@
 	background: #444;
 	color: #fff;
 	--hover-color: hsl(200, 60%, 60%);
-	--prefs-bg-color: #666;
+	--prefs-bg-color: #444;
 	--prefs-border-color: rgba(255, 255, 255, 0.1);
-	--overlay-color: #444;
+	--overlay-color: #222;
 	--text-color: #fff;
 	--border-color: rgba(255, 255, 255, 0.6);
 	--shadow-color: rgba(255, 255, 255, 0.9);
-	--tab-header-color: hsla(200, 10%, 95%, 0.2);
+	--tab-header-color: hsla(200, 10%, 95%, 0.1);
 	--transparent-overlay-color: rgba(255, 255, 255, 0.1);
 	--title-border-color: rgba(255, 255, 255, 0.2);
 	--link-color: hsl(200, 60%, 80%);
