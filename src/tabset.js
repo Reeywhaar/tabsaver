@@ -202,7 +202,12 @@ export const TabSet = {
 		await TabSet.saveAll(d);
 	},
 	async appendTab(tabsetName, passedTab = null) {
-		const tab = passedTab || (await browser.tabs.query({ active: true }))[0];
+		const tab =
+			passedTab ||
+			(await browser.tabs.query({ active: true, currentWindow: true }))[0];
+		if (!tab) {
+			throw new Error("Invalid tab");
+		}
 		if (tab.id === browser.tabs.TAB_ID_NONE) {
 			throw new Error("Invalid tab");
 		}
