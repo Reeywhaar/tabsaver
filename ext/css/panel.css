@@ -4,7 +4,7 @@
 }
 
 :root {
-	--hover-color: Highlight;
+	--hover-color: hsl(200, 60%, 70%);
 	--prefs-bg-color: hsl(0, 0%, 95%);
 	--prefs-border-color: rgba(0, 0, 0, 0.1);
 	--overlay-color: #fff;
@@ -19,12 +19,12 @@
 
 .main-theme-dark {
 	background: #444;
-	color: #fff;
+	color: #efefef;
 	--hover-color: hsl(200, 60%, 60%);
 	--prefs-bg-color: #444;
 	--prefs-border-color: rgba(255, 255, 255, 0.1);
 	--overlay-color: #222;
-	--text-color: #fff;
+	--text-color: #efefef;
 	--border-color: rgba(255, 255, 255, 0.6);
 	--shadow-color: rgba(255, 255, 255, 0.9);
 	--tab-header-color: hsla(200, 10%, 95%, 0.1);
@@ -184,6 +184,10 @@ body.sidebar .main {
 
 .toggle-button[data-state="off"] {
 	opacity: 0.8;
+}
+
+.toggle-button[data-state="on"] {
+	background-color: var(--hover-color);
 }
 
 /* tab-saver-item */
@@ -391,6 +395,14 @@ body.sidebar .main {
 .prefs__pinned {
 	flex: 1;
 	padding: 0.5em;
+}
+
+.prefs__pinned-button {
+	color: var(--text-color);
+}
+
+.prefs__pinned-button[data-state="on"] {
+	background-color: var(--hover-color);
 }
 
 .prefs__export,

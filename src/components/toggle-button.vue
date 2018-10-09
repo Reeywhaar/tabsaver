@@ -1,5 +1,5 @@
 <template>
-	<span class="toggle-button" @click="onClick" :style="style" :data-state="state"><slot></slot></span>
+	<span class="toggle-button" @click="onClick" :data-state="state"><slot></slot></span>
 </template>
 
 <script>
@@ -14,13 +14,6 @@ export default {
 		},
 	},
 	computed: {
-		style() {
-			return this.$props.value
-				? {
-						backgroundColor: this.$props.color,
-				  }
-				: {};
-		},
 		state() {
 			return this.$props.value ? "on" : "off";
 		},
