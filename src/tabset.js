@@ -150,7 +150,7 @@ export const TabSet = {
 				await browser.tabs.create(props);
 			} catch (e) {
 				if (e.message.indexOf("No cookie store exists with ID") === 0) {
-					props.url = `/html/handler.html?url=${encodeURIComponent(
+					props.url = `/dist/handler.html?url=${encodeURIComponent(
 						tab.url
 					)}&containerRemoved=true`;
 					props.cookieStoreId = DEFAULT_COOKIE_STORE_ID;
