@@ -305,6 +305,10 @@ body.sidebar .main {
 	line-height: 1.2em;
 }
 
+.tab-saver-item__controls:not(:hover) {
+	opacity: 0.5;
+}
+
 .tab-saver-item__controls-right {
 	right: 0;
 
