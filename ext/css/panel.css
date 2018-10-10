@@ -41,7 +41,7 @@ body {
 
 body.popup {
 	width: 25em;
-	min-height: 10em;
+	min-height: 5em;
 }
 
 button {
@@ -133,17 +133,17 @@ button {
 
 .main {
 	min-width: 100vw;
-	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 }
 
 body.popup .main {
-	max-height: 40em;
+	max-height: 60em;
 	box-sizing: border-box;
 }
 
 body.sidebar .main {
+	min-height: 100vh;
 	max-height: 100vh;
 	box-sizing: border-box;
 }
