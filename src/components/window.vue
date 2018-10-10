@@ -33,19 +33,21 @@
 			<div class="prefs__pinned" title="Include pinned tabs when saving">
 				<toggle-button class="prefs__pinned-button" v-model="pinned">Save Pinned</toggle-button>
 			</div>
-			<button @click="undo" class="inline-button prefs__undo" v-if="undoAvailable" title="Undo">Undo</button>
+			<hold-button @click="undo" class="inline-button prefs__undo" v-if="undoAvailable" title="Undo">Undo</hold-button>
 			<button class="inline-button prefs__options-button" @click="openSettings()">⚙</button>
 		</div>
 	</div>
 </template>
 <script>
 import ToggleButtonComponent from "./toggle-button.vue";
+import HoldButtonComponent from "./hold-button.vue";
 import TabSetComponent from "./tabset.vue";
 import { sleep, oneOf, first } from "../utils.js";
 
 export default {
 	components: {
 		tabset: TabSetComponent,
+		holdButton: HoldButtonComponent,
 		toggleButton: ToggleButtonComponent,
 	},
 	data() {
