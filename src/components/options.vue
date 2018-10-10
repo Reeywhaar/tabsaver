@@ -19,7 +19,7 @@
 				<option value="dark">Dark</option>
 				<option value="daytime">Based on day time</option>
 			</select>
-			<div class="comment">* Day time based theme is light from 7am to 8pm, otherwise it's dark</div>
+			<div class="comment" v-if="theme === 'daytime'">* Day time based theme is light from 7am to 8pm, otherwise it's dark</div>
 		</div>
 		<div class="options__section">
 			<span>Show controls overlay at&ensp;</span><select class="browser-style" v-model="overlayPosition">
