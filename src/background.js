@@ -33,9 +33,11 @@ async function main() {
 			window.preChangeTabs =
 				window.preChangeTabs || (await storage.get("tabs", []));
 			const tabsdiff = diff(value, window.preChangeTabs);
-			History.push(tabsdiff, () => {
-				window.preChangeTabs = null;
-			});
+			if (tabsdiff) {
+				History.push(tabsdiff, () => {
+					window.preChangeTabs = null;
+				});
+			}
 		}
 	});
 
