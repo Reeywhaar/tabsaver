@@ -19,7 +19,7 @@
 export default {
 	props: {
 		hues: {
-			default: [10, 40, 60, 120, 200, 240, 280],
+			default: [340, 10, 40, 55, 90, 200, 240, 280],
 			type: Array,
 		},
 		value: {

@@ -70,7 +70,7 @@ export default {
 		},
 		headerColor() {
 			if (!this.tabset.color) return null;
-			return `hsla(${this.tabset.color}, 90%, 60%, 0.4)`;
+			return `hsla(${this.tabset.color}, 100%, 60%, 0.4)`;
 		},
 		overlayPosition() {
 			return this.$store.state.settings.overlayPosition;
