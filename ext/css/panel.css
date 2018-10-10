@@ -397,8 +397,6 @@ body.sidebar .main {
 	align-items: center;
 	justify-content: space-around;
 	background: var(--prefs-bg-color);
-	-moz-user-select: none;
-	user-select: none;
 	border-top: 1px solid var(--prefs-border-color);
 }
 
@@ -417,8 +415,17 @@ body.sidebar .main {
 
 .prefs__undo {
 	/* padding: 0.5em; */
-	margin-right: 0.2em;
 	opacity: 0.5;
+}
+
+.prefs__options-button {
+	font-size: 140%;
+	opacity: 0.5;
+	padding: 0.2em;
+	line-height: 0.6em;
+	margin-right: 0.2em;
+	position: relative;
+	top: -0.1em;
 }
 
 @media (max-width: 250px) {
@@ -427,9 +434,5 @@ body.sidebar .main {
 	}
 	.tab-saver-item {
 		--padding-x: 4px;
-	}
-	.prefs {
-		flex-wrap: wrap;
-		height: auto;
 	}
 }

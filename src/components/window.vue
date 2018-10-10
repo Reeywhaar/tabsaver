@@ -34,6 +34,7 @@
 				<toggle-button class="prefs__pinned-button" v-model="pinned">Save Pinned</toggle-button>
 			</div>
 			<button @click="undo" class="inline-button prefs__undo" v-if="undoAvailable" title="Undo">Undo</button>
+			<button class="inline-button prefs__options-button" @click="openSettings()">⚙</button>
 		</div>
 	</div>
 </template>
@@ -170,6 +171,9 @@ export default {
 		},
 		undo() {
 			this.$store.dispatch("undo");
+		},
+		openSettings() {
+			browser.runtime.openOptionsPage();
 		},
 	},
 };
