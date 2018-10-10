@@ -1,6 +1,6 @@
 <template>
 	<div class="tab-saver-item">
-		<div class="tab-saver-item__item" :style="{'background-color': tabset.color}">
+		<div class="tab-saver-item__item" :style="{'background-color': headerColor}">
 			<span
 				class="tab-saver-item__title"
 				@click="toggleCollapse"
@@ -9,7 +9,6 @@
 				@focusout.stop="rename()"
 				:contenteditable="editable"
 				title="Click to show stored tabs, double click to edit name"
-				:style="{'color': titleColor}"
 			>{{tabset.key}}</span>
 			<div class="tab-saver-item__controls" :class="overlayClasses">
 				<color-select class="tab-saver-item__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
@@ -66,16 +65,9 @@ export default {
 		};
 	},
 	computed: {
-		titleColor() {
+		headerColor() {
 			if (!this.tabset.color) return null;
-			switch (this.tabset.color) {
-				case "hsl(40, 100%, 70%)":
-				case "hsl(60, 100%, 70%)":
-				case "hsl(120, 90%, 70%)":
-					return "#444";
-				default:
-					return "#fff";
-			}
+			return `hsla(${this.tabset.color}, 90%, 60%, 0.4)`;
 		},
 		overlayPosition() {
 			return this.$store.state.settings.overlayPosition;
