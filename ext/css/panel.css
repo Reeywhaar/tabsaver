@@ -215,6 +215,11 @@ body.sidebar .main {
 	line-height: 1.4em;
 }
 
+.tab-saver-item__count {
+	font-size: 0.8em;
+	opacity: 0.4;
+}
+
 .tab-saver-item__links-empty {
 	content: "No tabs";
 	font-weight: bold;
@@ -394,7 +399,7 @@ body.sidebar .main {
 
 .prefs__pinned {
 	flex: 1;
-	padding: 0.5em;
+	padding: 0.2em;
 }
 
 .prefs__pinned-button {
@@ -406,8 +411,8 @@ body.sidebar .main {
 }
 
 .prefs__undo {
-	padding: 0.5em;
-	margin-right: 0.5em;
+	/* padding: 0.5em; */
+	margin-right: 0.2em;
 	opacity: 0.5;
 }
 

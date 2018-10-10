@@ -60,6 +60,7 @@ const settingsDefault = {
 	includePinned: true,
 	showFavicons: false,
 	showTitles: false,
+	showCount: false,
 	useHistory: true,
 	numberOfHistoryStates: 15,
 	theme: "light",

@@ -11,6 +11,9 @@
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showTitles">Show tabs' titles</label>
 		</div>
 		<div class="options__section">
+			<label><input class="options__left-checkbox" type="checkbox" v-model="showCount">Show tabs' count</label>
+		</div>
+		<div class="options__section">
 			<span>Theme&ensp;</span><select class="browser-style" v-model="theme">
 				<option value="light">Light</option>
 				<option value="dark">Dark</option>
@@ -76,6 +79,7 @@ export default {
 		includePinned: createProperty("includePinned"),
 		showFavicons: createProperty("showFavicons"),
 		showTitles: createProperty("showTitles"),
+		showCount: createProperty("showCount"),
 		useHistory: createProperty("useHistory"),
 		numberOfHistoryStates: createProperty("numberOfHistoryStates"),
 		theme: createProperty("theme"),

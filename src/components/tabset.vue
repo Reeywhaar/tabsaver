@@ -9,7 +9,7 @@
 				@focusout.stop="rename()"
 				:contenteditable="editable"
 				title="Click to show stored tabs, double click to edit name"
-			>{{tabset.key}}</span>
+			>{{tabset.key}}</span><span v-if="showCount" class="tab-saver-item__count">{{tabset.data.length}}</span>
 			<div class="tab-saver-item__controls" :class="overlayClasses">
 				<color-select class="tab-saver-item__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
 				<button @click="open()" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
@@ -65,6 +65,9 @@ export default {
 		};
 	},
 	computed: {
+		showCount() {
+			return this.$store.state.settings.showCount;
+		},
 		headerColor() {
 			if (!this.tabset.color) return null;
 			return `hsla(${this.tabset.color}, 90%, 60%, 0.4)`;
