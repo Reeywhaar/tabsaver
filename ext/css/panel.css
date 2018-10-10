@@ -108,7 +108,7 @@ button {
 	border-radius: 50%;
 	display: inline-block;
 	border: 1px solid transparent;
-	transition: width 0.4s, border-width 0.4s, margin-right 0.4s;
+	transition: width 0.2s, border-width 0.2s, margin-right 0.2s;
 	transition-delay: 0.2s;
 }
 
