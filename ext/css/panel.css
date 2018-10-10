@@ -218,6 +218,7 @@ body.sidebar .main {
 .tab-saver-item__count {
 	font-size: 0.8em;
 	opacity: 0.4;
+	line-height: 1em;
 }
 
 .tab-saver-item__links-empty {
