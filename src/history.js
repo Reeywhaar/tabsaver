@@ -37,6 +37,7 @@ export const History = {
 		]);
 	},
 	push: debounce(async (state, callback = () => {}) => {
+		if (!state) return;
 		let capacity = await History.permittedNumberOfStates();
 		if (capacity === 0) return;
 		const states = await History.getAll();
