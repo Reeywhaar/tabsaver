@@ -64,10 +64,11 @@ const settingsDefault = {
 	overlayPosition: "right",
 	/**
 	 * Lookup strategy when opening existing tab
-	 * 0 - current
-	 * 1 - all
+	 * 0 - nowhere
+	 * 1 - current
+	 * 2 - all
 	 */
-	tabLookup: 0,
+	tabLookup: 1,
 	useHistory: true,
 	numberOfHistoryStates: 15,
 	theme: "light",
@@ -154,14 +155,16 @@ export function tabSetsAreEqual(setA, setB) {
 export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 	try {
 		const lookup = await settings.get("tabLookup");
-		const query = lookup === 0 ? { currentWindow: true } : {};
-		const tabs = await browser.tabs.query(query);
-		for (let tab of tabs) {
-			if (tab.cookieStoreId === cookieStoreId && tab.url === url) {
-				return await Promise.all([
-					browser.tabs.update(tab.id, { active: true }),
-					browser.windows.update(tab.windowId, { focused: true }),
-				]);
+		if (lookup !== 0) {
+			const query = lookup === 0 ? { currentWindow: true } : {};
+			const tabs = await browser.tabs.query(query);
+			for (let tab of tabs) {
+				if (tab.cookieStoreId === cookieStoreId && tab.url === url) {
+					return await Promise.all([
+						browser.tabs.update(tab.id, { active: true }),
+						browser.windows.update(tab.windowId, { focused: true }),
+					]);
+				}
 			}
 		}
 		return await browser.tabs.create({

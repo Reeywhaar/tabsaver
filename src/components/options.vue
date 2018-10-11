@@ -29,8 +29,9 @@
 		</div>
 		<div class="options__section">
 			<span>When opening a tab, check for the same tab in&ensp;</span><select class="browser-style" v-model.number="tabLookup">
-				<option value="0">Current window</option>
-				<option value="1">All windows</option>
+				<option value="0">Nowhere</option>
+				<option value="1">Current window</option>
+				<option value="2">All windows</option>
 			</select>
 		</div>
 		<div class="options__section">
