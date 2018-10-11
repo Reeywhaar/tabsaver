@@ -144,8 +144,6 @@ export function tabSetsAreEqual(setA, setB) {
 	return setsAreEqual(setA, setB);
 }
 
-function tabsAreEqual(tabA, tabB) {}
-
 export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 	try {
 		const tabs = await browser.tabs.query({ currentWindow: true });
