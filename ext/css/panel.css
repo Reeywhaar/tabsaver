@@ -277,10 +277,11 @@ body.sidebar .main {
 	content: attr(data-identity-name) "";
 	padding: 0.1em 0.3em;
 	border-radius: 2px;
-	margin-right: 0.2em;
+	margin-right: 0.1em;
 	font-size: 85%;
 	background-color: var(--color, "grey");
 	color: #fff;
+	font-weight: normal;
 }
 
 .tab-saver-item__link[data-identity-color="yellow"]:before {
