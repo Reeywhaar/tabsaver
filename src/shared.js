@@ -144,8 +144,16 @@ export function tabSetsAreEqual(setA, setB) {
 	return setsAreEqual(setA, setB);
 }
 
+function tabsAreEqual(tabA, tabB) {}
+
 export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 	try {
+		const tabs = await browser.tabs.query({ currentWindow: true });
+		for (let tab of tabs) {
+			if (tab.cookieStoreId === cookieStoreId && tab.url === url) {
+				return await browser.tabs.update(tab.id, { active: true });
+			}
+		}
 		return await browser.tabs.create({
 			url: getMangledURL(url),
 			cookieStoreId,
