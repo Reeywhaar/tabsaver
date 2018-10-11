@@ -28,7 +28,7 @@
 			</select>
 		</div>
 		<div class="options__section">
-			<span>When opening existing tab, look at at&ensp;</span><select class="browser-style" v-model.number="tabLookup">
+			<span>When opening a tab, check for the same tab in&ensp;</span><select class="browser-style" v-model.number="tabLookup">
 				<option value="0">Current window</option>
 				<option value="1">All windows</option>
 			</select>
