@@ -76,8 +76,8 @@ export default {
 				this.$el.style.setProperty("--color", contextualIdentity.color);
 			} catch (e) {
 				this.$el.dataset.identityName = "Unknown";
-				this.$el.dataset.identityColor = "hsl(0, 0%, 95%)";
-				this.$el.style.setProperty("--color", "hsl(0, 0%, 80%)");
+				this.$el.dataset.identityColor = "hsl(0, 0%, 70%)";
+				this.$el.style.setProperty("--color", "hsl(0, 0%, 70%)");
 			}
 		},
 		async openUrl() {
