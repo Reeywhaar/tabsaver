@@ -22,15 +22,15 @@
 			<div
 				v-if="tabset.data.length === 0"
 				class="tab-saver-item__links-empty"
-				@dragover.stop="onTabDragover($event)"
-				@drop.stop="onEmptyTabDrop($event)"
+				@dragover="onTabDragover($event)"
+				@drop="onEmptyTabDrop($event)"
 			>No Tabs</div>
 			<div
 				class="tab-saver-item__link-container"
 				v-for="tab in tabset.data"
 				:key="tab.url"
 				draggable="true"
-				@dragover.stop="onTabDragover($event)"
+				@dragover="onTabDragover($event)"
 				@dragstart.stop="onTabDrag($event, tab)"
 				@drop="onTabDrop($event, tab)"
 			>

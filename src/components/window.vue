@@ -22,7 +22,7 @@
 					:key="tabset.key"
 					class="tab-saver-items__tabset"
 					draggable="true"
-					@dragover.native.stop="onTabSetDragover($event)"
+					@dragover.native="onTabSetDragover($event)"
 					@dragstart.native.stop="onTabSetDrag($event, tabset)"
 					@drop.native="onTabSetDrop($event, tabset)"
 				></tabset>
@@ -108,9 +108,6 @@ export default {
 				e.preventDefault();
 				return;
 			}
-			this.$children.forEach(ch => {
-				if (ch.tabset) ch.collapse();
-			});
 			e.dataTransfer.setData("tabsaver/tabset", tabset.key);
 		},
 		async onTabSetDrop(e, tabset) {
