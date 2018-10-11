@@ -61,10 +61,16 @@ const settingsDefault = {
 	showFavicons: false,
 	showTitles: false,
 	showCount: false,
+	overlayPosition: "right",
+	/**
+	 * Lookup strategy when opening existing tab
+	 * 0 - current
+	 * 1 - all
+	 */
+	tabLookup: 0,
 	useHistory: true,
 	numberOfHistoryStates: 15,
 	theme: "light",
-	overlayPosition: "right",
 };
 const settingsKeys = Object.keys(settingsDefault);
 const settingsListeners = [];
@@ -147,10 +153,15 @@ export function tabSetsAreEqual(setA, setB) {
 
 export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 	try {
-		const tabs = await browser.tabs.query({ currentWindow: true });
+		const lookup = await settings.get("tabLookup");
+		const query = lookup === 0 ? { currentWindow: true } : {};
+		const tabs = await browser.tabs.query(query);
 		for (let tab of tabs) {
 			if (tab.cookieStoreId === cookieStoreId && tab.url === url) {
-				return await browser.tabs.update(tab.id, { active: true });
+				return await Promise.all([
+					browser.tabs.update(tab.id, { active: true }),
+					browser.windows.update(tab.windowId, { focused: true }),
+				]);
 			}
 		}
 		return await browser.tabs.create({

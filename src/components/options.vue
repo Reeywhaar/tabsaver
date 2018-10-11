@@ -28,6 +28,12 @@
 			</select>
 		</div>
 		<div class="options__section">
+			<span>When opening existing tab, look at at&ensp;</span><select class="browser-style" v-model.number="tabLookup">
+				<option value="0">Current window</option>
+				<option value="1">All windows</option>
+			</select>
+		</div>
+		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="useHistory"/>Use history</label>
 			<div class="history-options indent-1" :class="{'disabled': !useHistory}">
 				<div class="options__section">
@@ -80,10 +86,11 @@ export default {
 		showFavicons: createProperty("showFavicons"),
 		showTitles: createProperty("showTitles"),
 		showCount: createProperty("showCount"),
-		useHistory: createProperty("useHistory"),
-		numberOfHistoryStates: createProperty("numberOfHistoryStates"),
 		theme: createProperty("theme"),
 		overlayPosition: createProperty("overlayPosition"),
+		tabLookup: createProperty("tabLookup"),
+		useHistory: createProperty("useHistory"),
+		numberOfHistoryStates: createProperty("numberOfHistoryStates"),
 		statesCount() {
 			return this.$store.state.statesCount;
 		},
