@@ -134,7 +134,13 @@ export default {
 			}
 		},
 		onTabSetDragover(e) {
-			e.preventDefault();
+			for (let dtype of e.dataTransfer.types) {
+				switch (dtype) {
+					case "tabsaver/tabset":
+						e.preventDefault();
+						return;
+				}
+			}
 		},
 		async importData() {
 			this.$store.dispatch("import");

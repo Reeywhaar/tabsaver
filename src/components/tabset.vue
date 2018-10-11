@@ -145,7 +145,8 @@ export default {
 			}
 		},
 		onTabDragover(e) {
-			e.preventDefault();
+			if (e.dataTransfer.types.indexOf("tabsaver/tabset/tab") !== -1)
+				e.preventDefault();
 		},
 		onHoldCancel(type) {
 			this.$store.dispatch("notify", `Click and hold button to ${type}`);
