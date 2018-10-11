@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Tab Saver",
-  "version": "0.0.21pre6",
+  "version": "0.0.21pre7",
   "description": "Allows you to manage and save tabs",
   "icons": {
     "48": "icons/icon.svg",
