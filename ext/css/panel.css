@@ -375,6 +375,10 @@ body.sidebar .main {
 
 /* tabsaver__tab */
 
+.tabsaver__tab-current {
+	font-weight: bold;
+}
+
 .tabsaver__tab-title-favicon {
 	width: 1em;
 	height: 1em;

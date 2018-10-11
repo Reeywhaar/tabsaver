@@ -7,10 +7,14 @@ export default async () => {
 	const host = await bgpage();
 	await waitUntil(() => host.loaded === true);
 
-	const [items, settings, statesCount] = await Promise.all([
+	const [items, settings, statesCount, currentTab] = await Promise.all([
 		host.TabSet.getAll(),
 		host.settings.getAll(),
 		host.Undo.count(),
+		browser.tabs.query({
+			active: true,
+			currentWindow: true,
+		}),
 	]);
 
 	const store = new Vuex.Store({
@@ -20,6 +24,8 @@ export default async () => {
 			statesCount,
 			notification: "",
 			notificationCounter: 0,
+			currentTab:
+				currentTab.length > 0 ? currentTab[0] : browser.tabs.TAB_ID_NONE,
 		},
 		getters: {
 			itemsReversed(state) {
@@ -41,6 +47,9 @@ export default async () => {
 			},
 			updateStatesCount(state, count) {
 				state.statesCount = count;
+			},
+			setCurrentTab(state, tab) {
+				state.currentTab = tab;
 			},
 		},
 		actions: {
@@ -148,6 +157,27 @@ export default async () => {
 		} else if (key.indexOf("history:states") === 0) {
 			store.dispatch("updateStatesCount");
 		}
+	});
+
+	browser.tabs.onUpdated.addListener(async () => {
+		const tabs = await browser.tabs.query({
+			active: true,
+			currentWindow: true,
+		});
+		store.commit(
+			"setCurrentTab",
+			tabs.length > 0 ? tabs[0] : browser.tabs.TAB_ID_NONE
+		);
+	});
+	browser.tabs.onCreated.addListener(async () => {
+		const tabs = await browser.tabs.query({
+			active: true,
+			currentWindow: true,
+		});
+		store.commit(
+			"setCurrentTab",
+			tabs.length > 0 ? tabs[0] : browser.tabs.TAB_ID_NONE
+		);
 	});
 
 	return store;
