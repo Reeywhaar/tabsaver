@@ -141,7 +141,7 @@ button {
 }
 
 body.popup .main {
-	max-height: 60em;
+	max-height: 550px;
 	box-sizing: border-box;
 }
 
