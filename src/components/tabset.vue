@@ -26,10 +26,13 @@
 				@drop="onEmptyTabDrop($event)"
 			>No Tabs</div>
 			<div
+				v-for="(tab, index) in tabset.data"
 				class="tab-saver-item__link-container"
-				v-for="tab in tabset.data"
+				:class="{'tabsaver__tab-current': isCurrentTab(tab)}"
 				:key="tab.url"
+				@click="openTab(tab)"
 				draggable="true"
+				:data-index="index"
 				@dragover="onTabDragover($event)"
 				@dragstart.stop="onTabDrag($event, tab)"
 				@drop="onTabDrop($event, tab)"
@@ -44,7 +47,7 @@
 	</div>
 </template>
 <script>
-import { sleep } from "../utils.js";
+import { sleep, firstIndex, first } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -80,6 +83,18 @@ export default {
 		},
 	},
 	methods: {
+		isCurrentTab(tab) {
+			try {
+				if (this.$store.state.currentTab === browser.tabs.TAB_ID_NONE)
+					return false;
+				return (
+					tab.url === this.$store.state.currentTab.url &&
+					tab.cookieStoreId === this.$store.state.currentTab.cookieStoreId
+				);
+			} catch (e) {
+				return false;
+			}
+		},
 		onTabDrag(e, tab) {
 			if (
 				!e.target
@@ -89,36 +104,73 @@ export default {
 				e.preventDefault();
 				return;
 			}
-			e.dataTransfer.setData("tabsaver/tabset/key", this.tabset.key);
-			e.dataTransfer.setData("tabsaver/tabset/tab", JSON.stringify(tab));
+
+			e.dataTransfer.setData(
+				"tabsaver/tab",
+				JSON.stringify({
+					key: this.tabset.key,
+					tab,
+				})
+			);
 			e.dataTransfer.setData("text/plain", tab.url);
 		},
 		async onTabDrop(e, tab) {
 			try {
-				const key = e.dataTransfer.getData("tabsaver/tabset/key");
-				const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
-				if (!key && !serializedTab) return e;
-				if (!key) throw new Error("Can't find tab's TabSet");
-				if (!serializedTab) throw new Error("Can't find tab");
-				if (key === this.tabset.key && serializedTab === JSON.stringify(tab))
-					return;
+				if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
+					const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
+					if (!data.key) throw new Error("Can't find tab's TabSet");
+					if (!data.tab) throw new Error("Can't find tab");
+					if (
+						data.key === this.tabset.key &&
+						data.tab.url === tab.url &&
+						data.tab.cookieStoreId === tab.cookieStoreId
+					)
+						return;
 
-				e.stopPropagation();
+					e.stopPropagation();
 
-				const after = (() => {
-					const rect = e.currentTarget.getBoundingClientRect();
-					const y = e.clientY - rect.y;
-					const proportion = (y / rect.height) * 100;
-					return proportion >= 50 ? true : false;
-				})();
+					const after = (() => {
+						const rect = e.currentTarget.getBoundingClientRect();
+						const y = e.clientY - rect.y;
+						const proportion = (y / rect.height) * 100;
+						return proportion >= 50 ? true : false;
+					})();
 
-				await this.$store.dispatch("tabsetMoveTab", [
-					key,
-					JSON.parse(serializedTab),
-					this.tabset.key,
-					tab,
-					after,
-				]);
+					await this.$store.dispatch("tabsetMoveTab", [
+						data.key,
+						data.tab,
+						this.tabset.key,
+						tab,
+						after,
+					]);
+				} else if (e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
+					const tab = JSON.parse(e.dataTransfer.getData("tabsaver/native-tab"));
+					const tabExists =
+						first(
+							this.tabset.data,
+							x => x.url === tab.url && x.cookieStoreId === tab.cookieStoreId
+						) !== null;
+
+					if (tabExists) {
+						this.$store.dispatch("notify", "Tab Exists");
+						return;
+					}
+
+					const index = parseInt(e.currentTarget.dataset.index, 10);
+
+					const after = (() => {
+						const rect = e.currentTarget.getBoundingClientRect();
+						const y = e.clientY - rect.y;
+						const proportion = (y / rect.height) * 100;
+						return proportion < 50 ? 0 : 1;
+					})();
+
+					await this.$store.dispatch("tabsetAppend", [
+						this.tabset.key,
+						tab,
+						index + after,
+					]);
+				}
 			} catch (e) {
 				this.$store.dispatch("notify", e.message);
 				console.error(e);
@@ -126,27 +178,26 @@ export default {
 		},
 		async onEmptyTabDrop(e) {
 			try {
-				const key = e.dataTransfer.getData("tabsaver/tabset/key");
-				const serializedTab = e.dataTransfer.getData("tabsaver/tabset/tab");
-				if (!key) throw new Error("Can't find tab's TabSet");
-				if (!serializedTab) throw new Error("Can't find tab");
+				const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
+				if (!data.key) throw new Error("Can't find tab's TabSet");
+				if (!data.tab) throw new Error("Can't find tab");
 
-				await this.$store.dispatch("tabsetAppend", [
-					this.tabset.key,
-					JSON.parse(serializedTab),
-				]);
-				await this.$store.dispatch("tabsetRemoveTab", [
-					key,
-					JSON.parse(serializedTab),
-				]);
+				await this.$store.dispatch("tabsetAppend", [this.tabset.key, data.tab]);
+				await this.$store.dispatch("tabsetRemoveTab", [data.key, data.tab]);
 			} catch (e) {
 				this.$store.dispatch("notify", e.message);
 				console.error(e);
 			}
 		},
-		onTabDragover(e) {
-			if (e.dataTransfer.types.indexOf("tabsaver/tabset/tab") !== -1)
-				e.preventDefault();
+		onTabDragover(event) {
+			for (let type of event.dataTransfer.types) {
+				switch (type) {
+					case "tabsaver/native-tab":
+					case "tabsaver/tab":
+						event.preventDefault();
+						return;
+				}
+			}
 		},
 		onHoldCancel(type) {
 			this.$store.dispatch("notify", `Click and hold button to ${type}`);
@@ -288,6 +339,9 @@ export default {
 			if (color === this.tabset.color) return;
 			this.tabset.color = color;
 			await this.save(this.tabset.data);
+		},
+		async openTab(tab) {
+			await this.$store.dispatch("openUrl", [tab.url, tab.cookieStoreId]);
 		},
 	},
 };

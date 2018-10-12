@@ -2,9 +2,7 @@
 	<span
 		:title="link.url"
 		class="tabsaver__tab-title"
-		@click="openUrl"
-		:class="{'tabsaver__tab-current': isCurrent}"
-	><img :src="link.fav" class="tabsaver__tab-title-favicon" @error="hideFavicon" v-if="showFavicons"> {{title}}</span>
+	><img :src="link.favIconUrl" class="tabsaver__tab-title-favicon" @error="hideFavicon" v-if="showFavicons"> {{title}}</span>
 </template>
 
 <script>
@@ -22,23 +20,10 @@ export default {
 		return { faviconError: false };
 	},
 	computed: {
-		isCurrent() {
-			try {
-				if (this.$store.state.currentTab === browser.tabs.TAB_ID_NONE)
-					return false;
-				return (
-					this.$props.link.url === this.$store.state.currentTab.url &&
-					this.$props.link.cookieStoreId ===
-						this.$store.state.currentTab.cookieStoreId
-				);
-			} catch (e) {
-				return false;
-			}
-		},
 		showFavicons() {
 			return (
 				this.$store.state.settings.showFavicons &&
-				this.$props.link.fav &&
+				this.$props.link.favIconUrl &&
 				!this.faviconError
 			);
 		},
@@ -79,12 +64,6 @@ export default {
 				this.$el.dataset.identityColor = "hsl(0, 0%, 70%)";
 				this.$el.style.setProperty("--color", "hsl(0, 0%, 70%)");
 			}
-		},
-		async openUrl() {
-			await this.$store.dispatch("openUrl", [
-				this.link.url,
-				this.link.cookieStoreId,
-			]);
 		},
 	},
 };

@@ -1,5 +1,5 @@
 import { bgpage, getCurrentTabs } from "./shared.js";
-import { reverse, sleep, waitUntil } from "./utils.js";
+import { reverse, sleep, waitUntil, debounce, first } from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
 import { applyChange } from "deep-diff";
 
@@ -7,18 +7,24 @@ export default async () => {
 	const host = await bgpage();
 	await waitUntil(() => host.loaded === true);
 
-	const [items, settings, statesCount, currentTab] = await Promise.all([
-		host.TabSet.getAll(),
-		host.settings.getAll(),
-		host.Undo.count(),
-		browser.tabs.query({
-			active: true,
-			currentWindow: true,
-		}),
-	]);
+	const [items, settings, statesCount, currentTab, windows] = await Promise.all(
+		[
+			host.TabSet.getAll(),
+			host.settings.getAll(),
+			host.Undo.count(),
+			browser.tabs.query({
+				active: true,
+				currentWindow: true,
+			}),
+			browser.windows.getAll({
+				populate: true,
+			}),
+		]
+	);
 
 	const store = new Vuex.Store({
 		state: {
+			windows,
 			items,
 			settings,
 			statesCount,
@@ -30,6 +36,9 @@ export default async () => {
 		getters: {
 			itemsReversed(state) {
 				return Array.from(reverse(state.items));
+			},
+			currentWindow(state) {
+				return first(state.windows, x => x.focused);
 			},
 		},
 		mutations: {
@@ -50,6 +59,19 @@ export default async () => {
 			},
 			setCurrentTab(state, tab) {
 				state.currentTab = tab;
+			},
+			setWindows(state, windows) {
+				state.windows = windows;
+			},
+			removeWindowTab(state, tabId) {
+				for (let window of state.windows) {
+					for (let [index, tab] of window.tabs.entries()) {
+						if (tab.id === tabId) {
+							window.tabs.splice(index, 1);
+							return;
+						}
+					}
+				}
 			},
 		},
 		actions: {
@@ -143,6 +165,14 @@ export default async () => {
 					host.trackHistory = true;
 				}
 			},
+			updateWindows: debounce(async context => {
+				context.commit(
+					"setWindows",
+					await browser.windows.getAll({
+						populate: true,
+					})
+				);
+			}, 200),
 		},
 	});
 
@@ -168,6 +198,7 @@ export default async () => {
 			"setCurrentTab",
 			tabs.length > 0 ? tabs[0] : browser.tabs.TAB_ID_NONE
 		);
+		store.dispatch("updateWindows");
 	});
 	browser.tabs.onCreated.addListener(async () => {
 		const tabs = await browser.tabs.query({
@@ -178,6 +209,16 @@ export default async () => {
 			"setCurrentTab",
 			tabs.length > 0 ? tabs[0] : browser.tabs.TAB_ID_NONE
 		);
+		store.dispatch("updateWindows");
+	});
+	browser.tabs.onMoved.addListener(async () => {
+		store.dispatch("updateWindows");
+	});
+	browser.tabs.onRemoved.addListener(async tabId => {
+		store.commit("removeWindowTab", tabId);
+	});
+	browser.windows.onFocusChanged.addListener(async () => {
+		store.dispatch("updateWindows");
 	});
 
 	return store;

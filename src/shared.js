@@ -61,6 +61,8 @@ const settingsDefault = {
 	showFavicons: false,
 	showTitles: false,
 	showCount: false,
+	showWindows: true,
+	expandWindows: false,
 	overlayPosition: "right",
 	/**
 	 * Lookup strategy when opening existing tab
@@ -156,7 +158,7 @@ export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 	try {
 		const lookup = await settings.get("tabLookup");
 		if (lookup !== 0) {
-			const query = lookup === 0 ? { currentWindow: true } : {};
+			const query = lookup === 1 ? { currentWindow: true } : {};
 			const tabs = await browser.tabs.query(query);
 			for (let tab of tabs) {
 				if (tab.cookieStoreId === cookieStoreId && tab.url === url) {

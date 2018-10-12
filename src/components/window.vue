@@ -16,15 +16,25 @@
 		</div>
 		<div class="content" :style="contentStyle">
 			<div class="tab-saver-items">
+				<window-tabset
+					v-for="(window, index) in windows"
+					v-if="showWindows"
+					:tabset="window"
+					:key="window.id"
+					:title="index + 1"
+					class="tab-saver-items__tabset tab-saver-items__window-tabset"
+					:class="{'tab-saver-items__window-tabset-current': isCurrentTabSet(window)}"
+				></window-tabset>
+				<div class="tab-saver-items__separator" v-if="windows.length > 0 && showWindows"></div>
 				<tabset
 					v-for="tabset in items"
 					:tabset="tabset"
 					:key="tabset.key"
 					class="tab-saver-items__tabset"
 					draggable="true"
-					@dragover.native="onTabSetDragover($event)"
-					@dragstart.native.stop="onTabSetDrag($event, tabset)"
-					@drop.native="onTabSetDrop($event, tabset)"
+					@dragstart.native="onTabSetDrag($event, tabset)"
+					@dragover.native="onDragover($event)"
+					@drop.native="onDrop($event, tabset)"
 				></tabset>
 			</div>
 		</div>
@@ -42,6 +52,7 @@
 import ToggleButtonComponent from "./toggle-button.vue";
 import HoldButtonComponent from "./hold-button.vue";
 import TabSetComponent from "./tabset.vue";
+import WindowTabSetComponent from "./window-tabset.vue";
 import { sleep, oneOf, first } from "../utils.js";
 
 export default {
@@ -49,6 +60,7 @@ export default {
 		tabset: TabSetComponent,
 		holdButton: HoldButtonComponent,
 		toggleButton: ToggleButtonComponent,
+		"window-tabset": WindowTabSetComponent,
 	},
 	data() {
 		const hours = new Date().getHours();
@@ -65,6 +77,12 @@ export default {
 		}, 1000 * 60 * 10);
 	},
 	computed: {
+		windows() {
+			return this.$store.state.windows;
+		},
+		showWindows() {
+			return this.$store.state.settings.showWindows;
+		},
 		items() {
 			return this.$store.getters.itemsReversed;
 		},
@@ -110,7 +128,7 @@ export default {
 			}
 			e.dataTransfer.setData("tabsaver/tabset", tabset.key);
 		},
-		async onTabSetDrop(e, tabset) {
+		async onDrop(e, tabset) {
 			try {
 				const key = e.dataTransfer.getData("tabsaver/tabset");
 				if (!key || key === tabset.key) return;
@@ -130,7 +148,7 @@ export default {
 				console.error(e);
 			}
 		},
-		onTabSetDragover(e) {
+		onDragover(e) {
 			for (let dtype of e.dataTransfer.types) {
 				switch (dtype) {
 					case "tabsaver/tabset":
@@ -179,6 +197,11 @@ export default {
 		},
 		openSettings() {
 			browser.runtime.openOptionsPage();
+		},
+		isCurrentTabSet(window) {
+			const c = this.$store.getters.currentWindow;
+			if (!c) return false;
+			return c.id === window.id;
 		},
 	},
 };

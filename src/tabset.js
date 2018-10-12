@@ -1,7 +1,6 @@
 import { first, firstIndex, oneOf, getKey } from "./utils.js";
 import {
 	storage,
-	pinned,
 	getMangledURL,
 	getUnmangledURL,
 	getDefaultTabSetName,
@@ -18,7 +17,7 @@ const serializeTab = tab => {
 	return {
 		title: tab.title,
 		url: tab.url,
-		fav: tab.favIconUrl,
+		favIconUrl: tab.favIconUrl,
 		pinned: tab.pinned,
 		cookieStoreId: tab.cookieStoreId || DEFAULT_COOKIE_STORE_ID,
 	};
@@ -201,7 +200,7 @@ export const TabSet = {
 		d.splice(d.indexOf(b) + (after ? 0 : 1), 0, cut[0]);
 		await TabSet.saveAll(d);
 	},
-	async appendTab(tabsetName, passedTab = null) {
+	async appendTab(tabsetName, passedTab = null, index = -1) {
 		const tab =
 			passedTab ||
 			(await browser.tabs.query({ active: true, currentWindow: true }))[0];
@@ -224,7 +223,11 @@ export const TabSet = {
 		if (first(tabset.data, x => tabsEqual(x, tabData))) {
 			throw new Error("Tab already exists");
 		}
-		tabset.data.push(tabData);
+		if (index === -1) {
+			tabset.data.push(tabData);
+		} else {
+			tabset.data.splice(index, 0, tabData);
+		}
 		await TabSet.saveAll(d);
 	},
 	async removeTab(tabsetName, tab) {

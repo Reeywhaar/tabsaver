@@ -1,6 +1,12 @@
 <template>
 	<div class="options">
 		<div class="options__section">
+			<label><input class="options__left-checkbox" type="checkbox" v-model="showWindows">Show window TabSets</label>
+			<div class="indent-1" :class="{'disabled': !showWindows}">
+				<label><input class="options__left-checkbox" type="checkbox" v-model="expandWindows">Expand window TabSets</label>
+			</div>
+		</div>
+		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="includePinned">Include pinned tabs when saving TabSet</label>
 		</div>
 		<div class="options__section">
@@ -87,6 +93,8 @@ export default {
 		showFavicons: createProperty("showFavicons"),
 		showTitles: createProperty("showTitles"),
 		showCount: createProperty("showCount"),
+		showWindows: createProperty("showWindows"),
+		expandWindows: createProperty("expandWindows"),
 		theme: createProperty("theme"),
 		overlayPosition: createProperty("overlayPosition"),
 		tabLookup: createProperty("tabLookup"),
