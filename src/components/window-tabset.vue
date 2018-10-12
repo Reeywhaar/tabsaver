@@ -101,11 +101,13 @@ export default {
 		},
 		async handleClick(event, tab) {
 			if (event.which === 1) {
+				event.preventDefault();
 				await Promise.all([
 					browser.tabs.update(tab.id, { active: true }),
 					browser.windows.update(tab.windowId, { focused: true }),
 				]);
 			} else if (event.which === 2) {
+				event.preventDefault();
 				this.closeTab(tab);
 			}
 		},
