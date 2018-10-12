@@ -28,14 +28,20 @@ export default {
 			);
 		},
 		title() {
+			let link = this.$props.link.url;
 			if (
 				this.$store.state.settings.showTitles &&
 				this.$props.link.title &&
 				this.$props.link.title.length > 0
 			) {
-				return `${this.$props.link.title} (${this.$props.link.url})`;
+				link = `${this.$props.link.title} (${link})`;
 			}
-			return this.$props.link.url;
+
+			if (this.$props.link.pinned === true) {
+				link = `• ${link}`;
+			}
+
+			return link;
 		},
 	},
 	methods: {
