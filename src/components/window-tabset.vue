@@ -22,7 +22,7 @@
 				class="tab-saver-item__link-container"
 				:class="{'tabsaver__tab-current': isCurrentTab(tab)}"
 				:key="tab.url"
-				@click="openTab(tab)"
+				@mouseup="handleClick($event, tab)"
 				draggable="true"
 				@dragstart="onTabDrag($event, tab)"
 			>
@@ -89,11 +89,15 @@ export default {
 			this.collapsed = true;
 			this.$emit("collapsed", this.tabset);
 		},
-		async openTab(tab) {
-			await Promise.all([
-				browser.tabs.update(tab.id, { active: true }),
-				browser.windows.update(tab.windowId, { focused: true }),
-			]);
+		async handleClick(event, tab) {
+			if (event.which === 1) {
+				await Promise.all([
+					browser.tabs.update(tab.id, { active: true }),
+					browser.windows.update(tab.windowId, { focused: true }),
+				]);
+			} else if (event.which === 2) {
+				this.closeTab(tab);
+			}
 		},
 		onTabDrag(event, tab) {
 			event.dataTransfer.setData("tabsaver/native-tab", JSON.stringify(tab));
