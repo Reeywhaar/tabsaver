@@ -44,7 +44,8 @@
 				<toggle-button class="prefs__pinned-button" v-model="pinned">Save Pinned</toggle-button>
 			</div>
 			<hold-button @click="undo" class="inline-button prefs__undo" v-if="undoAvailable" title="Undo">Undo</hold-button>
-			<button class="inline-button prefs__options-button" @click="openSettings()">⚙</button>
+			<button class="inline-button prefs__options-button" @click="openSettings()" title="Open preferences">⚙</button>
+			<button class="inline-button prefs__detach-button" @click="detach()" title="Detach">➚</button>
 		</div>
 	</div>
 </template>
@@ -197,6 +198,18 @@ export default {
 		},
 		openSettings() {
 			browser.runtime.openOptionsPage();
+		},
+		detach() {
+			const url = browser.runtime.getURL("./dist/sidebar.html");
+			browser.windows.create({
+				url,
+				type: "detached_panel",
+				width: 250,
+				height: 500,
+				titlePreface: "TabSaver",
+				top: 0,
+				left: 0,
+			});
 		},
 		isCurrentTabSet(window) {
 			const c = this.$store.getters.currentWindow;
