@@ -62,7 +62,13 @@ const settingsDefault = {
 	showTitles: false,
 	showCount: false,
 	showWindows: true,
-	expandWindows: false,
+	/**
+	 * Expand window TabSets
+	 * 0 - no
+	 * 1 - current
+	 * 2 - all
+	 */
+	expandWindows: 1,
 	overlayPosition: "right",
 	/**
 	 * Lookup strategy when opening existing tab

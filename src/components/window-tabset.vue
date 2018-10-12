@@ -51,8 +51,18 @@ export default {
 		icon: IconComponent,
 	},
 	data() {
+		let collapsed = true;
+		if (
+			this.$store.state.settings.expandWindows === 1 &&
+			this.$props.tabset.focused
+		) {
+			collapsed = false;
+		}
+		if (this.$store.state.settings.expandWindows === 2) {
+			collapsed = false;
+		}
 		return {
-			collapsed: !this.$store.state.settings.expandWindows,
+			collapsed,
 		};
 	},
 	computed: {

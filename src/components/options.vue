@@ -3,7 +3,11 @@
 		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="showWindows">Show window TabSets</label>
 			<div class="indent-1" :class="{'disabled': !showWindows}">
-				<label><input class="options__left-checkbox" type="checkbox" v-model="expandWindows">Expand window TabSets</label>
+				<span>Expand window TabSets:&ensp;</span><select class="browser-style" v-model.number="expandWindows">
+					<option value="0">None</option>
+					<option value="1">Current window</option>
+					<option value="2">All windows</option>
+				</select>
 			</div>
 		</div>
 		<div class="options__section">
