@@ -79,7 +79,7 @@ export default {
 	},
 	computed: {
 		windows() {
-			return this.$store.state.windows;
+			return this.$store.getters.windows;
 		},
 		showWindows() {
 			return this.$store.state.settings.showWindows;
@@ -206,7 +206,6 @@ export default {
 				type: "detached_panel",
 				width: 250,
 				height: 500,
-				titlePreface: "TabSaver",
 				top: 0,
 				left: 0,
 			});

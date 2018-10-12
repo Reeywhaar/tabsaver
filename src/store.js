@@ -40,6 +40,11 @@ export default async () => {
 			currentWindow(state) {
 				return first(state.windows, x => x.focused);
 			},
+			windows(state) {
+				let url = browser.runtime.getURL("");
+				url = url.substr(0, url.length - 1);
+				return state.windows.filter(x => x.title.indexOf(url) !== 0);
+			},
 		},
 		mutations: {
 			updateItems(state, items) {
