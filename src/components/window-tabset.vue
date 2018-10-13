@@ -22,13 +22,14 @@
 				class="tab-saver-item__link-container"
 				:class="{'tabsaver__tab-current': isCurrentTab(tab)}"
 				:key="tab.url"
-				@mouseup="handleClick($event, tab)"
 				draggable="true"
 				@dragstart="onTabDrag($event, tab)"
 			>
 				<tabset-tab
 					class="tab-saver-item__link"
 					:link="tab"
+					@mousedown.native="handleDown($event)"
+					@mouseup.native="handleClick($event, tab)"
 				></tabset-tab>
 				<button class="inline-button tab-saver-item__link-remove-button" title="Remove tab" @click="closeTab(tab)"><icon icon="cross"></icon></button>
 			</div>
@@ -98,6 +99,11 @@ export default {
 		collapse() {
 			this.collapsed = true;
 			this.$emit("collapsed", this.tabset);
+		},
+		handleDown(event) {
+			if (event.which === 2) {
+				event.preventDefault();
+			}
 		},
 		async handleClick(event, tab) {
 			if (event.which === 1) {
