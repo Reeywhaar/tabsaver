@@ -187,7 +187,7 @@ export default {
 				if (event.target.matches(".tab-saver-item__title")) {
 					browser.tabs.create({
 						url: tab.tab.url,
-						cookieStoreId: tab.cookieStoreId,
+						cookieStoreId: tab.tab.cookieStoreId,
 					});
 				} else if (event.target.matches(".tab-saver-item__link")) {
 					for (let ch of this.$children) {
@@ -203,7 +203,7 @@ export default {
 								active: false,
 								windowId: this.tabset.id,
 								url: tab.tab.url,
-								cookieStoreId: tab.cookieStoreId,
+								cookieStoreId: tab.tab.cookieStoreId,
 								index: ch.$props.link.index + append,
 							});
 						}
