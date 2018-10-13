@@ -15,3 +15,25 @@ Current state of Firefox WebExtension Api restricts opening of privileged urls (
 
 ![main](screenshots/main-assets/main.png)
 ![tabs](screenshots/main-assets/tabs.png)
+
+## FAQ
+
+#### When I click on `remove tab` button, nothing happens
+
+Click and hold button. Such action made to prevent accidental remove. Other buttons with such behavior are `Undo`, `Replace TabSet`, `Remove TabSet`.
+
+#### I don't need Window TabSets, can I hide them?
+
+Yes. Such preference available in addon's preferences. Click on cog icon in the panel's bottom right corner, to access preferences.
+
+#### What does `•` dot sumbol before tab's link means?
+
+It means that tab is pinned.
+
+#### What is `Unknown` label near tab's link.
+
+It means that tab's container was removed
+
+#### Can I open TabSaver in sidebar?
+
+Yes, you can detach popup panel as well.
