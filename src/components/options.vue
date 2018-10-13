@@ -60,6 +60,10 @@
 			<button class="button" @click="exportTabsets">Export TabSets</button>
 			<hold-button class="button clear-tabsets-button" color="hsla(10, 90%, 50%)" delay="2" @click="clearTabsets">Clear TabSets</hold-button>
 		</div>
+		<div class="options__section links">
+			<h3><a :href="usageLink">Show Usage</a></h3>
+			<h3><a :href="faqLink">Show Faq</a></h3>
+		</div>
 		<div class="options__section credits">
 			<h3>Credits</h3>
 			<p>This project takes best of these products:</p>
@@ -91,6 +95,17 @@ function createProperty(prop) {
 export default {
 	components: {
 		HoldButton,
+	},
+	data() {
+		const version = browser.runtime.getManifest().version;
+		const usageLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#screenshots`;
+		const faqLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#faq`;
+
+		return {
+			version,
+			usageLink,
+			faqLink,
+		};
 	},
 	computed: {
 		includePinned: createProperty("includePinned"),
