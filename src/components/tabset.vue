@@ -30,7 +30,6 @@
 				class="tab-saver-item__link-container"
 				:class="{'tabsaver__tab-current': isCurrentTab(tab)}"
 				:key="tab.url"
-				@click="openTab(tab)"
 				draggable="true"
 				:data-index="index"
 				@dragover="onTabDragover($event)"
@@ -40,6 +39,7 @@
 				<tabset-tab
 					class="tab-saver-item__link"
 					:link="tab"
+					@click.native="openTab(tab)"
 				></tabset-tab>
 				<hold-button class="inline-button tab-saver-item__link-remove-button" title="Remove tab" @click="removeTab(tab)" @cancel="onHoldCancel('remove tab')"><icon icon="cross"></icon></hold-button>
 			</div>
