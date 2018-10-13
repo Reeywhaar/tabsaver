@@ -37,3 +37,11 @@ It means that tab's container was removed
 #### Can I open TabSaver in sidebar?
 
 Yes, you can detach popup panel as well.
+
+#### Can I have tab's title near tab's link?
+
+Yes, available in preferences.
+
+#### Can I have tab's favicon near tab's link?
+
+Yes, available in preferences.
