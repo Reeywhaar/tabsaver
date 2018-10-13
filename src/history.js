@@ -1,8 +1,6 @@
 import { storage, settings } from "./shared.js";
 import { debounce } from "./utils.js";
 
-let cachedTabs = null;
-
 export const History = {
 	async permittedNumberOfStates() {
 		const [use, length] = await Promise.all([

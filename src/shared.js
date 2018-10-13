@@ -5,6 +5,28 @@ export const DEFAULT_COOKIE_STORE_ID = "firefox-default";
 const storageListeners = [];
 const storageBeforeListeners = [];
 
+async function processListeners(listeners, key, value, blocking = false) {
+	let failedcbs = [];
+	for (let cb of listeners) {
+		try {
+			if (blocking) {
+				await cb(key, value);
+			} else {
+				cb(key, value);
+			}
+		} catch (e) {
+			if (e.message === "can't access dead object") {
+				failedcbs.push(cb);
+			} else {
+				throw e;
+			}
+		}
+	}
+	for (let fcb of failedcbs) {
+		listeners.splice(listeners.indexOf(fcb), 1);
+	}
+}
+
 export const storage = {
 	async get(key, def = null) {
 		const req = await browser.storage.local.get(key);
@@ -12,41 +34,9 @@ export const storage = {
 		return req[key];
 	},
 	async set(key, value) {
-		{
-			let failedcbs = [];
-			for (let cb of storageBeforeListeners) {
-				try {
-					await cb(key, value);
-				} catch (e) {
-					if (e.message === "can't access dead object") {
-						failedcbs.push(cb);
-					} else {
-						throw e;
-					}
-				}
-			}
-			for (let fcb of failedcbs) {
-				storageBeforeListeners.splice(storageBeforeListeners.indexOf(fcb), 1);
-			}
-		}
+		await processListeners(storageBeforeListeners, key, value, true);
 		await browser.storage.local.set({ [key]: value });
-		{
-			let failedcbs = [];
-			for (let cb of storageListeners) {
-				try {
-					cb(key, value);
-				} catch (e) {
-					if (e.message === "can't access dead object") {
-						failedcbs.push(cb);
-					} else {
-						throw e;
-					}
-				}
-			}
-			for (let fcb of failedcbs) {
-				storageListeners.splice(storageListeners.indexOf(fcb), 1);
-			}
-		}
+		await processListeners(storageListeners, key, value, false);
 	},
 	subscribeBefore(fn) {
 		storageBeforeListeners.push(fn);
@@ -95,32 +85,14 @@ export const settings = {
 		let rsettings = (await Promise.all(
 			keys.map(x => settings.get(x).then(setting => [x, setting]))
 		)).reduce((c, [key, value]) => {
-			if (value !== null) {
-				c[key] = value;
-			}
+			if (value !== null) c[key] = value;
 			return c;
 		}, {});
 		return Object.assign({}, settingsDefault, rsettings);
 	},
 	async set(key, val) {
 		await storage.set(`settings:${key}`, val);
-		{
-			let failedcbs = [];
-			for (let cb of settingsListeners) {
-				try {
-					await cb(key, value);
-				} catch (e) {
-					if (e.message === "can't access dead object") {
-						failedcbs.push(cb);
-					} else {
-						throw e;
-					}
-				}
-			}
-			for (let fcb of failedcbs) {
-				settingsListeners.splice(settingsListeners.indexOf(fcb), 1);
-			}
-		}
+		await processListeners(settingsListeners, key, value, false);
 	},
 	subscribe(fn) {
 		settingsListeners.push(fn);
@@ -167,12 +139,11 @@ export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 			const query = lookup === 1 ? { currentWindow: true } : {};
 			const tabs = await browser.tabs.query(query);
 			for (let tab of tabs) {
-				if (tab.cookieStoreId === cookieStoreId && tab.url === url) {
+				if (tab.cookieStoreId === cookieStoreId && tab.url === url)
 					return await Promise.all([
 						browser.tabs.update(tab.id, { active: true }),
 						browser.windows.update(tab.windowId, { focused: true }),
 					]);
-				}
 			}
 		}
 		return await browser.tabs.create({

@@ -75,7 +75,7 @@ export const TabSet = {
 		const index = firstIndex(d, x => {
 			return x.key === key;
 		});
-		if (index > -1) {
+		if (index !== -1) {
 			d[index].data = tabsData;
 			d[index].color = color;
 		} else {
@@ -96,9 +96,9 @@ export const TabSet = {
 			first(d, x => {
 				return x.key === key;
 			}) !== null
-		) {
+		)
 			throw new Error("Name exists");
-		}
+
 		for (let set of d) {
 			if (
 				tabSetsAreEqual(
@@ -113,9 +113,8 @@ export const TabSet = {
 	},
 	async open(key) {
 		const tabset = first(await TabSet.getAll(), x => x.key === key);
-		if (tabset === null) {
-			throw new Error("Unknown TabSet");
-		}
+		if (tabset === null) throw new Error("Unknown TabSet");
+
 		const windows = await browser.windows.getAll({ populate: true });
 		for (let window of windows) {
 			if (
@@ -168,7 +167,7 @@ export const TabSet = {
 		const newExists =
 			firstIndex(d, x => {
 				return x.key === newn;
-			}) > -1;
+			}) !== -1;
 		if (newExists) throw new Error("Name already exists");
 
 		const index = firstIndex(d, x => {
@@ -217,12 +216,11 @@ export const TabSet = {
 		const tabData = serializeTab(tab);
 		const d = await TabSet.getAll();
 		const tabset = first(d, x => x.key === tabsetName);
-		if (!tabset) {
-			throw new Error("TabSet doesn't exist");
-		}
-		if (first(tabset.data, x => tabsEqual(x, tabData))) {
+		if (tabset === null) throw new Error("TabSet doesn't exist");
+
+		if (first(tabset.data, x => tabsEqual(x, tabData)))
 			throw new Error("Tab already exists");
-		}
+
 		if (index === -1) {
 			tabset.data.push(tabData);
 		} else {
@@ -251,20 +249,20 @@ export const TabSet = {
 			return;
 		const d = await TabSet.getAll();
 		const donorTabset = findTabSet(d, donorTabsetKey);
-		if (!donorTabset) throw new Error("Original TabSet doesn't exists");
+		if (donorTabset === null) throw new Error("Original TabSet doesn't exists");
 		const targetTabset =
 			donorTabsetKey === targetTabsetKey
 				? donorTabset
 				: findTabSet(d, targetTabsetKey);
 		if (!targetTabset) throw new Error("Target TabSet doesn't exists");
 		const donor = first(donorTabset.data, tab => tabsEqual(tab, donorTab));
-		if (!donor) throw new Error("Original tab doesn't exists");
+		if (donor === null) throw new Error("Original tab doesn't exists");
 		if (donorTabsetKey !== targetTabsetKey) {
 			const duplicate = first(targetTabset.data, tab => tabsEqual(tab, donor));
 			if (duplicate) throw new Error("TabSet already have this tab");
 		}
 		const target = first(targetTabset.data, tab => tabsEqual(tab, targetTab));
-		if (!target) throw new Error("Target tab doesn't exists");
+		if (target === null) throw new Error("Target tab doesn't exists");
 		const cut = donorTabset.data.splice(donorTabset.data.indexOf(donor), 1);
 		targetTabset.data.splice(
 			targetTabset.data.indexOf(target) + (after ? 1 : 0),

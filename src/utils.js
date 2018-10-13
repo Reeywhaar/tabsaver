@@ -6,15 +6,14 @@ export function withDefault(obj, def) {
 }
 
 export function sleep(n) {
-	return new Promise(resolve => {
-		setTimeout(resolve, n);
-	});
+	return new Promise(resolve => setTimeout(resolve, n));
 }
 
 export function pipe(obj, ...fns) {
-	return fns.reduce((c, fn) => {
-		return c instanceof Promise ? c.then(c => fn(c)) : fn(c);
-	}, obj);
+	return fns.reduce(
+		(c, fn) => (c instanceof Promise ? c.then(c => fn(c)) : fn(c)),
+		obj
+	);
 }
 
 export async function saveFile(value, fileName, fileType = "application/json") {
@@ -49,17 +48,16 @@ export function readFile(accept = ".json") {
 		input.addEventListener(
 			"change",
 			async function(e) {
-				if (e.target.files.length < 1) {
+				if (e.target.files.length < 1)
 					reject(new Error("no file was selected"));
-				}
+
 				try {
 					resolve(await readContent(e.target.files[0]));
-					host.removeChild(input);
 				} catch (e) {
 					reject(new Error("error while reading import file"));
+				} finally {
 					host.removeChild(input);
 				}
-				host.removeChild(input);
 			},
 			false
 		);
@@ -71,38 +69,36 @@ export async function readFileAsJson() {
 	return JSON.parse(await readFile());
 }
 
-export function first(array, fn) {
-	for (let item of array) {
-		if (fn(item)) return item;
+export function firstIndex(array, fn) {
+	for (let [index, item] of array.entries()) {
+		if (fn(item)) return index;
 	}
-	return null;
+	return -1;
 }
 
-export function firstIndex(array, fn) {
-	const item = first(array, fn);
-	return array.indexOf(item);
+export function first(array, fn) {
+	const index = firstIndex(array, fn);
+	if (index === -1) return null;
+	return array[index];
 }
 
 export function setsAreEqual(setA, setB) {
 	setB = setB.slice(0);
-	if (setA.length !== setB.length) {
-		return false;
-	}
+	if (setA.length !== setB.length) return false;
+
 	for (let item of setA) {
 		if (setB.length < 1) return false;
 		const index = setB.indexOf(item);
-		if (index === -1) {
-			return false;
-		}
+		if (index === -1) return false;
 		setB.splice(index, 1);
 	}
 	return true;
 }
 
-export function live(parent, selector, event, fn, capture = false) {
-	parent.addEventListener(
+export function live(host, selector, event, fn, capture = false) {
+	host.addEventListener(
 		event,
-		function(e) {
+		e => {
 			if (e.target.matches(selector)) {
 				fn.call(e.target, e);
 			}
@@ -147,20 +143,23 @@ export function padLeft(length, padder = " ", str) {
 
 export function parseQuery(query) {
 	return query
-		.substr(1)
+		.substr(1) // remove "?"
 		.split("&")
 		.map(x => {
 			return x.split("=").map(x => decodeURIComponent(x));
 		})
-		.reduce((c, x) => {
-			c[x[0]] = x[1];
+		.reduce((c, [key, value]) => {
+			c[key] = value;
 			return c;
 		}, {});
 }
 
 export function findParent(el, selector) {
-	while ((el = el.parentElement) && !el.matches(selector) && el !== document) {}
-	return el;
+	while (true) {
+		if (el.matches(selector)) return el;
+		if (el === document) return null;
+		el = el.parentElement;
+	}
 }
 
 export async function tryOR(fn, def = null) {
@@ -222,8 +221,8 @@ export function debounce(fn, delay, immediate) {
 	};
 }
 
-export async function waitUntil(predicate, interval = 100) {
-	while (!predicate) {
+export async function waitUntil(fn, interval = 100) {
+	while (!(await fn())) {
 		await sleep(interval);
 	}
 }
