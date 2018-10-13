@@ -185,10 +185,16 @@ export default {
 				}
 
 				if (event.target.matches(".tab-saver-item__title")) {
-					browser.tabs.create({
-						url: tab.tab.url,
-						cookieStoreId: tab.tab.cookieStoreId,
-					});
+					browser.tabs
+						.create({
+							url: tab.tab.url,
+							cookieStoreId: tab.tab.cookieStoreId,
+						})
+						.catch(e => {
+							browser.tabs.create({
+								url: tab.tab.url,
+							});
+						});
 				} else if (event.target.matches(".tab-saver-item__link")) {
 					for (let ch of this.$children) {
 						if (event.target === ch.$el) {
@@ -199,13 +205,22 @@ export default {
 								return proportion < 70 ? 0 : 1;
 							})();
 
-							browser.tabs.create({
-								active: false,
-								windowId: this.tabset.id,
-								url: tab.tab.url,
-								cookieStoreId: tab.tab.cookieStoreId,
-								index: ch.$props.link.index + append,
-							});
+							browser.tabs
+								.create({
+									active: false,
+									windowId: this.tabset.id,
+									url: tab.tab.url,
+									cookieStoreId: tab.tab.cookieStoreId,
+									index: ch.$props.link.index + append,
+								})
+								.catch(e => {
+									browser.tabs.create({
+										active: false,
+										windowId: this.tabset.id,
+										url: tab.tab.url,
+										index: ch.$props.link.index + append,
+									});
+								});
 						}
 					}
 				}
