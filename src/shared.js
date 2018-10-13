@@ -81,9 +81,8 @@ export const settings = {
 		return storage.get(`settings:${key}`, settingsDefault[key]);
 	},
 	async getAll() {
-		let keys = Object.keys(settingsDefault);
 		let rsettings = (await Promise.all(
-			keys.map(x => settings.get(x).then(setting => [x, setting]))
+			settingsKeys.map(x => settings.get(x).then(setting => [x, setting]))
 		)).reduce((c, [key, value]) => {
 			if (value !== null) c[key] = value;
 			return c;
