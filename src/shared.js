@@ -90,8 +90,8 @@ export const settings = {
 		}, {});
 		return Object.assign({}, settingsDefault, rsettings);
 	},
-	async set(key, val) {
-		await storage.set(`settings:${key}`, val);
+	async set(key, value) {
+		await storage.set(`settings:${key}`, value);
 		await processListeners(settingsListeners, key, value, false);
 	},
 	subscribe(fn) {
