@@ -16,7 +16,7 @@ const stringifyTab = tab => {
 const serializeTab = tab => {
 	return {
 		title: tab.title,
-		url: tab.url,
+		url: getUnmangledURL(tab.url),
 		favIconUrl: tab.favIconUrl,
 		pinned: tab.pinned,
 		cookieStoreId: tab.cookieStoreId || DEFAULT_COOKIE_STORE_ID,

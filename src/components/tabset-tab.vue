@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { DEFAULT_COOKIE_STORE_ID } from "../shared.js";
+import { DEFAULT_COOKIE_STORE_ID, getUnmangledURL } from "../shared.js";
 
 export default {
 	props: ["link"],
@@ -28,7 +28,7 @@ export default {
 			);
 		},
 		title() {
-			let link = this.$props.link.url;
+			let link = getUnmangledURL(this.$props.link.url);
 			if (
 				this.$store.state.settings.showTitles &&
 				this.$props.link.title &&
