@@ -1,5 +1,12 @@
 import { bgpage, getCurrentTabs } from "./shared.js";
-import { reverse, sleep, waitUntil, debounce, first } from "./utils.js";
+import {
+	reverse,
+	sleep,
+	waitUntil,
+	debounce,
+	first,
+	parseQuery,
+} from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
 import { applyChange } from "deep-diff";
 
@@ -7,20 +14,33 @@ export default async () => {
 	const host = await bgpage();
 	await waitUntil(() => host.loaded === true);
 
-	const [items, settings, statesCount, currentTab, windows] = await Promise.all(
-		[
-			host.TabSet.getAll(),
-			host.settings.getAll(),
-			host.Undo.count(),
-			browser.tabs.query({
-				active: true,
-				currentWindow: true,
-			}),
-			browser.windows.getAll({
-				populate: true,
-			}),
-		]
-	);
+	const windowid = (() => {
+		const query = parseQuery(location.search);
+		if ("windowid" in query) {
+			return parseInt(query.windowid, 10);
+		}
+		return null;
+	})();
+
+	const [
+		items,
+		settings,
+		statesCount,
+		windows,
+		currentWindow,
+	] = await Promise.all([
+		host.TabSet.getAll(),
+		host.settings.getAll(),
+		host.Undo.count(),
+		browser.windows.getAll({
+			populate: true,
+		}),
+		browser.windows.getCurrent(),
+	]);
+
+	const currentTabs = await browser.tabs.query({
+		active: true,
+	});
 
 	const store = new Vuex.Store({
 		state: {
@@ -30,15 +50,18 @@ export default async () => {
 			statesCount,
 			notification: "",
 			notificationCounter: 0,
-			currentTab:
-				currentTab.length > 0 ? currentTab[0] : browser.tabs.TAB_ID_NONE,
+			currentTabs,
 		},
 		getters: {
 			itemsReversed(state) {
 				return Array.from(reverse(state.items));
 			},
 			currentWindow(state) {
-				return first(state.windows, x => x.focused);
+				const focused = first(state.windows, x => x.focused);
+				if (focused === null) return null;
+				if (windowid !== null && focused.id === currentWindow.id)
+					return first(state.windows, x => x.id === windowid);
+				return focused;
 			},
 			windows(state) {
 				let url = browser.runtime.getURL("");
@@ -62,8 +85,8 @@ export default async () => {
 			updateStatesCount(state, count) {
 				state.statesCount = count;
 			},
-			setCurrentTab(state, tab) {
-				state.currentTab = tab;
+			setCurrentTabs(state, tabs) {
+				state.currentTabs = tabs;
 			},
 			setWindows(state, windows) {
 				state.windows = windows;
@@ -197,23 +220,15 @@ export default async () => {
 	browser.tabs.onUpdated.addListener(async () => {
 		const tabs = await browser.tabs.query({
 			active: true,
-			currentWindow: true,
 		});
-		store.commit(
-			"setCurrentTab",
-			tabs.length > 0 ? tabs[0] : browser.tabs.TAB_ID_NONE
-		);
+		store.commit("setCurrentTabs", tabs);
 		store.dispatch("updateWindows");
 	});
 	browser.tabs.onCreated.addListener(async () => {
 		const tabs = await browser.tabs.query({
 			active: true,
-			currentWindow: true,
 		});
-		store.commit(
-			"setCurrentTab",
-			tabs.length > 0 ? tabs[0] : browser.tabs.TAB_ID_NONE
-		);
+		store.commit("setCurrentTabs", tabs);
 		store.dispatch("updateWindows");
 	});
 	browser.tabs.onMoved.addListener(async () => {

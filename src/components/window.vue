@@ -200,7 +200,9 @@ export default {
 			browser.runtime.openOptionsPage();
 		},
 		detach() {
-			const url = browser.runtime.getURL("./dist/sidebar.html");
+			const url = browser.runtime.getURL(
+				`./dist/sidebar.html?windowid=${this.$store.getters.currentWindow.id}`
+			);
 			browser.windows.create({
 				url,
 				type: "detached_panel",

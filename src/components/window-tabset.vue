@@ -37,7 +37,7 @@
 	</div>
 </template>
 <script>
-import { sleep } from "../utils.js";
+import { sleep, first } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -79,13 +79,9 @@ export default {
 	},
 	methods: {
 		isCurrentTab(tab) {
-			try {
-				if (this.$store.state.currentTab === browser.tabs.TAB_ID_NONE)
-					return false;
-				return tab.id === this.$store.state.currentTab.id;
-			} catch (e) {
-				return false;
-			}
+			return first(this.$store.state.currentTabs, x => x.id === tab.id) === null
+				? false
+				: true;
 		},
 		closeTab(tab) {
 			browser.tabs.remove(tab.id);

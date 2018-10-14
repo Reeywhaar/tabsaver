@@ -149,7 +149,7 @@ export function parseQuery(query) {
 			return x.split("=").map(x => decodeURIComponent(x));
 		})
 		.reduce((c, [key, value]) => {
-			c[key] = value;
+			if (key) c[key] = value;
 			return c;
 		}, {});
 }
