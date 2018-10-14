@@ -84,16 +84,15 @@ export default {
 	},
 	methods: {
 		isCurrentTab(tab) {
-			try {
-				if (this.$store.state.currentTab === browser.tabs.TAB_ID_NONE)
-					return false;
-				return (
-					tab.url === this.$store.state.currentTab.url &&
-					tab.cookieStoreId === this.$store.state.currentTab.cookieStoreId
-				);
-			} catch (e) {
-				return false;
-			}
+			return first(
+				this.$store.state.currentTabs,
+				x =>
+					x.windowId === this.$store.getters.currentWindow.id &&
+					tab.url === x.url &&
+					tab.cookieStoreId === x.cookieStoreId
+			) === null
+				? false
+				: true;
 		},
 		onTabDrag(e, tab) {
 			if (
