@@ -11,6 +11,13 @@
 			</div>
 		</div>
 		<div class="options__section">
+			<span>When opening a tab, check for the same tab in&ensp;</span><select class="browser-style" v-model.number="tabLookup">
+				<option value="0">Nowhere</option>
+				<option value="1">Current window</option>
+				<option value="2">All windows</option>
+			</select>
+		</div>
+		<div class="options__section">
 			<label><input class="options__left-checkbox" type="checkbox" v-model="includePinned">Include pinned tabs when saving TabSet</label>
 		</div>
 		<div class="options__section">
@@ -35,13 +42,6 @@
 			<span>Show controls overlay at&ensp;</span><select class="browser-style" v-model="overlayPosition">
 				<option value="right">Right</option>
 				<option value="left">Left</option>
-			</select>
-		</div>
-		<div class="options__section">
-			<span>When opening a tab, check for the same tab in&ensp;</span><select class="browser-style" v-model.number="tabLookup">
-				<option value="0">Nowhere</option>
-				<option value="1">Current window</option>
-				<option value="2">All windows</option>
 			</select>
 		</div>
 		<div class="options__section">
