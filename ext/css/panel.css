@@ -140,12 +140,6 @@ button {
 	flex-direction: column;
 }
 
-.incognito-mode-title {
-	text-align: center;
-	font-size: 140%;
-	margin-top: 1em;
-}
-
 body.popup .main {
 	max-height: 550px;
 	box-sizing: border-box;
@@ -211,6 +205,7 @@ body.sidebar .main {
 
 .window-tabset-incognito .tabset__item {
 	background-color: hsla(270, 80%, 70%, 0.5);
+	color: #fff;
 }
 
 .tabset__item {
@@ -312,12 +307,14 @@ body.sidebar .main {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	line-height: 1.5em;
 	position: absolute;
 	top: calc(var(--padding-y) / 2);
 	background: var(--overlay-color);
+	color: var(--text-color);
+	padding-top: 0.2em;
 
-	line-height: 1.2em;
+	line-height: 1em;
+	height: 1.6em;
 }
 
 .tabset__controls:not(:hover) {

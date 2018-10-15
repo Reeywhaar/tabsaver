@@ -11,7 +11,8 @@
 				@click="toggleCollapse"
 			>Window {{title}}</span><span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
 			<div class="tabset__controls" :class="overlayClasses">
-				<button @click="createTab()" class="inline-button tabset__button tabset__button-open" title="Create Tab"><icon icon="add"></icon></button>
+				<button @click="createTab()" class="inline-button tabset__button tabset__button-add" title="Create Tab"><icon icon="add"></icon></button>
+				<hold-button @click="closeWindow()" @cancel="onHoldCancel('close window')" class="inline-button tabset__button tabset__button-remove" title="Close Window"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
 		<div class="tabset__links" v-if="!collapsed">
@@ -224,6 +225,9 @@ export default {
 				}
 			}
 		},
+		onHoldCancel(type) {
+			this.$store.dispatch("notify", `Click and hold button to ${type}`);
+		},
 		async createTab() {
 			let index;
 			switch (this.$store.state.settings.placeCreatedTabs) {
@@ -243,12 +247,14 @@ export default {
 					}
 					break;
 			}
-			console.log(this.$store.state.settings.placeCreatedTabs, index);
 			browser.tabs.create({
 				active: true,
 				windowId: this.$props.tabset.id,
 				index,
 			});
+		},
+		closeWindow() {
+			browser.windows.remove(this.$props.tabset.id);
 		},
 	},
 };
