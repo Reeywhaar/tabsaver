@@ -204,16 +204,16 @@ export default async () => {
 		},
 	});
 
-	host.storage.subscribe((key, value) => {
-		if (key === "tabs") {
-			store.dispatch("updateItems");
-		} else if (key === "includePinned") {
-			store.commit("setPinned", value);
-		} else if (key.indexOf("settings:") === 0) {
-			key = key.substr(9);
-			store.commit("setSetting", { key, value });
-		} else if (key.indexOf("history:states") === 0) {
-			store.dispatch("updateStatesCount");
+	browser.storage.onChanged.addListener((diff, area) => {
+		for (const [key, { oldValue, newValue }] of Object.entries(diff)) {
+			if (key === "tabs") {
+				store.dispatch("updateItems");
+			} else if (key.indexOf("settings:") === 0) {
+				key = key.substr(9);
+				store.commit("setSetting", { key, newValue });
+			} else if (key.indexOf("history:states") === 0) {
+				store.dispatch("updateStatesCount");
+			}
 		}
 	});
 
