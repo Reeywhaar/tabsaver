@@ -60,6 +60,13 @@ const settingsDefault = {
 	 * 2 - all
 	 */
 	expandWindows: 1,
+	/**
+	 * Place created Tab
+	 * 0 - start
+	 * 1 - end
+	 * 2 - after current tab
+	 */
+	placeCreatedTabs: 1,
 	overlayPosition: "right",
 	/**
 	 * Lookup strategy when opening existing tab

@@ -9,6 +9,13 @@
 					<option value="2">All windows</option>
 				</select>
 			</div>
+			<div class="indent-1" :class="{'disabled': !showWindows}">
+				<span>Place created tab:&ensp;</span><select class="browser-style" v-model.number="placeCreatedTabs">
+					<option value="0">At start</option>
+					<option value="1">At end</option>
+					<option value="2">After current tab</option>
+				</select>
+			</div>
 		</div>
 		<div class="options__section">
 			<span>When opening a tab, check for the same tab in&ensp;</span><select class="browser-style" v-model.number="tabLookup">
@@ -114,6 +121,7 @@ export default {
 		showCount: createProperty("showCount"),
 		showWindows: createProperty("showWindows"),
 		expandWindows: createProperty("expandWindows"),
+		placeCreatedTabs: createProperty("placeCreatedTabs"),
 		theme: createProperty("theme"),
 		overlayPosition: createProperty("overlayPosition"),
 		tabLookup: createProperty("tabLookup"),

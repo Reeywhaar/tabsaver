@@ -6,7 +6,11 @@
 </template>
 
 <script>
-import { DEFAULT_COOKIE_STORE_ID, getUnmangledURL } from "../shared.js";
+import {
+	getUnmangledURL,
+	DEFAULT_COOKIE_STORE_ID,
+	PRIVATE_COOKIE_STORE_ID,
+} from "../shared.js";
 
 export default {
 	props: ["link"],
@@ -51,7 +55,8 @@ export default {
 		async updateContainerProps() {
 			if (
 				!this.link.cookieStoreId ||
-				this.link.cookieStoreId === DEFAULT_COOKIE_STORE_ID
+				this.link.cookieStoreId === DEFAULT_COOKIE_STORE_ID ||
+				this.link.cookieStoreId === PRIVATE_COOKIE_STORE_ID
 			) {
 				delete this.$el.dataset.identityName;
 				delete this.$el.dataset.identityColor;

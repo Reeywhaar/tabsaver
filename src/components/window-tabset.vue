@@ -11,6 +11,7 @@
 				@click="toggleCollapse"
 			>Window {{title}}</span><span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
 			<div class="tabset__controls" :class="overlayClasses">
+				<button @click="createTab()" class="inline-button tabset__button tabset__button-open" title="Create Tab"><icon icon="add"></icon></button>
 			</div>
 		</div>
 		<div class="tabset__links" v-if="!collapsed">
@@ -222,6 +223,32 @@ export default {
 					}
 				}
 			}
+		},
+		async createTab() {
+			let index;
+			switch (this.$store.state.settings.placeCreatedTabs) {
+				case 0:
+					index = 0;
+					break;
+				case 1:
+					index = null;
+					break;
+				case 2:
+					index = null;
+					for (const tab of this.$props.tabset.tabs) {
+						if (this.isCurrentTab(tab)) {
+							index = tab.index + 1;
+							break;
+						}
+					}
+					break;
+			}
+			console.log(this.$store.state.settings.placeCreatedTabs, index);
+			browser.tabs.create({
+				active: true,
+				windowId: this.$props.tabset.id,
+				index,
+			});
 		},
 	},
 };
