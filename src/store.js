@@ -104,10 +104,10 @@ export default async () => {
 		},
 		actions: {
 			async import() {
-				await host.import();
+				await browser.runtime.sendMessage("import");
 			},
 			async export() {
-				await host.export();
+				await browser.runtime.sendMessage("export");
 			},
 			async notify(context, message) {
 				context.commit("setNotification", message);
