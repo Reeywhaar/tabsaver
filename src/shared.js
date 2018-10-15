@@ -98,8 +98,6 @@ export const settings = {
 	},
 };
 
-export const bgpage = () => browser.runtime.getBackgroundPage();
-
 export function isURLPrivileged(url) {
 	if (url === "about:blank") return false;
 	if (url === "about:home") return false;

@@ -1,4 +1,4 @@
-import { bgpage, getCurrentTabs } from "./shared.js";
+import { getCurrentTabs } from "./shared.js";
 import {
 	reverse,
 	sleep,
@@ -11,7 +11,7 @@ import Vuex from "vuex/dist/vuex.esm.js";
 import { applyChange } from "deep-diff";
 
 export default async () => {
-	const host = await bgpage();
+	const host = await browser.runtime.getBackgroundPage();
 	await waitUntil(() => host.loaded === true);
 
 	const windowid = (() => {
