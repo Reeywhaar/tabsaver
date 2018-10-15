@@ -39,7 +39,8 @@
 				<tabset-tab
 					class="tabset__link"
 					:link="tab"
-					@click.native="openTab(tab)"
+					@mousedown.native="handleDown($event)"
+					@mouseup.native="handleClick($event, tab)"
 				></tabset-tab>
 				<hold-button class="inline-button tabset__link-remove-button" title="Remove tab" @click="removeTab(tab)" @cancel="onHoldCancel('remove tab')"><icon icon="cross"></icon></hold-button>
 			</div>
@@ -339,6 +340,14 @@ export default {
 		},
 		async openTab(tab) {
 			await this.$store.dispatch("openUrl", [tab.url, tab.cookieStoreId]);
+		},
+		handleDown(event) {
+			if (event.which === 2) {
+				event.preventDefault();
+			}
+		},
+		async handleClick(event, tab) {
+			this.openTab(tab);
 		},
 	},
 };
