@@ -3,6 +3,7 @@
 	class="tabset window-tabset"
 	@dragover="onDragover($event)"
 	@drop="onDrop($event)"
+	:class="{'window-tabset-incognito': tabset.incognito}"
 	>
 		<div class="tabset__item" :style="{'background-color': headerColor}">
 			<span

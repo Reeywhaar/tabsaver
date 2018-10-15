@@ -5,16 +5,6 @@ import getStore from "./store.js";
 import WindowComponent from "./components/window.vue";
 
 async function main() {
-	const cwin = await browser.windows.getCurrent();
-	if (cwin !== browser.windows.WINDOW_ID_NONE && cwin.incognito) {
-		const host = document.querySelector(".main");
-		const el = document.createElement("div");
-		el.classList.add("incognito-mode-title");
-		el.innerText = "Incognito Mode";
-		host.appendChild(el);
-		return;
-	}
-
 	Vue.config.devtools = false;
 	Vue.use(Vuex);
 

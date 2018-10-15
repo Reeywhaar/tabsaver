@@ -1,12 +1,10 @@
 import { storage as Storage, settings as Settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
+import { History as Undo } from "./history.js";
 import { reverse, sleep, debounce, first, parseQuery } from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
-import { applyChange } from "deep-diff";
 
 export default async () => {
-	const host = await browser.runtime.getBackgroundPage();
-
 	const windowid = await (async () => {
 		const query = parseQuery(location.search);
 		if ("windowid" in query) return parseInt(query.windowid, 10);
@@ -25,21 +23,19 @@ export default async () => {
 		settings,
 		statesCount,
 		windows,
-		currentWindow,
+		currentTabs,
 	] = await Promise.all([
 		TabSet.getAll(),
 		Settings.getAll(),
-		host.Undo.count(),
+		Undo.count(),
 		browser.windows.getAll({
 			populate: true,
 			windowTypes: ["normal"],
 		}),
-		browser.windows.getCurrent(),
+		browser.tabs.query({
+			active: true,
+		}),
 	]);
-
-	const currentTabs = await browser.tabs.query({
-		active: true,
-	});
 
 	const store = new Vuex.Store({
 		state: {
@@ -213,21 +209,11 @@ export default async () => {
 				});
 			},
 			async updateStatesCount(context) {
-				const count = await host.Undo.count();
+				const count = await Undo.count();
 				context.commit("updateStatesCount", count);
 			},
 			async undo(context) {
-				try {
-					host.trackHistory = false;
-					let last = await host.Undo.pop();
-					let target = JSON.parse(JSON.stringify(context.state.items));
-					for (let change of last) {
-						applyChange(target, target, change);
-					}
-					await host.storage.set("tabs", target);
-				} finally {
-					host.trackHistory = true;
-				}
+				await browser.runtime.sendMessage("undo");
 			},
 			updateWindows: debounce(async context => {
 				context.commit(

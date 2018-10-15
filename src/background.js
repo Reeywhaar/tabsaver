@@ -2,9 +2,11 @@ import { readFileAsJson, saveFile } from "./utils.js";
 import { openURL, storage, settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
 import { History } from "./history.js";
-import { diff as objdiff } from "deep-diff";
+import { diff as objdiff, applyChange } from "deep-diff";
 
 async function main() {
+	let trackHistory = true;
+
 	browser.runtime.onMessage.addListener(async msg => {
 		switch (msg) {
 			case "import":
@@ -17,6 +19,18 @@ async function main() {
 					await saveFile(out, "export.tabsaver.json");
 				} catch (e) {}
 				return;
+			case "undo":
+				try {
+					trackHistory = false;
+					let last = await History.pop();
+					let target = await TabSet.getAll();
+					for (let change of last) {
+						applyChange(target, target, change);
+					}
+					await storage.set("tabs", target);
+				} finally {
+					trackHistory = true;
+				}
 		}
 		if (typeof msg === "object" && "domain" in msg) {
 			switch (msg.domain) {
@@ -41,7 +55,7 @@ async function main() {
 		for (const [key, { oldValue, newValue }] of Object.entries(diff)) {
 			if (key === "settings:useHistory" && newValue == false) {
 				History.clear();
-			} else if (key === "tabs" && window.trackHistory) {
+			} else if (key === "tabs" && trackHistory) {
 				if (!(await settings.get("useHistory"))) return;
 				preChangeTabs = preChangeTabs || oldValue;
 				const tabsdiff = objdiff(newValue, preChangeTabs);
