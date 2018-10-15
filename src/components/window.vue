@@ -131,19 +131,45 @@ export default {
 		},
 		async onDrop(e, tabset) {
 			try {
-				const key = e.dataTransfer.getData("tabsaver/tabset");
-				if (!key || key === tabset.key) return;
+				if (e.dataTransfer.types.indexOf("tabsaver/tabset") !== -1) {
+					const key = e.dataTransfer.getData("tabsaver/tabset");
+					if (!key || key === tabset.key) return;
 
-				e.stopPropagation();
+					e.stopPropagation();
 
-				const after = (() => {
-					const rect = e.currentTarget.getBoundingClientRect();
-					const y = e.clientY - rect.y;
-					const proportion = (y / rect.height) * 100;
-					return proportion >= 50 ? true : false;
-				})();
+					const after = (() => {
+						const rect = e.currentTarget.getBoundingClientRect();
+						const y = e.clientY - rect.y;
+						const proportion = (y / rect.height) * 100;
+						return proportion >= 50 ? true : false;
+					})();
 
-				await this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
+					await this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
+				} else if (e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
+					const tab = JSON.parse(e.dataTransfer.getData("tabsaver/native-tab"));
+
+					await this.$store.dispatch("tabsetAppend", [tabset.key, tab]);
+				} else if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
+					const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
+					if (!data.key) throw new Error("Can't find tab's TabSet");
+					if (!data.tab) throw new Error("Can't find tab");
+					if (data.key === tabset.key) return;
+
+					e.stopPropagation();
+
+					if (tabset.data.length === 0) {
+						await this.$store.dispatch("tabsetAppend", [tabset.key, data.tab]);
+						await this.$store.dispatch("tabsetRemoveTab", [data.key, data.tab]);
+					} else {
+						await this.$store.dispatch("tabsetMoveTab", [
+							data.key,
+							data.tab,
+							tabset.key,
+							tabset.data[tabset.data.length - 1],
+							true,
+						]);
+					}
+				}
 			} catch (e) {
 				this.$store.dispatch("notify", e.message);
 				console.error(e);
@@ -152,6 +178,8 @@ export default {
 		onDragover(e) {
 			for (let dtype of e.dataTransfer.types) {
 				switch (dtype) {
+					case "tabsaver/native-tab":
+					case "tabsaver/tab":
 					case "tabsaver/tabset":
 						e.preventDefault();
 						return;

@@ -23,7 +23,7 @@
 				v-if="tabset.data.length === 0"
 				class="tabset__links-empty"
 				@dragover="onTabDragover($event)"
-				@drop="onEmptyTabDrop($event)"
+				@drop="onTabDrop($event, null)"
 			>No Tabs</div>
 			<div
 				v-for="(tab, index) in tabset.data"
@@ -115,74 +115,85 @@ export default {
 		},
 		async onTabDrop(e, tab) {
 			try {
-				if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
-					const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
-					if (!data.key) throw new Error("Can't find tab's TabSet");
-					if (!data.tab) throw new Error("Can't find tab");
-					if (
-						data.key === this.tabset.key &&
-						data.tab.url === tab.url &&
-						data.tab.cookieStoreId === tab.cookieStoreId
-					)
-						return;
+				if (e.currentTarget.matches(".tabset__links-empty")) {
+					if (e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
+						const tab = JSON.parse(
+							e.dataTransfer.getData("tabsaver/native-tab")
+						);
 
-					e.stopPropagation();
+						await this.$store.dispatch("tabsetAppend", [this.tabset.key, tab]);
+					} else if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
+						const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
+						if (!data.key) throw new Error("Can't find tab's TabSet");
+						if (!data.tab) throw new Error("Can't find tab");
 
-					const after = (() => {
-						const rect = e.currentTarget.getBoundingClientRect();
-						const y = e.clientY - rect.y;
-						const proportion = (y / rect.height) * 100;
-						return proportion >= 50 ? true : false;
-					})();
-
-					await this.$store.dispatch("tabsetMoveTab", [
-						data.key,
-						data.tab,
-						this.tabset.key,
-						tab,
-						after,
-					]);
-				} else if (e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
-					const tab = JSON.parse(e.dataTransfer.getData("tabsaver/native-tab"));
-					const tabExists =
-						first(
-							this.tabset.data,
-							x => x.url === tab.url && x.cookieStoreId === tab.cookieStoreId
-						) !== null;
-
-					if (tabExists) {
-						this.$store.dispatch("notify", "Tab Exists");
-						return;
+						await this.$store.dispatch("tabsetAppend", [
+							this.tabset.key,
+							data.tab,
+						]);
+						await this.$store.dispatch("tabsetRemoveTab", [data.key, data.tab]);
 					}
+				} else if (e.currentTarget.matches(".tabset__link-container")) {
+					if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
+						const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
+						if (!data.key) throw new Error("Can't find tab's TabSet");
+						if (!data.tab) throw new Error("Can't find tab");
+						if (
+							data.key === this.tabset.key &&
+							data.tab.url === tab.url &&
+							data.tab.cookieStoreId === tab.cookieStoreId
+						)
+							return;
 
-					const index = parseInt(e.currentTarget.dataset.index, 10);
+						e.stopPropagation();
 
-					const after = (() => {
-						const rect = e.currentTarget.getBoundingClientRect();
-						const y = e.clientY - rect.y;
-						const proportion = (y / rect.height) * 100;
-						return proportion < 50 ? 0 : 1;
-					})();
+						const after = (() => {
+							const rect = e.currentTarget.getBoundingClientRect();
+							const y = e.clientY - rect.y;
+							const proportion = (y / rect.height) * 100;
+							return proportion >= 50 ? true : false;
+						})();
 
-					await this.$store.dispatch("tabsetAppend", [
-						this.tabset.key,
-						tab,
-						index + after,
-					]);
+						await this.$store.dispatch("tabsetMoveTab", [
+							data.key,
+							data.tab,
+							this.tabset.key,
+							tab,
+							after,
+						]);
+					} else if (
+						e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1
+					) {
+						const tab = JSON.parse(
+							e.dataTransfer.getData("tabsaver/native-tab")
+						);
+						const tabExists =
+							first(
+								this.tabset.data,
+								x => x.url === tab.url && x.cookieStoreId === tab.cookieStoreId
+							) !== null;
+
+						if (tabExists) {
+							this.$store.dispatch("notify", "Tab Exists");
+							return;
+						}
+
+						const index = parseInt(e.currentTarget.dataset.index, 10);
+
+						const after = (() => {
+							const rect = e.currentTarget.getBoundingClientRect();
+							const y = e.clientY - rect.y;
+							const proportion = (y / rect.height) * 100;
+							return proportion < 50 ? 0 : 1;
+						})();
+
+						await this.$store.dispatch("tabsetAppend", [
+							this.tabset.key,
+							tab,
+							index + after,
+						]);
+					}
 				}
-			} catch (e) {
-				this.$store.dispatch("notify", e.message);
-				console.error(e);
-			}
-		},
-		async onEmptyTabDrop(e) {
-			try {
-				const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
-				if (!data.key) throw new Error("Can't find tab's TabSet");
-				if (!data.tab) throw new Error("Can't find tab");
-
-				await this.$store.dispatch("tabsetAppend", [this.tabset.key, data.tab]);
-				await this.$store.dispatch("tabsetRemoveTab", [data.key, data.tab]);
 			} catch (e) {
 				this.$store.dispatch("notify", e.message);
 				console.error(e);
