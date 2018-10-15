@@ -197,13 +197,13 @@ body.sidebar .main {
 
 /* tab-saver-item */
 
-.tab-saver-item {
+.tabset {
 	--padding-y: 0.2em;
 	--padding-x: 0.2em;
 	/* margin-bottom: 1px; */
 }
 
-.tab-saver-item__item {
+.tabset__item {
 	padding: var(--padding-y) var(--padding-x);
 	background: var(--tab-header-color);
 	display: flex;
@@ -213,19 +213,19 @@ body.sidebar .main {
 	position: relative;
 }
 
-.tab-saver-item__title {
+.tabset__title {
 	flex-grow: 10;
 	min-height: 1.4em;
 	line-height: 1.4em;
 }
 
-.tab-saver-item__count {
+.tabset__count {
 	font-size: 0.8em;
 	opacity: 0.4;
 	line-height: 1em;
 }
 
-.tab-saver-item__links-empty {
+.tabset__links-empty {
 	content: "No tabs";
 	font-weight: bold;
 	display: block;
@@ -234,7 +234,7 @@ body.sidebar .main {
 	margin-left: calc(var(--padding-x) * 1.4);
 }
 
-.tab-saver-item__link-container {
+.tabset__link-container {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
@@ -243,22 +243,22 @@ body.sidebar .main {
 	line-height: 1.2em;
 }
 
-.tab-saver-item__link-remove-button,
-.tab-saver-item__link-move {
+.tabset__link-remove-button,
+.tabset__link-move {
 	opacity: 0.6;
 	margin-right: 0.9em;
 }
 
-.tab-saver-item__link-remove-button {
+.tabset__link-remove-button {
 	font-size: 70%;
 }
 
-.tab-saver-item__link-container:not(:hover) .tab-saver-item__link-remove-button,
-.tab-saver-item__link-container:not(:hover) .tab-saver-item__link-move {
+.tabset__link-container:not(:hover) .tabset__link-remove-button,
+.tabset__link-container:not(:hover) .tabset__link-move {
 	display: none;
 }
 
-.tab-saver-item__link {
+.tabset__link {
 	/* --color will be set in js */
 	--color: Highlight;
 	flex: 1;
@@ -274,7 +274,7 @@ body.sidebar .main {
 	text-decoration: none;
 }
 
-.tab-saver-item__link[data-identity-name]:before {
+.tabset__link[data-identity-name]:before {
 	content: attr(data-identity-name) "";
 	padding: 0.1em 0.3em;
 	border-radius: 2px;
@@ -285,20 +285,20 @@ body.sidebar .main {
 	font-weight: normal;
 }
 
-.tab-saver-item__link[data-identity-color="yellow"]:before {
+.tabset__link[data-identity-color="yellow"]:before {
 	color: #777;
 }
 
-.tab-saver-item__link-move {
+.tabset__link-move {
 	font-size: 80%;
 	line-height: 1em;
 }
 
-.tab-saver-item__title[contenteditable="true"] {
+.tabset__title[contenteditable="true"] {
 	font-weight: bold;
 }
 
-.tab-saver-item__controls {
+.tabset__controls {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
@@ -310,11 +310,11 @@ body.sidebar .main {
 	line-height: 1.2em;
 }
 
-.tab-saver-item__controls:not(:hover) {
+.tabset__controls:not(:hover) {
 	opacity: 0.5;
 }
 
-.tab-saver-item__controls-right {
+.tabset__controls-right {
 	right: 0;
 
 	padding-left: 0.3em;
@@ -324,7 +324,7 @@ body.sidebar .main {
 	border-bottom-left-radius: 0.3em;
 }
 
-.tab-saver-item__controls-left {
+.tabset__controls-left {
 	left: 0;
 
 	flex-direction: row-reverse;
@@ -336,37 +336,37 @@ body.sidebar .main {
 	border-bottom-right-radius: 0.3em;
 }
 
-.tab-saver-item:not(:hover) .tab-saver-item__controls {
+.tabset:not(:hover) .tabset__controls {
 	opacity: 0;
 }
 
-.tab-saver-item__button {
+.tabset__button {
 	font-size: 130%;
 }
 
-.tab-saver-item__button-open,
-.tab-saver-item__button-add,
-.tab-saver-item__button-save {
+.tabset__button-open,
+.tabset__button-add,
+.tabset__button-save {
 	padding: 0;
 }
 
-.tab-saver-item__button-remove {
+.tabset__button-remove {
 	font-size: 80%;
 }
 
-.tab-saver-item__button-more {
+.tabset__button-more {
 	position: relative;
 	top: -0.25em;
 }
 
-/* tab-saver-items */
+/* tabsets */
 
-.tab-saver-items {
+.tabsets {
 	position: relative;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.tab-saver-items:empty::after {
+.tabsets:empty::after {
 	content: "No TabSets";
 	display: block;
 	text-align: center;
@@ -375,30 +375,30 @@ body.sidebar .main {
 	margin-bottom: 0.5em;
 }
 
-.tab-saver-items__tabset + .tab-saver-items__tabset {
+.tabsets__tabset+.tabsets__tabset {
 	margin-top: 1px;
 }
 
-.tab-saver-items__window-tabset {
+.tabsets__window-tabset {
 	z-index: 4;
 }
 
-.tab-saver-items__window-tabset-current .tab-saver-item__title {
+.tabsets__window-tabset-current .tabset__title {
 	font-weight: bold;
 }
 
-.tab-saver-items__separator {
+.tabsets__separator {
 	--shadowLightness: 0%;
 	box-shadow: 0px 0.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.5),
-		0px 1px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.35),
-		0px 1.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.25),
-		0px 2px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.17),
-		0px 2.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.12),
-		0px 3px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.08),
-		0px 3.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.05);
+	0px 1px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.35),
+	0px 1.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.25),
+	0px 2px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.17),
+	0px 2.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.12),
+	0px 3px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.08),
+	0px 3.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.05);
 }
 
-.main-theme-dark .tab-saver-items__separator {
+.main-theme-dark .tabsets__separator {
 	--shadowLightness: 100%;
 }
 
@@ -483,7 +483,7 @@ body.sidebar .prefs__detach-button {
 	.save-new {
 		padding: 2px;
 	}
-	.tab-saver-item {
+	.tabset {
 		--padding-x: 4px;
 	}
 }

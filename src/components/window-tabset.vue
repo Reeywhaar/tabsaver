@@ -1,37 +1,37 @@
 <template>
 	<div
-	class="tab-saver-item"
+	class="tabset window-tabset"
 	@dragover="onDragover($event)"
 	@drop="onDrop($event)"
 	>
-		<div class="tab-saver-item__item" :style="{'background-color': headerColor}">
+		<div class="tabset__item" :style="{'background-color': headerColor}">
 			<span
-				class="tab-saver-item__title"
+				class="tabset__title"
 				@click="toggleCollapse"
-			>Window {{title}}</span><span v-if="showCount" class="tab-saver-item__count">{{tabset.tabs.length}}</span>
-			<div class="tab-saver-item__controls" :class="overlayClasses">
+			>Window {{title}}</span><span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
+			<div class="tabset__controls" :class="overlayClasses">
 			</div>
 		</div>
-		<div class="tab-saver-item__links" v-if="!collapsed">
+		<div class="tabset__links" v-if="!collapsed">
 			<div
 				v-if="tabset.tabs.length === 0"
-				class="tab-saver-item__links-empty"
+				class="tabset__links-empty"
 			>No Tabs</div>
 			<div
 				v-for="tab in tabset.tabs"
-				class="tab-saver-item__link-container"
+				class="tabset__link-container"
 				:class="{'tabsaver__tab-current': isCurrentTab(tab)}"
 				:key="tab.url"
 				draggable="true"
 				@dragstart="onTabDrag($event, tab)"
 			>
 				<tabset-tab
-					class="tab-saver-item__link"
+					class="tabset__link"
 					:link="tab"
 					@mousedown.native="handleDown($event)"
 					@mouseup.native="handleClick($event, tab)"
 				></tabset-tab>
-				<button class="inline-button tab-saver-item__link-remove-button" title="Remove tab" @click="closeTab(tab)"><icon icon="cross"></icon></button>
+				<button class="inline-button tabset__link-remove-button" title="Remove tab" @click="closeTab(tab)"><icon icon="cross"></icon></button>
 			</div>
 		</div>
 	</div>
@@ -74,7 +74,7 @@ export default {
 			return this.$store.state.settings.overlayPosition;
 		},
 		overlayClasses() {
-			return [`tab-saver-item__controls-${this.overlayPosition}`];
+			return [`tabset__controls-${this.overlayPosition}`];
 		},
 	},
 	methods: {
@@ -131,12 +131,12 @@ export default {
 				const tab = JSON.parse(
 					event.dataTransfer.getData("tabsaver/native-tab")
 				);
-				if (event.target.matches(".tab-saver-item__title")) {
+				if (event.target.matches(".tabset__title")) {
 					browser.tabs.move(tab.id, {
 						index: -1,
 						windowId: this.$props.tabset.id,
 					});
-				} else if (event.target.matches(".tab-saver-item__link")) {
+				} else if (event.target.matches(".tabset__link")) {
 					for (let ch of this.$children) {
 						if (event.target === ch.$el) {
 							let append = (() => {
@@ -180,7 +180,7 @@ export default {
 					}
 				}
 
-				if (event.target.matches(".tab-saver-item__title")) {
+				if (event.target.matches(".tabset__title")) {
 					browser.tabs
 						.create({
 							url: tab.tab.url,
@@ -191,7 +191,7 @@ export default {
 								url: tab.tab.url,
 							});
 						});
-				} else if (event.target.matches(".tab-saver-item__link")) {
+				} else if (event.target.matches(".tabset__link")) {
 					for (let ch of this.$children) {
 						if (event.target === ch.$el) {
 							let append = (() => {

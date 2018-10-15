@@ -1,33 +1,33 @@
 <template>
-	<div class="tab-saver-item">
-		<div class="tab-saver-item__item" :style="{'background-color': headerColor}">
+	<div class="tabset">
+		<div class="tabset__item" :style="{'background-color': headerColor}">
 			<span
-				class="tab-saver-item__title"
+				class="tabset__title"
 				@click="toggleCollapse"
 				@dblclick="setEditable"
 				@keydown.enter.prevent="rename()"
 				@focusout.stop="rename()"
 				:contenteditable="editable"
 				title="Click to show stored tabs, double click to edit name"
-			>{{tabset.key}}</span><span v-if="showCount" class="tab-saver-item__count">{{tabset.data.length}}</span>
-			<div class="tab-saver-item__controls" :class="overlayClasses">
-				<color-select class="tab-saver-item__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
-				<button @click="open()" class="inline-button tab-saver-item__button tab-saver-item__button-open" title="Open TabSet"><icon icon="open"></icon></button>
-				<button @click="addCurrentTab()" class="inline-button tab-saver-item__button tab-saver-item__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
-				<hold-button @click="save()" @cancel="onHoldCancel('save TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
-				<hold-button @click="remove()" @cancel="onHoldCancel('remove TabSet')" class="inline-button tab-saver-item__button tab-saver-item__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
+			>{{tabset.key}}</span><span v-if="showCount" class="tabset__count">{{tabset.data.length}}</span>
+			<div class="tabset__controls" :class="overlayClasses">
+				<color-select class="tabset__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
+				<button @click="open()" class="inline-button tabset__button tabset__button-open" title="Open TabSet"><icon icon="open"></icon></button>
+				<button @click="addCurrentTab()" class="inline-button tabset__button tabset__button-add" title="Add current tab to TabSet"><icon icon="add"></icon></button>
+				<hold-button @click="save()" @cancel="onHoldCancel('save TabSet')" class="inline-button tabset__button tabset__button-save" title="Save current window under selected TabSet"><icon icon="save"></icon></hold-button>
+				<hold-button @click="remove()" @cancel="onHoldCancel('remove TabSet')" class="inline-button tabset__button tabset__button-remove" title="Remove TabSet"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
-		<div class="tab-saver-item__links" v-if="!collapsed">
+		<div class="tabset__links" v-if="!collapsed">
 			<div
 				v-if="tabset.data.length === 0"
-				class="tab-saver-item__links-empty"
+				class="tabset__links-empty"
 				@dragover="onTabDragover($event)"
 				@drop="onEmptyTabDrop($event)"
 			>No Tabs</div>
 			<div
 				v-for="(tab, index) in tabset.data"
-				class="tab-saver-item__link-container"
+				class="tabset__link-container"
 				:class="{'tabsaver__tab-current': isCurrentTab(tab)}"
 				:key="tab.url"
 				draggable="true"
@@ -37,11 +37,11 @@
 				@drop="onTabDrop($event, tab)"
 			>
 				<tabset-tab
-					class="tab-saver-item__link"
+					class="tabset__link"
 					:link="tab"
 					@click.native="openTab(tab)"
 				></tabset-tab>
-				<hold-button class="inline-button tab-saver-item__link-remove-button" title="Remove tab" @click="removeTab(tab)" @cancel="onHoldCancel('remove tab')"><icon icon="cross"></icon></hold-button>
+				<hold-button class="inline-button tabset__link-remove-button" title="Remove tab" @click="removeTab(tab)" @cancel="onHoldCancel('remove tab')"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
 	</div>
@@ -79,7 +79,7 @@ export default {
 			return this.$store.state.settings.overlayPosition;
 		},
 		overlayClasses() {
-			return [`tab-saver-item__controls-${this.overlayPosition}`];
+			return [`tabset__controls-${this.overlayPosition}`];
 		},
 	},
 	methods: {
@@ -96,9 +96,7 @@ export default {
 		},
 		onTabDrag(e, tab) {
 			if (
-				!e.target
-					.querySelector(".tab-saver-item__link")
-					.matches(".tab-saver-item__link:hover")
+				!e.target.querySelector(".tabset__link").matches(".tabset__link:hover")
 			) {
 				e.preventDefault();
 				return;
@@ -218,7 +216,7 @@ export default {
 			}
 			this.editable = true;
 			await sleep(30);
-			this.$el.querySelector(".tab-saver-item__title").focus();
+			this.$el.querySelector(".tabset__title").focus();
 			document.execCommand("selectAll", false, null);
 			this.$emit("editable", this.tabset);
 		},
@@ -267,14 +265,13 @@ export default {
 		async rename() {
 			try {
 				const oldn = this.tabset.key;
-				const newn = this.$el.querySelector(".tab-saver-item__title")
-					.textContent;
+				const newn = this.$el.querySelector(".tabset__title").textContent;
 				if (oldn !== newn) {
 					await this.$store.dispatch("tabsetRename", [oldn, newn]);
 				}
 				this.setUneditable();
 				await sleep(30);
-				this.$el.querySelector(".tab-saver-item__title").blur();
+				this.$el.querySelector(".tabset__title").blur();
 				window.getSelection().removeAllRanges();
 			} catch (e) {
 				if (e.message === "Name already exists") {

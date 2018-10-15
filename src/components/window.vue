@@ -15,22 +15,22 @@
 			>+</button>
 		</div>
 		<div class="content" :style="contentStyle">
-			<div class="tab-saver-items">
+			<div class="tabsets">
 				<window-tabset
 					v-for="(window, index) in windows"
 					v-if="showWindows"
 					:tabset="window"
 					:key="window.id"
 					:title="index + 1"
-					class="tab-saver-items__tabset tab-saver-items__window-tabset"
-					:class="{'tab-saver-items__window-tabset-current': isCurrentTabSet(window)}"
+					class="tabsets__tabset tabsets__window-tabset"
+					:class="{'tabsets__window-tabset-current': isCurrentTabSet(window)}"
 				></window-tabset>
-				<div class="tab-saver-items__separator" v-if="windows.length > 0 && showWindows"></div>
+				<div class="tabsets__separator" v-if="windows.length > 0 && showWindows"></div>
 				<tabset
 					v-for="tabset in items"
 					:tabset="tabset"
 					:key="tabset.key"
-					class="tab-saver-items__tabset"
+					class="tabsets__tabset"
 					draggable="true"
 					@dragstart.native="onTabSetDrag($event, tabset)"
 					@dragover.native="onDragover($event)"
