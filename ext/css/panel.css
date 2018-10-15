@@ -140,6 +140,12 @@ button {
 	flex-direction: column;
 }
 
+.incognito-mode-title {
+	text-align: center;
+	font-size: 140%;
+	margin-top: 1em;
+}
+
 body.popup .main {
 	max-height: 550px;
 	box-sizing: border-box;
