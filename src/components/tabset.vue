@@ -84,6 +84,7 @@ export default {
 	},
 	methods: {
 		isCurrentTab(tab) {
+			if (this.$store.getters.currentWindow === null) return false;
 			return first(
 				this.$store.state.currentTabs,
 				x =>

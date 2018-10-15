@@ -2,7 +2,7 @@ import { readFileAsJson, saveFile } from "./utils.js";
 import { openURL, storage, settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
 import { History } from "./history.js";
-import { diff } from "deep-diff";
+import { diff as objdiff } from "deep-diff";
 
 async function main() {
 	browser.runtime.onMessage.addListener(async msg => {
@@ -18,6 +18,14 @@ async function main() {
 				} catch (e) {}
 				return;
 		}
+		if (typeof msg === "object" && "domain" in msg) {
+			switch (msg.domain) {
+				case "tabset":
+					return await TabSet[msg.action](...msg.args);
+				case "openURL":
+					return await openURL(...msg.args);
+			}
+		}
 	});
 
 	window.storage = storage;
@@ -25,30 +33,24 @@ async function main() {
 	window.TabSet = TabSet;
 	window.Undo = History;
 
-	window.openURL = openURL;
-
 	window.trackHistory = true;
-	window.preChangeTabs = null;
 
-	storage.subscribeBefore(async (key, value) => {
-		if (key === "tabs" && window.trackHistory) {
-			if (!(await settings.get("useHistory"))) return;
-			window.preChangeTabs =
-				window.preChangeTabs || (await storage.get("tabs", []));
-			const tabsdiff = diff(value, window.preChangeTabs);
-			History.push(tabsdiff, () => {
-				window.preChangeTabs = null;
-			});
+	let preChangeTabs = null;
+
+	browser.storage.onChanged.addListener(async (diff, area) => {
+		for (const [key, { oldValue, newValue }] of Object.entries(diff)) {
+			if (key === "settings:useHistory" && newValue == false) {
+				History.clear();
+			} else if (key === "tabs" && window.trackHistory) {
+				if (!(await settings.get("useHistory"))) return;
+				preChangeTabs = preChangeTabs || oldValue;
+				const tabsdiff = objdiff(newValue, preChangeTabs);
+				History.push(tabsdiff, () => {
+					preChangeTabs = null;
+				});
+			}
 		}
 	});
-
-	storage.subscribe(async (key, value) => {
-		if (key === "settings:useHistory" && value == false) {
-			History.clear();
-		}
-	});
-
-	window.loaded = true;
 }
 
 main().catch(err => console.error(err));

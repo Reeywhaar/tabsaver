@@ -1,26 +1,24 @@
-import { getCurrentTabs } from "./shared.js";
-import {
-	reverse,
-	sleep,
-	waitUntil,
-	debounce,
-	first,
-	parseQuery,
-} from "./utils.js";
+import { storage as Storage, settings as Settings } from "./shared.js";
+import { TabSet } from "./tabset.js";
+import { reverse, sleep, debounce, first, parseQuery } from "./utils.js";
 import Vuex from "vuex/dist/vuex.esm.js";
 import { applyChange } from "deep-diff";
 
 export default async () => {
 	const host = await browser.runtime.getBackgroundPage();
-	await waitUntil(() => host.loaded === true);
 
-	const windowid = (() => {
+	const windowid = await (async () => {
 		const query = parseQuery(location.search);
-		if ("windowid" in query) {
-			return parseInt(query.windowid, 10);
-		}
+		if ("windowid" in query) return parseInt(query.windowid, 10);
 		return null;
 	})();
+
+	async function getWindowTabs() {
+		const window = await (windowid === null
+			? browser.windows.getCurrent({ populate: true })
+			: browser.windows.get(windowid, { populate: true }));
+		return window.tabs;
+	}
 
 	const [
 		items,
@@ -29,11 +27,12 @@ export default async () => {
 		windows,
 		currentWindow,
 	] = await Promise.all([
-		host.TabSet.getAll(),
-		host.settings.getAll(),
+		TabSet.getAll(),
+		Settings.getAll(),
 		host.Undo.count(),
 		browser.windows.getAll({
 			populate: true,
+			windowTypes: ["normal"],
 		}),
 		browser.windows.getCurrent(),
 	]);
@@ -58,9 +57,9 @@ export default async () => {
 			},
 			currentWindow(state) {
 				const focused = first(state.windows, x => x.focused);
-				if (focused === null) return null;
-				if (windowid !== null && focused.id === currentWindow.id)
+				if (focused === null) {
 					return first(state.windows, x => x.id === windowid);
+				}
 				return focused;
 			},
 			windows(state) {
@@ -118,63 +117,100 @@ export default async () => {
 					context.commit("setNotification", "");
 			},
 			async updateItems(context) {
-				context.commit("updateItems", await host.TabSet.getAll());
+				context.commit("updateItems", await TabSet.getAll());
 			},
 			async setSetting(context, { key, value }) {
-				await host.settings.set(key, value);
+				await Settings.set(key, value);
 				context.commit("setSetting", { key, value });
 			},
 			async tabsetOpen(context, key = null) {
-				return await host.TabSet.open(key);
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "open",
+					args: [key],
+				});
 			},
 			async tabsetCreate(context, key = null) {
-				await host.TabSet.add(key, await getCurrentTabs());
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "add",
+					args: [key, await getWindowTabs()],
+				});
 			},
 			async tabsetSave(context, { key, color, tabs = null }) {
 				if (tabs === null) {
-					tabs = await getCurrentTabs();
+					tabs = await getWindowTabs();
 					if (!context.state.settings.includePinned) {
 						tabs = tabs.filter(x => !x.pinned);
 					}
 				}
-				await host.TabSet.save(key, tabs, color);
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "save",
+					args: [key, tabs, color],
+				});
 			},
 			async tabsetRename(context, [oldkey, newkey]) {
-				await host.TabSet.rename(oldkey, newkey);
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "rename",
+					args: [oldkey, newkey],
+				});
 			},
 			async tabsetRemove(context, key) {
-				await host.TabSet.remove(key);
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "remove",
+					args: [key],
+				});
 			},
 			async tabsetMove(context, [tabsetKey, targetKey, after = true]) {
-				await host.TabSet.moveTabSet(tabsetKey, targetKey, after);
+				await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "moveTabSet",
+					args: [tabsetKey, targetKey, after],
+				});
 			},
 			async tabsetAppend(context, key) {
 				if (Array.isArray(key)) {
-					await host.TabSet.appendTab(...key);
+					await browser.runtime.sendMessage({
+						domain: "tabset",
+						action: "appendTab",
+						args: [...key],
+					});
 				} else {
-					await host.TabSet.appendTab(key);
+					await browser.runtime.sendMessage({
+						domain: "tabset",
+						action: "appendTab",
+						args: [key],
+					});
 				}
 			},
 			async tabsetRemoveTab(context, [tabsetKey, tab]) {
-				await host.TabSet.removeTab(tabsetKey, tab);
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "removeTab",
+					args: [tabsetKey, tab],
+				});
 			},
 			async tabsetMoveTab(
 				context,
 				[tabsetKey, tab, targetTabsetKey, targetTab, after = true]
 			) {
-				await host.TabSet.moveTab(
-					tabsetKey,
-					tab,
-					targetTabsetKey,
-					targetTab,
-					after
-				);
+				return await browser.runtime.sendMessage({
+					domain: "tabset",
+					action: "moveTab",
+					args: [tabsetKey, tab, targetTabsetKey, targetTab, after],
+				});
 			},
 			async clearTabsets(context) {
-				await host.storage.set("tabs", []);
+				await Storage.set("tabs", []);
 			},
 			async openUrl(context, [url, identity]) {
-				await host.openURL(url, identity);
+				return await browser.runtime.sendMessage({
+					domain: "openURL",
+					args: [url, identity],
+				});
 			},
 			async updateStatesCount(context) {
 				const count = await host.Undo.count();
@@ -198,6 +234,7 @@ export default async () => {
 					"setWindows",
 					await browser.windows.getAll({
 						populate: true,
+						windowTypes: ["normal"],
 					})
 				);
 			}, 200),
@@ -209,8 +246,8 @@ export default async () => {
 			if (key === "tabs") {
 				store.dispatch("updateItems");
 			} else if (key.indexOf("settings:") === 0) {
-				key = key.substr(9);
-				store.commit("setSetting", { key, newValue });
+				const ckey = key.substr(9);
+				store.commit("setSetting", { key: ckey, value: newValue });
 			} else if (key.indexOf("history:states") === 0) {
 				store.dispatch("updateStatesCount");
 			}

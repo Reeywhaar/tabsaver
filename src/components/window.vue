@@ -119,10 +119,10 @@ export default {
 	methods: {
 		onTabSetDrag(e, tabset) {
 			if (
-				!e.target.querySelector(".tab-saver-item__title") ||
+				!e.target.querySelector(".tabset__title") ||
 				!e.target
-					.querySelector(".tab-saver-item__title")
-					.matches(".tab-saver-item__title:hover")
+					.querySelector(".tabset__title")
+					.matches(".tabset__title:hover")
 			) {
 				e.preventDefault();
 				return;

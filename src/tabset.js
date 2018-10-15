@@ -31,32 +31,12 @@ const findTabSet = (tabsets, name) => {
 	return first(tabsets, x => x.key === name);
 };
 
-const listeners = [];
-
 export const TabSet = {
-	subscribe(fn) {
-		listeners.push(fn);
-	},
 	async getAll() {
 		return storage.get("tabs", []);
 	},
 	async saveAll(tabs) {
 		await storage.set("tabs", tabs);
-		let failedcbs = [];
-		for (let cb of listeners) {
-			try {
-				cb(tabs);
-			} catch (e) {
-				if (e.message === "can't access dead object") {
-					failedcbs.push(cb);
-				} else {
-					throw e;
-				}
-			}
-		}
-		for (let fcb of failedcbs) {
-			listeners.splice(listeners.indexOf(fcb), 1);
-		}
 	},
 	async save(key, tabs, color = null) {
 		const tabsData = tabs

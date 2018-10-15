@@ -166,7 +166,3 @@ export function getDefaultTabSetName() {
 		date.getDate()
 	)} ${pl(date.getHours())}:${pl(date.getMinutes())}`;
 }
-
-export async function getCurrentTabs() {
-	return (await browser.windows.getLastFocused({ populate: true })).tabs;
-}
