@@ -6,6 +6,7 @@ import {
 	getDefaultTabSetName,
 	tabSetsAreEqual,
 	DEFAULT_COOKIE_STORE_ID,
+	PRIVATE_COOKIE_STORE_ID,
 } from "./shared.js";
 
 const stringifyTab = tab => {
@@ -14,6 +15,8 @@ const stringifyTab = tab => {
 };
 
 const serializeTab = tab => {
+	if (tab.cookieStoreId === PRIVATE_COOKIE_STORE_ID)
+		tab.cookieStoreId = DEFAULT_COOKIE_STORE_ID;
 	return {
 		title: tab.title,
 		url: getUnmangledURL(tab.url),

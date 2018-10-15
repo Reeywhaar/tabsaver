@@ -1,6 +1,7 @@
 import { setsAreEqual, oneOf, strAfter, padLeft, parseQuery } from "./utils.js";
 
 export const DEFAULT_COOKIE_STORE_ID = "firefox-default";
+export const PRIVATE_COOKIE_STORE_ID = "firefox-private";
 
 const storageListeners = [];
 const storageBeforeListeners = [];
