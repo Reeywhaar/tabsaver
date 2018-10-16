@@ -2,5 +2,5 @@ node_modules
 web-ext-artifacts
 .env
 .web-extension-id
-ext/js
+ext/dist
 private

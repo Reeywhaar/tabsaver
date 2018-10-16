@@ -1,0 +1,59 @@
+.indent-1 {
+	padding-left: 1.2em;
+}
+
+.indent-2 {
+	padding-left: 2.4em;
+}
+
+.comment {
+	display: block;
+	font-style: italic;
+	opacity: 0.8;
+}
+
+.disabled {
+	opacity: 0.4;
+	pointer-events: none;
+}
+
+.options__section+.options__section {
+	margin-top: 0.5em;
+	padding-top: 0.5em;
+}
+
+.options__left-checkbox {
+	margin-left: 0;
+}
+
+.options__states-counter {
+	width: 4em;
+	text-align: right;
+}
+
+.credits-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.credits-list__item::before {
+	content: "- ";
+}
+
+.button {
+	background: rgba(0, 0, 0, 0.04);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	padding: 0.4em 0.8em;
+	font: inherit;
+	border-radius: 0.2em;
+}
+
+.options__section.clear-section {
+	margin-top: 4em;
+}
+
+.clear-tabsets-button {
+	background: hsla(10, 90%, 50%);
+	color: #fff;
+}

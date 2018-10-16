@@ -1,16 +1,25 @@
 include ./.env
 
+webpack:
+	./node_modules/.bin/webpack --mode development
+
+webpackProd:
+	./node_modules/.bin/webpack --mode production
+
 build:
-	webpack && make lint && web-ext build -s ext
+	rm -r ext/dist && ./node_modules/.bin/webpack --mode production && make lint && web-ext build -s ext
 
 watch:
-	webpack --watch
+	./node_modules/.bin/webpack --mode development --watch
 
 run:
-	make watch & web-ext run -s ext --bc --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+	make watch & web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+
+runProd:
+	./node_modules/.bin/webpack --mode production && web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE}
 
 runNightly:
-	make watch & web-ext run -f nightly -s ext --bc --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+	make watch & web-ext run -f nightly -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
 
 sign: build
 	web-ext sign -s ext --api-key ${APIKEY} --api-secret ${APISECRET}

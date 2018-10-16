@@ -18,14 +18,17 @@
   "homepage": "https://github.com/Reeywhaar/tabsaver#readme",
   "devDependencies": {
     "@reeywhaar/svgmaker": "^0.3.1",
-    "babel-minify-webpack-plugin": "^0.2.0",
-    "css-loader": "^0.28.11",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "inert-entry-webpack-plugin": "^3.0.1",
-    "vue": "^2.5.16",
-    "vue-loader": "^13.7.1",
-    "vue-template-compiler": "^2.5.16",
-    "vuex": "^3.0.1"
+    "css-loader": "^1.0.0",
+    "deep-diff": "^1.0.2",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "^4.0.0-beta.1",
+    "inert-entry-webpack-plugin": "^4.0.2",
+    "vue": "^2.5.17",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "vuex": "^3.0.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {}
 }

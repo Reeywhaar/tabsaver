@@ -1,32 +1,70 @@
-import {
-	readFileAsJson,
-	saveFile,
-} from "./utils.js";
-import {
-	pinned,
-	openURL,
-} from "./shared.js";
-import {
-	TabSet,
-} from "./tabset.js";
+import { readFileAsJson, saveFile } from "./utils.js";
+import { openURL, storage, settings } from "./shared.js";
+import { TabSet } from "./tabset.js";
+import { History } from "./history.js";
+import { diff as objdiff, applyChange } from "deep-diff";
 
-async function main(){
-	window.import = async () => {
-		const imported = await readFileAsJson();
-		await TabSet.saveAll(imported);
-	}
+async function main() {
+	let trackHistory = true;
 
-	window.export = async () => {
-		const out = JSON.stringify(await TabSet.getAll(), null, 2);
-		try{
-			await saveFile(out, "export.tabsaver.json");
-		} catch (e) {};
-	}
+	browser.runtime.onMessage.addListener(async msg => {
+		switch (msg) {
+			case "import":
+				const imported = await readFileAsJson();
+				await TabSet.saveAll(imported);
+				return;
+			case "export":
+				const out = JSON.stringify(await TabSet.getAll(), null, 2);
+				try {
+					await saveFile(out, "export.tabsaver.json");
+				} catch (e) {}
+				return;
+			case "undo":
+				try {
+					trackHistory = false;
+					let last = await History.pop();
+					let target = await TabSet.getAll();
+					for (let change of last) {
+						applyChange(target, target, change);
+					}
+					await storage.set("tabs", target);
+				} finally {
+					trackHistory = true;
+				}
+		}
+		if (typeof msg === "object" && "domain" in msg) {
+			switch (msg.domain) {
+				case "tabset":
+					return await TabSet[msg.action](...msg.args);
+				case "openURL":
+					return await openURL(...msg.args);
+			}
+		}
+	});
 
-	window.pinned = pinned;
-
+	window.storage = storage;
+	window.settings = settings;
 	window.TabSet = TabSet;
-	window.openURL = openURL;
+	window.Undo = History;
+
+	window.trackHistory = true;
+
+	let preChangeTabs = null;
+
+	browser.storage.onChanged.addListener(async (diff, area) => {
+		for (const [key, { oldValue, newValue }] of Object.entries(diff)) {
+			if (key === "settings:useHistory" && newValue == false) {
+				History.clear();
+			} else if (key === "tabs" && trackHistory) {
+				if (!(await settings.get("useHistory"))) return;
+				preChangeTabs = preChangeTabs || oldValue;
+				const tabsdiff = objdiff(newValue, preChangeTabs);
+				History.push(tabsdiff, () => {
+					preChangeTabs = null;
+				});
+			}
+		}
+	});
 }
 
 main().catch(err => console.error(err));
