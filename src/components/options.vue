@@ -70,6 +70,7 @@
 		<div class="options__section links">
 			<h3><a :href="usageLink">Show Usage</a></h3>
 			<h3><a :href="faqLink">Show Faq</a></h3>
+			<h3><a :href="changelogLink">Show Changelog</a></h3>
 		</div>
 		<div class="options__section credits">
 			<h3>Credits</h3>
@@ -107,11 +108,13 @@ export default {
 		const version = browser.runtime.getManifest().version;
 		const usageLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#screenshots`;
 		const faqLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#faq`;
+		const changelogLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#changelog`;
 
 		return {
 			version,
 			usageLink,
 			faqLink,
+			changelogLink,
 		};
 	},
 	computed: {

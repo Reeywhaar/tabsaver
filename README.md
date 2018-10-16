@@ -45,3 +45,23 @@ Yes, available in preferences.
 #### Can I have tab's favicon near tab's link?
 
 Yes, available in preferences.
+
+# CHANGELOG
+
+## `v.0.0.21`
+### Features
+
+* Extension options page
+* Ability to manage window's tabs
+* Undo feature
+* Detachable panel
+* Sidebar panel
+* Color may be assigned to TabSet
+* Option to show tab's title
+* Option to show tab's favicon
+* Option to show tab's count
+* Dark/light themes support
+
+### Fixes
+
+* Panel works in private window
