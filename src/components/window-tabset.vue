@@ -34,6 +34,7 @@
 					@mousedown.native="handleDown($event)"
 					@mouseup.native="handleClick($event, tab)"
 				></tabset-tab>
+				<button class="inline-button tabset__link-reload-button" title="Reload tab" @click="reloadTab(tab, $event)"><icon icon="reload"></icon></button>
 				<button class="inline-button tabset__link-remove-button" title="Remove tab" @click="closeTab(tab)"><icon icon="cross"></icon></button>
 			</div>
 		</div>
@@ -85,6 +86,11 @@ export default {
 			return first(this.$store.state.currentTabs, x => x.id === tab.id) === null
 				? false
 				: true;
+		},
+		reloadTab(tab, event) {
+			browser.tabs.reload(tab.id, {
+				bypassCache: event.shiftKey,
+			});
 		},
 		closeTab(tab) {
 			browser.tabs.remove(tab.id);

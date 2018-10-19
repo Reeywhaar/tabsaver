@@ -248,18 +248,26 @@ body.sidebar .main {
 	line-height: 1.2em;
 }
 
-.tabset__link-remove-button,
-.tabset__link-move {
+.tabset__link-remove-button {
+	margin-right: 1.2em;
+}
+
+.tabset__link-reload-button {
+	font-size: 1.1em;
+}
+
+.tabset__link-reload-button,
+.tabset__link-remove-button {
+	line-height: 0.8em;
 	opacity: 0.6;
-	margin-right: 0.9em;
 }
 
 .tabset__link-remove-button {
 	font-size: 70%;
 }
 
-.tabset__link-container:not(:hover) .tabset__link-remove-button,
-.tabset__link-container:not(:hover) .tabset__link-move {
+.tabset__link-container:not(:hover) .tabset__link-reload-button,
+.tabset__link-container:not(:hover) .tabset__link-remove-button {
 	display: none;
 }
 
