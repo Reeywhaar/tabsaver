@@ -468,6 +468,16 @@ body.sidebar .main {
 	opacity: 0.5;
 }
 
+.prefs__icon {
+	font-size: 8pt;
+	line-height: 1em;
+	vertical-align: middle;
+}
+
+.prefs__icon-prefs {
+	font-size: 10pt;
+}
+
 .prefs__options-button {
 	font-size: 140%;
 	opacity: 0.5;
