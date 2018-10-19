@@ -34,7 +34,7 @@
 					@mousedown.native="handleDown($event)"
 					@mouseup.native="handleClick($event, tab)"
 				></tabset-tab>
-				<button class="inline-button tabset__link-reload-button" title="Reload tab" @click="reloadTab(tab, $event)"><icon icon="reload"></icon></button>
+				<button class="inline-button tabset__link-reload-button" title="Reload tab" @mousedown="reloadTab(tab, $event)"><icon icon="reload"></icon></button>
 				<button class="inline-button tabset__link-remove-button" title="Remove tab" @click="closeTab(tab)"><icon icon="cross"></icon></button>
 			</div>
 		</div>
@@ -88,6 +88,11 @@ export default {
 				: true;
 		},
 		reloadTab(tab, event) {
+			if (event.which === 2) {
+				browser.tabs.duplicate(tab.id);
+				return;
+			}
+
 			browser.tabs.reload(tab.id, {
 				bypassCache: event.shiftKey,
 			});
