@@ -1,5 +1,5 @@
 <template>
-	<div class="tabset">
+	<div class="tabset" v-if="tabset">
 		<div class="tabset__item" :style="{'background-color': headerColor}">
 			<span
 				class="tabset__title"
@@ -73,8 +73,9 @@ export default {
 			return this.$store.state.settings.showCount;
 		},
 		headerColor() {
-			if (!this.tabset.color) return null;
-			return `hsla(${this.tabset.color}, 100%, 60%, 0.4)`;
+			if (!this.$props.tabset) return null;
+			if (!this.$props.tabset.color) return null;
+			return `hsla(${this.$props.tabset.color}, 100%, 60%, 0.4)`;
 		},
 		overlayPosition() {
 			return this.$store.state.settings.overlayPosition;
