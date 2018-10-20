@@ -48,6 +48,18 @@ Yes, available in preferences.
 
 # CHANGELOG
 
+## `v.0.1.1`
+### Features
+
+* Reload tab icon added (shift click to cache free reload, middle click to duplicate)
+* Reload all window tabs icon added (shift click to cache free reload)
+
+### Changes
+
+* Undo button's text changed to icon
+* Code fixes
+* Controls hover behavior
+
 ## `v.0.1.0`
 ### Features
 
@@ -57,9 +69,10 @@ Yes, available in preferences.
 * Detachable panel
 * Sidebar panel
 * Color may be assigned to TabSet
-* Option to show tab's title
-* Option to show tab's favicon
-* Option to show tab's count
+* Options to show tab's
+  * tab's title
+  * favicon
+  * count
 * Dark/light themes support
 
 ### Fixes

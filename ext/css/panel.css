@@ -208,6 +208,10 @@ body.sidebar .main {
 	color: #fff;
 }
 
+.window-tabset__button {
+	padding: 0 0.2em;
+}
+
 .tabset__item {
 	padding: var(--padding-y) var(--padding-x);
 	background: var(--tab-header-color);
@@ -248,18 +252,26 @@ body.sidebar .main {
 	line-height: 1.2em;
 }
 
-.tabset__link-remove-button,
-.tabset__link-move {
+.tabset__link-remove-button {
+	margin-right: 1.2em;
+}
+
+.tabset__link-reload-button {
+	font-size: 1.1em;
+}
+
+.tabset__link-reload-button,
+.tabset__link-remove-button {
+	line-height: 0.8em;
 	opacity: 0.6;
-	margin-right: 0.9em;
 }
 
 .tabset__link-remove-button {
 	font-size: 70%;
 }
 
-.tabset__link-container:not(:hover) .tabset__link-remove-button,
-.tabset__link-container:not(:hover) .tabset__link-move {
+.tabset__link-container:not(:hover) .tabset__link-reload-button,
+.tabset__link-container:not(:hover) .tabset__link-remove-button {
 	display: none;
 }
 
@@ -343,7 +355,7 @@ body.sidebar .main {
 	border-bottom-right-radius: 0.3em;
 }
 
-.tabset:not(:hover) .tabset__controls {
+.tabset__item:not(:hover) .tabset__controls {
 	opacity: 0;
 }
 
@@ -359,6 +371,10 @@ body.sidebar .main {
 
 .tabset__button-remove {
 	font-size: 80%;
+}
+
+.tabset__button-reload {
+	padding-left: 0;
 }
 
 .tabset__button-more {
@@ -382,7 +398,7 @@ body.sidebar .main {
 	margin-bottom: 0.5em;
 }
 
-.tabsets__tabset + .tabsets__tabset {
+.tabsets__tabset+.tabsets__tabset {
 	margin-top: 1px;
 }
 
@@ -397,12 +413,12 @@ body.sidebar .main {
 .tabsets__separator {
 	--shadowLightness: 0%;
 	box-shadow: 0px 0.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.5),
-		0px 1px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.35),
-		0px 1.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.25),
-		0px 2px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.17),
-		0px 2.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.12),
-		0px 3px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.08),
-		0px 3.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.05);
+	0px 1px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.35),
+	0px 1.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.25),
+	0px 2px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.17),
+	0px 2.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.12),
+	0px 3px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.08),
+	0px 3.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.05);
 }
 
 .main-theme-dark .tabsets__separator {
@@ -458,6 +474,16 @@ body.sidebar .main {
 .prefs__undo {
 	/* padding: 0.5em; */
 	opacity: 0.5;
+}
+
+.prefs__icon {
+	font-size: 8pt;
+	line-height: 1em;
+	vertical-align: middle;
+}
+
+.prefs__icon-prefs {
+	font-size: 10pt;
 }
 
 .prefs__options-button {
