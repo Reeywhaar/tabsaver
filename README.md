@@ -52,6 +52,7 @@ Yes, available in preferences.
 ### Features
 
 * Reload tab icon added (shift click to cache free reload, middle click to duplicate)
+* Reload all window tabs icon added (shift click to cache free reload)
 
 ### Changes
 

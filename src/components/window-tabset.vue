@@ -11,8 +11,9 @@
 				@click="toggleCollapse"
 			>Window {{title}}</span><span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
 			<div class="tabset__controls" :class="overlayClasses">
-				<button @click="createTab()" class="inline-button tabset__button tabset__button-add" title="Create Tab"><icon icon="add"></icon></button>
-				<hold-button @click="closeWindow()" @cancel="onHoldCancel('close window')" class="inline-button tabset__button tabset__button-remove" title="Close Window"><icon icon="cross"></icon></hold-button>
+				<button class="inline-button tabset__button window-tabset__button tabset__button-add" @click="createTab()" title="Create Tab"><icon icon="add"></icon></button>
+				<hold-button class="inline-button tabset__button window-tabset__button tabset__button-reload" @click="reloadAllTabs($event)" @cancel="onHoldCancel('reload all tabs')" title="Reload all tabs"><icon icon="reload"></icon></hold-button>
+				<hold-button class="inline-button tabset__button window-tabset__button tabset__button-remove" @click="closeWindow()" @cancel="onHoldCancel('close window')" title="Close Window"><icon icon="cross"></icon></hold-button>
 			</div>
 		</div>
 		<div class="tabset__links" v-if="!collapsed">
@@ -96,6 +97,13 @@ export default {
 			browser.tabs.reload(tab.id, {
 				bypassCache: event.shiftKey,
 			});
+		},
+		reloadAllTabs(event) {
+			for (let tab of this.$props.tabset.tabs) {
+				browser.tabs.reload(tab.id, {
+					bypassCache: event.shiftKey,
+				});
+			}
 		},
 		closeTab(tab) {
 			browser.tabs.remove(tab.id);

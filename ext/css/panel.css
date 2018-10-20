@@ -208,6 +208,10 @@ body.sidebar .main {
 	color: #fff;
 }
 
+.window-tabset__button {
+	padding: 0 0.2em;
+}
+
 .tabset__item {
 	padding: var(--padding-y) var(--padding-x);
 	background: var(--tab-header-color);
@@ -367,6 +371,10 @@ body.sidebar .main {
 
 .tabset__button-remove {
 	font-size: 80%;
+}
+
+.tabset__button-reload {
+	padding-left: 0;
 }
 
 .tabset__button-more {
