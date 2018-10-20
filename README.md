@@ -58,6 +58,7 @@ Yes, available in preferences.
 
 * Undo button's text changed to icon
 * Code fixes
+* Controls hover behavior
 
 ## `v.0.1.0`
 ### Features
