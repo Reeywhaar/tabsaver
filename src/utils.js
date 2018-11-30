@@ -226,3 +226,16 @@ export async function waitUntil(fn, interval = 100) {
 		await sleep(interval);
 	}
 }
+
+/**
+ *
+ * @param {HTMLElement} el
+ * @param {string} selector
+ */
+export function parentMatching(el, selector) {
+	while (el !== document.body.parentElement) {
+		if (el.matches(selector)) return el;
+		el = el.parentElement;
+	}
+	return null;
+}
