@@ -4,7 +4,7 @@ services:
     builder:
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: dev.Dockerfile
         image: "vyrtsev/tabsaver-builder"
         container_name: "vyrtsev-tabsaver-builder"
         volumes:
