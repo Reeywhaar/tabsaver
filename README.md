@@ -56,6 +56,12 @@ Yes, available in preferences.
 
 ### Changes
 
+## `v.0.1.2`
+
+* Show border over element when dragging
+
+## `v.0.1.1`
+
 * Undo button's text changed to icon
 * Code fixes
 * Controls hover behavior
