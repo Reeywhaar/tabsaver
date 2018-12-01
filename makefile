@@ -1,34 +1,45 @@
 include ./.env
 
+.PHONY: buildDocker
+buildDocker:
+	docker-compose -f docker-compose.dev.yml build
+
+.PHONY: dockerShell
+dockerShell:
+	docker-compose -f docker-compose.dev.yml run --rm builder
+
+.PHONY: webpack
 webpack:
-	./node_modules/.bin/webpack --mode development
+	docker-compose -f docker-compose.dev.yml run --rm builder -c "./node_modules/.bin/webpack --mode development"
 
+.PHONY: webpackProd
 webpackProd:
-	./node_modules/.bin/webpack --mode production
+	docker-compose -f docker-compose.dev.yml run --rm builder -c "./node_modules/.bin/webpack --mode production"
 
-build:
-	rm -r ext/dist && ./node_modules/.bin/webpack --mode production && make lint && web-ext build -s ext
-
+.PHONY: watch
 watch:
-	./node_modules/.bin/webpack --mode development --watch
+	docker-compose -f docker-compose.dev.yml run --rm builder -c "./node_modules/.bin/webpack --mode development --watch"
 
+.PHONY: build
+build:
+	rm -r ext/dist && make webpackProd && make lint && web-ext build -s ext
+
+.PHONY: run
 run:
-	make watch & web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+	web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE}
 
-runProd:
-	./node_modules/.bin/webpack --mode production && web-ext run -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE}
-
+.PHONY: runNightly
 runNightly:
-	make watch & web-ext run -f nightly -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE} & wait
+	web-ext run -f nightly -s ext --firefox-profile ${WEB_EXT_FIREFOX_PROFILE}
 
+.PHONY: sign
 sign: build
 	web-ext sign -s ext --api-key ${APIKEY} --api-secret ${APISECRET}
 
+.PHONY: lint
 lint:
 	web-ext lint -s ext
 
-clear:
-	rm -rf ./ext/js && rm -rf ./ext/icons/icon.svg
-
+.PHONY: test_data
 test_data:
 	node make-test-data.js > private/test-data.json

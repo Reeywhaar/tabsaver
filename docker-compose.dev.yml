@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+    builder:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        image: "vyrtsev/tabsaver-builder"
+        container_name: "vyrtsev-tabsaver-builder"
+        volumes:
+            - ./src:/app/src:ro
+            - ./icon.svg.base.js:/app/icon.svg.base.js:ro
+            - ./icon-light.svg.js:/app/icon-light.svg.js:ro
+            - ./icon.svg.js:/app/icon.svg.js:ro
+            - ./html_templates:/app/html_templates:ro
+            - ./webpack.config.js:/app/webpack.config.js:ro
+            - ./sync-packages.sh:/app/sync-packages.sh:ro
+            - ./package.json:/app/package.json.host
+            - ./package-lock.json:/app/package-lock.json.host
+            - ./ext:/app/ext
