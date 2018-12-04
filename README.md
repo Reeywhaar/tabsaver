@@ -48,6 +48,10 @@ Yes, available in preferences.
 
 # CHANGELOG
 
+## `v.0.1.2`
+
+* Show border over element when dragging
+
 ## `v.0.1.1`
 ### Features
 
@@ -55,12 +59,6 @@ Yes, available in preferences.
 * Reload all window tabs icon added (shift click to cache free reload)
 
 ### Changes
-
-## `v.0.1.2`
-
-* Show border over element when dragging
-
-## `v.0.1.1`
 
 * Undo button's text changed to icon
 * Code fixes
