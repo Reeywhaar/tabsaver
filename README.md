@@ -48,6 +48,10 @@ Yes, available in preferences.
 
 # CHANGELOG
 
+## `v.0.1.3`
+
+* Refine drag'n'drop
+
 ## `v.0.1.2`
 
 * Show border over element when dragging
