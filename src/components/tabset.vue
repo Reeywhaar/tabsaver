@@ -141,6 +141,11 @@ export default {
         return;
       }
 
+      const target = e.currentTarget;
+      setTimeout(() => {
+        target.classList.add("dnd__drag-target");
+      }, 30);
+
       e.dataTransfer.setData(
         "tabsaver/tab",
         JSON.stringify({
@@ -151,10 +156,7 @@ export default {
       e.dataTransfer.setData("text/plain", tab.url);
     },
     async onTabDrop(e, tab) {
-      e.currentTarget.classList.remove(
-        "tabsaver__link--drop-top",
-        "tabsaver__link--drop-bottom"
-      );
+      e.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
 
       try {
         if (
@@ -265,28 +267,15 @@ export default {
         return proportion < 50 ? 0 : 1;
       })();
 
-      tab.classList.add(
-        append === 0
-          ? "tabsaver__link--drop-top"
-          : "tabsaver__link--drop-bottom"
-      );
-      tab.classList.remove(
-        append === 1
-          ? "tabsaver__link--drop-top"
-          : "tabsaver__link--drop-bottom"
-      );
+      tab.classList.add(append === 0 ? "dnd__drop-top" : "dnd__drop-bottom");
+      tab.classList.remove(append === 1 ? "dnd__drop-top" : "dnd__drop-bottom");
     },
     onTabDragEnd(event) {
-      event.currentTarget.classList.remove(
-        "tabsaver__link--drop-top",
-        "tabsaver__link--drop-bottom"
-      );
+      event.target.classList.remove("dnd__drag-target");
+      event.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
     },
     onTabDragLeave(event) {
-      event.currentTarget.classList.remove(
-        "tabsaver__link--drop-top",
-        "tabsaver__link--drop-bottom"
-      );
+      event.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
     },
     onHoldCancel(type) {
       this.$store.dispatch("notify", `Click and hold button to ${type}`);

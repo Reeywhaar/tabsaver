@@ -164,15 +164,17 @@ export default {
       }
     },
     onTabDrag(event, tab) {
+      const target = event.currentTarget;
+      setTimeout(() => {
+        target.classList.add("dnd__drag-target");
+      }, 30);
       event.dataTransfer.setData("tabsaver/native-tab", JSON.stringify(tab));
     },
     onDragend(event) {
+      event.target.classList.remove("dnd__drag-target");
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
-        tab.classList.remove(
-          "tabsaver__link--drop-top",
-          "tabsaver__link--drop-bottom"
-        );
+        tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       }
     },
     onDragover(event) {
@@ -195,30 +197,20 @@ export default {
           })();
 
           tab.classList.add(
-            append === 0
-              ? "tabsaver__link--drop-top"
-              : "tabsaver__link--drop-bottom"
+            append === 0 ? "dnd__drop-top" : "dnd__drop-bottom"
           );
           tab.classList.remove(
-            append === 1
-              ? "tabsaver__link--drop-top"
-              : "tabsaver__link--drop-bottom"
+            append === 1 ? "dnd__drop-top" : "dnd__drop-bottom"
           );
         } else {
-          tab.classList.remove(
-            "tabsaver__link--drop-top",
-            "tabsaver__link--drop-bottom"
-          );
+          tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
         }
       }
     },
     onDrop(event) {
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
-        tab.classList.remove(
-          "tabsaver__link--drop-top",
-          "tabsaver__link--drop-bottom"
-        );
+        tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       }
 
       if (

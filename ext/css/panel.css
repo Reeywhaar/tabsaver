@@ -81,6 +81,26 @@ button {
 	background: #ccc;
 }
 
+/* dnd (drag'n'drop) */
+
+.dnd__drag-target {
+	opacity: 0.2;
+}
+
+.dnd__drop-top:not(.dnd__drag-target) {
+	border-top: 1px dotted var(--drop-border-color);
+}
+
+.dnd__drop-bottom:not(.dnd__drag-target) {
+	border-bottom: 1px dotted var(--drop-border-color);
+}
+
+.dnd__drop-in:not(.dnd__drag-target) {
+	background-color: hsla(200, 70%, 70%, 1);
+}
+
+/* inline-button */
+
 .inline-button {
 	background: none;
 	border: none;
@@ -255,14 +275,7 @@ body.sidebar .main {
 	line-height: 1.2em;
 	border-top: 1px solid transparent;
 	border-bottom: 1px solid transparent;
-}
-
-.tabsaver__link--drop-top {
-	border-top: 1px dotted var(--drop-border-color);
-}
-
-.tabsaver__link--drop-bottom {
-	border-bottom: 1px dotted var(--drop-border-color);
+	margin-bottom: -1px;
 }
 
 .tabset__link-remove-button {
@@ -411,8 +424,13 @@ body.sidebar .main {
 	margin-bottom: 0.5em;
 }
 
-.tabsets__tabset + .tabsets__tabset {
-	margin-top: 1px;
+.tabsets__tabset:not(:last-child) {
+	margin-bottom: -1px;
+}
+
+.tabsets__tabset {
+	border-bottom: 1px solid transparent;
+	border-top: 1px solid transparent;
 }
 
 .tabsets__window-tabset {

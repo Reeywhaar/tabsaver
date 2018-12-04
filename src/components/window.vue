@@ -31,6 +31,8 @@
           @dragstart.native="onTabSetDrag($event, tabset)"
           @dragover.native="onDragover($event)"
           @drop.native="onDrop($event, tabset)"
+          @dragend.native="onDragend($event, tabset)"
+          @dragleave.native="onDragleave($event, tabset)"
         ></tabset>
       </div>
     </div>
@@ -136,9 +138,20 @@ export default {
         e.preventDefault();
         return;
       }
+      const target = e.currentTarget;
+      setTimeout(() => {
+        target.classList.add("dnd__drag-target");
+      }, 30);
       e.dataTransfer.setData("tabsaver/tabset", tabset.key);
     },
+    onDragend(e, tabset) {
+      e.target.classList.remove("dnd__drag-target");
+    },
+    onDragleave(event, tabset) {
+      event.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
+    },
     async onDrop(e, tabset) {
+      e.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       try {
         if (e.dataTransfer.types.indexOf("tabsaver/tabset") !== -1) {
           const key = e.dataTransfer.getData("tabsaver/tabset");
@@ -185,14 +198,36 @@ export default {
       }
     },
     onDragover(event) {
+      let type;
       for (let dtype of event.dataTransfer.types) {
         switch (dtype) {
           case "tabsaver/native-tab":
           case "tabsaver/tab":
           case "tabsaver/tabset":
+            type = dtype;
             event.preventDefault();
-            return;
+            break;
         }
+      }
+
+      if (!type) return;
+
+      event.stopPropagation();
+
+      if (type === "tabsaver/tabset") {
+        const after = (() => {
+          const rect = event.currentTarget.getBoundingClientRect();
+          const y = event.clientY - rect.y;
+          const proportion = (y / rect.height) * 100;
+          return proportion >= 50 ? true : false;
+        })();
+
+        event.currentTarget.classList.add(
+          !after ? "dnd__drop-top" : "dnd__drop-bottom"
+        );
+        event.currentTarget.classList.remove(
+          after ? "dnd__drop-top" : "dnd__drop-bottom"
+        );
       }
     },
     async importData() {
