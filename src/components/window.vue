@@ -198,21 +198,17 @@ export default {
       }
     },
     onDragover(event) {
-      let type;
-      for (let dtype of event.dataTransfer.types) {
-        switch (dtype) {
-          case "tabsaver/native-tab":
-          case "tabsaver/tab":
-          case "tabsaver/tabset":
-            type = dtype;
-            event.preventDefault();
-            break;
-        }
-      }
+      const type = event.dataTransfer.types.find(
+        type =>
+          type === "tabsaver/native-tab" ||
+          type === "tabsaver/tab" ||
+          type === "tabsaver/tabset"
+      );
 
       if (!type) return;
 
       event.stopPropagation();
+      event.preventDefault();
 
       if (type === "tabsaver/tabset") {
         const after = (() => {

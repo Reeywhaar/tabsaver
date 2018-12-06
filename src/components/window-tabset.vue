@@ -178,14 +178,15 @@ export default {
       }
     },
     onDragover(event) {
-      for (let type of event.dataTransfer.types) {
-        switch (type) {
-          case "tabsaver/native-tab":
-          case "tabsaver/tab":
-            event.preventDefault();
-            break;
-        }
-      }
+      if (
+        !event.dataTransfer.types.find(
+          type => type === "tabsaver/native-tab" || type === "tabsaver/tab"
+        )
+      )
+        return;
+
+      event.preventDefault();
+
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
         if (event.target === tab || tab.contains(event.target)) {
@@ -212,12 +213,6 @@ export default {
       for (let tab of tabs) {
         tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       }
-
-      if (
-        event.dataTransfer.types.indexOf("tabsaver/native-tab") === -1 &&
-        event.dataTransfer.types.indexOf("tabsaver/tab") === -1
-      )
-        return;
 
       if (event.target.matches(".tabset__title")) {
         if (event.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {

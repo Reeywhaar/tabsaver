@@ -249,14 +249,13 @@ export default {
       }
     },
     onTabDragover(event) {
-      for (let type of event.dataTransfer.types) {
-        switch (type) {
-          case "tabsaver/native-tab":
-          case "tabsaver/tab":
-            event.preventDefault();
-            break;
-        }
-      }
+      const type = event.dataTransfer.types.find(
+        type => type === "tabsaver/native-tab" || type === "tabsaver/tab"
+      );
+
+      if (!type) return;
+
+      event.preventDefault();
 
       const tab = event.currentTarget;
 
