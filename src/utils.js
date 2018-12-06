@@ -69,17 +69,22 @@ export async function readFileAsJson() {
 	return JSON.parse(await readFile());
 }
 
+/**
+ *
+ * @param {any[]} array
+ * @param {function} fn
+ */
 export function firstIndex(array, fn) {
-	for (let [index, item] of array.entries()) {
-		if (fn(item)) return index;
-	}
-	return -1;
+	return Array.from(array).findIndex(fn);
 }
 
+/**
+ *
+ * @param {any[]} array
+ * @param {function} fn
+ */
 export function first(array, fn) {
-	const index = firstIndex(array, fn);
-	if (index === -1) return null;
-	return array[index];
+	return Array.from(array).find(fn) || null;
 }
 
 export function setsAreEqual(setA, setB) {

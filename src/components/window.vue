@@ -64,7 +64,7 @@ import HoldButtonComponent from "./hold-button.vue";
 import TabSetComponent from "./tabset.vue";
 import IconComponent from "./icon.vue";
 import WindowTabSetComponent from "./window-tabset.vue";
-import { sleep, oneOf, first, eventYProportion } from "../utils.js";
+import { sleep, oneOf, eventYProportion } from "../utils.js";
 
 export default {
   components: {
