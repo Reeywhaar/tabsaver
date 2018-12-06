@@ -77,7 +77,8 @@
       </label>
       <div class="history-options indent-1" :class="{'disabled': !useHistory}">
         <div class="options__section">
-          <label>Number of history states
+          <label>
+            Number of history states
             <input
               class="options__states-counter"
               type="number"
@@ -160,7 +161,7 @@ export default {
     const version = browser.runtime.getManifest().version;
     const usageLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#screenshots`;
     const faqLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#faq`;
-    const changelogLink = `https://github.com/Reeywhaar/tabsaver/tree/${version}#changelog`;
+    const changelogLink = `https://github.com/Reeywhaar/tabsaver#changelog`;
 
     return {
       version,
