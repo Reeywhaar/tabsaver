@@ -64,7 +64,7 @@ import HoldButtonComponent from "./hold-button.vue";
 import TabSetComponent from "./tabset.vue";
 import IconComponent from "./icon.vue";
 import WindowTabSetComponent from "./window-tabset.vue";
-import { sleep, oneOf, first } from "../utils.js";
+import { sleep, oneOf, first, eventYProportion } from "../utils.js";
 
 export default {
   components: {
@@ -159,12 +159,7 @@ export default {
 
           e.stopPropagation();
 
-          const after = (() => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const y = e.clientY - rect.y;
-            const proportion = (y / rect.height) * 100;
-            return proportion >= 50 ? true : false;
-          })();
+          const after = eventYProportion(e);
 
           await this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
         } else if (e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
@@ -211,12 +206,7 @@ export default {
       event.preventDefault();
 
       if (type === "tabsaver/tabset") {
-        const after = (() => {
-          const rect = event.currentTarget.getBoundingClientRect();
-          const y = event.clientY - rect.y;
-          const proportion = (y / rect.height) * 100;
-          return proportion >= 50 ? true : false;
-        })();
+        const after = eventYProportion(event);
 
         event.currentTarget.classList.add(
           !after ? "dnd__drop-top" : "dnd__drop-bottom"

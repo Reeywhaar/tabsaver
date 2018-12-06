@@ -17,6 +17,7 @@
 	--title-border-color: #fff;
 	--link-color: hsl(210, 90%, 45%);
 	--drop-border-color: rgba(0, 0, 0, 0.4);
+	--separatorLightness: 0%;
 }
 
 .main-theme-dark {
@@ -33,6 +34,7 @@
 	--title-border-color: rgba(255, 255, 255, 0.2);
 	--link-color: hsl(200, 60%, 80%);
 	--drop-border-color: rgba(255, 255, 255, 0.5);
+	--separatorLightness: 80%;
 
 	background: var(--background-color);
 	color: var(--text-color);
@@ -442,18 +444,13 @@ body.sidebar .main {
 }
 
 .tabsets__separator {
-	--shadowLightness: 0%;
-	box-shadow: 0px 0.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.5),
-		0px 1px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.35),
-		0px 1.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.25),
-		0px 2px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.17),
-		0px 2.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.12),
-		0px 3px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.08),
-		0px 3.5px 0px 0.5px hsla(0, 0%, var(--shadowLightness), 0.05);
-}
-
-.main-theme-dark .tabsets__separator {
-	--shadowLightness: 80%;
+	box-shadow: 0px 0.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.5),
+		0px 1px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.35),
+		0px 1.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.25),
+		0px 2px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.17),
+		0px 2.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.12),
+		0px 3px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.08),
+		0px 3.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.05);
 }
 
 /* tabsaver__tab */

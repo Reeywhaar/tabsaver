@@ -239,3 +239,16 @@ export function parentMatching(el, selector) {
 	}
 	return null;
 }
+
+/**
+ * Calculates wheter event occured in bottom or top half
+ * of element
+ *
+ * @param {Event} event
+ */
+export function eventYProportion(event, target = event.currentTarget) {
+	const rect = target.getBoundingClientRect();
+	const y = event.clientY - rect.y;
+	const proportion = y / rect.height;
+	return proportion >= 0.5;
+}

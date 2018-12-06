@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import { sleep, firstIndex, first } from "../utils.js";
+import { sleep, firstIndex, first, eventYProportion } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -190,12 +190,7 @@ export default {
         if (e.currentTarget.matches(".tabset__link-container")) {
           e.stopPropagation();
 
-          const after = (() => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const y = e.clientY - rect.y;
-            const proportion = (y / rect.height) * 100;
-            return proportion >= 50 ? true : false;
-          })();
+          const after = eventYProportion(e);
 
           if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
             const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
@@ -258,16 +253,10 @@ export default {
       event.preventDefault();
 
       const tab = event.currentTarget;
+      const after = eventYProportion(event, tab);
 
-      let append = (() => {
-        const rect = tab.getBoundingClientRect();
-        const y = event.clientY - rect.y;
-        const proportion = (y / rect.height) * 100;
-        return proportion < 50 ? 0 : 1;
-      })();
-
-      tab.classList.add(append === 0 ? "dnd__drop-top" : "dnd__drop-bottom");
-      tab.classList.remove(append === 1 ? "dnd__drop-top" : "dnd__drop-bottom");
+      tab.classList.remove(!after ? "dnd__drop-bottom" : "dnd__drop-top");
+      tab.classList.add(after ? "dnd__drop-bottom" : "dnd__drop-top");
     },
     onTabDragEnd(event) {
       event.target.classList.remove("dnd__drag-target");

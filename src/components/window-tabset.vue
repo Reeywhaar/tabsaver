@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import { sleep, first, parentMatching } from "../utils.js";
+import { sleep, first, parentMatching, eventYProportion } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -190,19 +190,10 @@ export default {
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
         if (event.target === tab || tab.contains(event.target)) {
-          let append = (() => {
-            const rect = tab.getBoundingClientRect();
-            const y = event.clientY - rect.y;
-            const proportion = (y / rect.height) * 100;
-            return proportion < 50 ? 0 : 1;
-          })();
+          const after = eventYProportion(event, tab);
 
-          tab.classList.add(
-            append === 0 ? "dnd__drop-top" : "dnd__drop-bottom"
-          );
-          tab.classList.remove(
-            append === 1 ? "dnd__drop-top" : "dnd__drop-bottom"
-          );
+          tab.classList.remove(!after ? "dnd__drop-bottom" : "dnd__drop-top");
+          tab.classList.add(after ? "dnd__drop-bottom" : "dnd__drop-top");
         } else {
           tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
         }
@@ -254,12 +245,7 @@ export default {
         const ch = this.$children.find(ch => el.contains(ch.$el));
         if (!ch) return;
 
-        let append = (() => {
-          const rect = el.getBoundingClientRect();
-          const y = event.clientY - rect.y;
-          const proportion = (y / rect.height) * 100;
-          return proportion < 50 ? 0 : 1;
-        })();
+        let append = eventYProportion(event, el) ? 1 : 0;
 
         if (event.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
           const tab = JSON.parse(
