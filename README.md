@@ -51,6 +51,7 @@ Yes, available in preferences.
 ## `v.0.1.3`
 
 * Refine drag'n'drop
+* Minor refactoring
 
 ## `v.0.1.2`
 
