@@ -263,6 +263,12 @@ export default async () => {
 	browser.windows.onFocusChanged.addListener(async () => {
 		store.dispatch("updateWindows");
 	});
+	browser.windows.onRemoved.addListener(async () => {
+		store.dispatch("updateWindows");
+	});
+	browser.windows.onCreated.addListener(async () => {
+		store.dispatch("updateWindows");
+	});
 
 	return store;
 };
