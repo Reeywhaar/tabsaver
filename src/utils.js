@@ -5,6 +5,10 @@ export function withDefault(obj, def) {
 	return obj;
 }
 
+/**
+ *
+ * @param {number} n
+ */
 export function sleep(n) {
 	return new Promise(resolve => setTimeout(resolve, n));
 }
@@ -87,6 +91,12 @@ export function first(array, fn) {
 	return Array.from(array).find(fn) || null;
 }
 
+/**
+ * Checks if two arrays are contain same elements
+ *
+ * @param {any[]} setA
+ * @param {any[]} setB
+ */
 export function setsAreEqual(setA, setB) {
 	setB = setB.slice(0);
 	if (setA.length !== setB.length) return false;
@@ -100,18 +110,33 @@ export function setsAreEqual(setA, setB) {
 	return true;
 }
 
+/**
+ * Binds event handler to host
+ *
+ * @param {HTMLElement} host host to bind event
+ * @param {string} selector host child selector
+ * @param {string} event event name
+ * @param {function} fn event handler
+ * @param {boolean} capture capture/bubble mode
+ */
 export function live(host, selector, event, fn, capture = false) {
 	host.addEventListener(
 		event,
 		e => {
-			if (e.target.matches(selector)) {
-				fn.call(e.target, e);
-			}
+			if (e.target.matches(selector)) fn.call(e.target, e);
 		},
 		capture
 	);
 }
 
+/**
+ * Bind event and removes once event occured
+ *
+ * @param {HTMLElement} node element
+ * @param {string} type event name
+ * @param {function} fn handler
+ * @param {boolean} capture capture/bubble mode (false)
+ */
 export function once(node, type, fn, capture = false) {
 	return node.addEventListener(
 		type,
@@ -140,6 +165,12 @@ export function getKey(obj, key, def = null) {
 	return def;
 }
 
+/**
+ *
+ * @param {number} length
+ * @param {string} padder
+ * @param {string} str
+ */
 export function padLeft(length, padder = " ", str) {
 	str = str.toString();
 	if (str.length >= length) return str;
@@ -159,14 +190,24 @@ export function parseQuery(query) {
 		}, {});
 }
 
+/**
+ *
+ * @param {HTMLElement} el
+ * @param {string} selector
+ */
 export function findParent(el, selector) {
-	while (true) {
-		if (el.matches(selector)) return el;
-		if (el === document) return null;
+	while (!el.matches(selector)) {
+		if (el === document.body) return null;
 		el = el.parentElement;
 	}
+	return el;
 }
 
+/**
+ *
+ * @param {function} fn
+ * @param {any} def
+ */
 export async function tryOR(fn, def = null) {
 	try {
 		return await fn();
@@ -226,6 +267,11 @@ export function debounce(fn, delay, immediate) {
 	};
 }
 
+/**
+ *
+ * @param {function} fn
+ * @param {number} interval
+ */
 export async function waitUntil(fn, interval = 100) {
 	while (!(await fn())) {
 		await sleep(interval);
