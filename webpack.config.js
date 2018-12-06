@@ -6,6 +6,12 @@ const extractSVG = new ExtractTextPlugin("[name]");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+// Handle docker's SIGINT
+process.on("SIGINT", () => {
+	console.log(`\nGot "SIGINT", exiting...`);
+	process.exit(0);
+});
+
 module.exports = (h, args) => {
 	return [
 		{

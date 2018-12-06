@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import { sleep, firstIndex, first } from "../utils.js";
+import { sleep, firstIndex, first, eventYProportion } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -141,6 +141,11 @@ export default {
         return;
       }
 
+      const target = e.currentTarget;
+      setTimeout(() => {
+        target.classList.add("dnd__drag-target");
+      }, 30);
+
       e.dataTransfer.setData(
         "tabsaver/tab",
         JSON.stringify({
@@ -151,10 +156,7 @@ export default {
       e.dataTransfer.setData("text/plain", tab.url);
     },
     async onTabDrop(e, tab) {
-      e.currentTarget.classList.remove(
-        "tabsaver__link--drop-top",
-        "tabsaver__link--drop-bottom"
-      );
+      e.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
 
       try {
         if (
@@ -188,12 +190,7 @@ export default {
         if (e.currentTarget.matches(".tabset__link-container")) {
           e.stopPropagation();
 
-          const after = (() => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const y = e.clientY - rect.y;
-            const proportion = (y / rect.height) * 100;
-            return proportion >= 50 ? true : false;
-          })();
+          const after = eventYProportion(e);
 
           if (e.dataTransfer.types.indexOf("tabsaver/tab") !== -1) {
             const data = JSON.parse(e.dataTransfer.getData("tabsaver/tab"));
@@ -247,46 +244,26 @@ export default {
       }
     },
     onTabDragover(event) {
-      for (let type of event.dataTransfer.types) {
-        switch (type) {
-          case "tabsaver/native-tab":
-          case "tabsaver/tab":
-            event.preventDefault();
-            break;
-        }
-      }
+      const type = event.dataTransfer.types.find(
+        type => type === "tabsaver/native-tab" || type === "tabsaver/tab"
+      );
+
+      if (!type) return;
+
+      event.preventDefault();
 
       const tab = event.currentTarget;
+      const after = eventYProportion(event, tab);
 
-      let append = (() => {
-        const rect = tab.getBoundingClientRect();
-        const y = event.clientY - rect.y;
-        const proportion = (y / rect.height) * 100;
-        return proportion < 50 ? 0 : 1;
-      })();
-
-      tab.classList.add(
-        append === 0
-          ? "tabsaver__link--drop-top"
-          : "tabsaver__link--drop-bottom"
-      );
-      tab.classList.remove(
-        append === 1
-          ? "tabsaver__link--drop-top"
-          : "tabsaver__link--drop-bottom"
-      );
+      tab.classList.remove(!after ? "dnd__drop-bottom" : "dnd__drop-top");
+      tab.classList.add(after ? "dnd__drop-bottom" : "dnd__drop-top");
     },
     onTabDragEnd(event) {
-      event.currentTarget.classList.remove(
-        "tabsaver__link--drop-top",
-        "tabsaver__link--drop-bottom"
-      );
+      event.target.classList.remove("dnd__drag-target");
+      event.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
     },
     onTabDragLeave(event) {
-      event.currentTarget.classList.remove(
-        "tabsaver__link--drop-top",
-        "tabsaver__link--drop-bottom"
-      );
+      event.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
     },
     onHoldCancel(type) {
       this.$store.dispatch("notify", `Click and hold button to ${type}`);

@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import { sleep, first, parentMatching } from "../utils.js";
+import { sleep, first, parentMatching, eventYProportion } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -164,68 +164,46 @@ export default {
       }
     },
     onTabDrag(event, tab) {
+      const target = event.currentTarget;
+      setTimeout(() => {
+        target.classList.add("dnd__drag-target");
+      }, 30);
       event.dataTransfer.setData("tabsaver/native-tab", JSON.stringify(tab));
     },
     onDragend(event) {
+      event.target.classList.remove("dnd__drag-target");
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
-        tab.classList.remove(
-          "tabsaver__link--drop-top",
-          "tabsaver__link--drop-bottom"
-        );
+        tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       }
     },
     onDragover(event) {
-      for (let type of event.dataTransfer.types) {
-        switch (type) {
-          case "tabsaver/native-tab":
-          case "tabsaver/tab":
-            event.preventDefault();
-            break;
-        }
-      }
+      if (
+        !event.dataTransfer.types.find(
+          type => type === "tabsaver/native-tab" || type === "tabsaver/tab"
+        )
+      )
+        return;
+
+      event.preventDefault();
+
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
         if (event.target === tab || tab.contains(event.target)) {
-          let append = (() => {
-            const rect = tab.getBoundingClientRect();
-            const y = event.clientY - rect.y;
-            const proportion = (y / rect.height) * 100;
-            return proportion < 50 ? 0 : 1;
-          })();
+          const after = eventYProportion(event, tab);
 
-          tab.classList.add(
-            append === 0
-              ? "tabsaver__link--drop-top"
-              : "tabsaver__link--drop-bottom"
-          );
-          tab.classList.remove(
-            append === 1
-              ? "tabsaver__link--drop-top"
-              : "tabsaver__link--drop-bottom"
-          );
+          tab.classList.remove(!after ? "dnd__drop-bottom" : "dnd__drop-top");
+          tab.classList.add(after ? "dnd__drop-bottom" : "dnd__drop-top");
         } else {
-          tab.classList.remove(
-            "tabsaver__link--drop-top",
-            "tabsaver__link--drop-bottom"
-          );
+          tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
         }
       }
     },
     onDrop(event) {
       const tabs = this.$el.querySelectorAll(".tabset__link-container");
       for (let tab of tabs) {
-        tab.classList.remove(
-          "tabsaver__link--drop-top",
-          "tabsaver__link--drop-bottom"
-        );
+        tab.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       }
-
-      if (
-        event.dataTransfer.types.indexOf("tabsaver/native-tab") === -1 &&
-        event.dataTransfer.types.indexOf("tabsaver/tab") === -1
-      )
-        return;
 
       if (event.target.matches(".tabset__title")) {
         if (event.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
@@ -267,12 +245,7 @@ export default {
         const ch = this.$children.find(ch => el.contains(ch.$el));
         if (!ch) return;
 
-        let append = (() => {
-          const rect = el.getBoundingClientRect();
-          const y = event.clientY - rect.y;
-          const proportion = (y / rect.height) * 100;
-          return proportion < 50 ? 0 : 1;
-        })();
+        let append = eventYProportion(event, el) ? 1 : 0;
 
         if (event.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
           const tab = JSON.parse(

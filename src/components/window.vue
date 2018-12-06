@@ -31,6 +31,8 @@
           @dragstart.native="onTabSetDrag($event, tabset)"
           @dragover.native="onDragover($event)"
           @drop.native="onDrop($event, tabset)"
+          @dragend.native="onDragend($event, tabset)"
+          @dragleave.native="onDragleave($event, tabset)"
         ></tabset>
       </div>
     </div>
@@ -62,7 +64,7 @@ import HoldButtonComponent from "./hold-button.vue";
 import TabSetComponent from "./tabset.vue";
 import IconComponent from "./icon.vue";
 import WindowTabSetComponent from "./window-tabset.vue";
-import { sleep, oneOf, first } from "../utils.js";
+import { sleep, oneOf, eventYProportion } from "../utils.js";
 
 export default {
   components: {
@@ -136,9 +138,20 @@ export default {
         e.preventDefault();
         return;
       }
+      const target = e.currentTarget;
+      setTimeout(() => {
+        target.classList.add("dnd__drag-target");
+      }, 30);
       e.dataTransfer.setData("tabsaver/tabset", tabset.key);
     },
+    onDragend(e, tabset) {
+      e.target.classList.remove("dnd__drag-target");
+    },
+    onDragleave(event, tabset) {
+      event.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
+    },
     async onDrop(e, tabset) {
+      e.currentTarget.classList.remove("dnd__drop-top", "dnd__drop-bottom");
       try {
         if (e.dataTransfer.types.indexOf("tabsaver/tabset") !== -1) {
           const key = e.dataTransfer.getData("tabsaver/tabset");
@@ -146,12 +159,7 @@ export default {
 
           e.stopPropagation();
 
-          const after = (() => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const y = e.clientY - rect.y;
-            const proportion = (y / rect.height) * 100;
-            return proportion >= 50 ? true : false;
-          })();
+          const after = eventYProportion(e);
 
           await this.$store.dispatch("tabsetMove", [key, tabset.key, after]);
         } else if (e.dataTransfer.types.indexOf("tabsaver/native-tab") !== -1) {
@@ -185,14 +193,27 @@ export default {
       }
     },
     onDragover(event) {
-      for (let dtype of event.dataTransfer.types) {
-        switch (dtype) {
-          case "tabsaver/native-tab":
-          case "tabsaver/tab":
-          case "tabsaver/tabset":
-            event.preventDefault();
-            return;
-        }
+      const type = event.dataTransfer.types.find(
+        type =>
+          type === "tabsaver/native-tab" ||
+          type === "tabsaver/tab" ||
+          type === "tabsaver/tabset"
+      );
+
+      if (!type) return;
+
+      event.stopPropagation();
+      event.preventDefault();
+
+      if (type === "tabsaver/tabset") {
+        const after = eventYProportion(event);
+
+        event.currentTarget.classList.add(
+          !after ? "dnd__drop-top" : "dnd__drop-bottom"
+        );
+        event.currentTarget.classList.remove(
+          after ? "dnd__drop-top" : "dnd__drop-bottom"
+        );
       }
     },
     async importData() {
