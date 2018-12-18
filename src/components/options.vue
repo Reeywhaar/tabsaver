@@ -137,7 +137,7 @@
 </template>
 <script>
 import HoldButton from "./hold-button.vue";
-import { sleep, oneOf } from "../utils.js";
+import { sleep, oneOf, readFileAsJson } from "../utils.js";
 
 function createProperty(prop) {
   return {
@@ -188,8 +188,9 @@ export default {
     }
   },
   methods: {
-    importTabsets() {
-      this.$store.dispatch("import");
+    async importTabsets() {
+      const imported = await readFileAsJson();
+      this.$store.dispatch("import", imported);
     },
     exportTabsets() {
       this.$store.dispatch("export");
