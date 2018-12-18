@@ -98,8 +98,11 @@ export default async () => {
 			},
 		},
 		actions: {
-			async import() {
-				await browser.runtime.sendMessage("import");
+			async import(context, data) {
+				await browser.runtime.sendMessage({
+					type: "import",
+					data,
+				});
 			},
 			async export() {
 				await browser.runtime.sendMessage("export");

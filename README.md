@@ -48,6 +48,10 @@ Yes, available in preferences.
 
 # CHANGELOG
 
+## `v.0.1.4`
+
+* Fixed import issue
+
 ## `v.0.1.3`
 
 * Refine drag'n'drop

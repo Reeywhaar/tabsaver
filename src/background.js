@@ -8,11 +8,14 @@ async function main() {
 	let trackHistory = true;
 
 	browser.runtime.onMessage.addListener(async msg => {
+		if (typeof msg === "object") {
+			switch (msg.type) {
+				case "import":
+					await TabSet.saveAll(msg.data);
+					return;
+			}
+		}
 		switch (msg) {
-			case "import":
-				const imported = await readFileAsJson();
-				await TabSet.saveAll(imported);
-				return;
 			case "export":
 				const out = JSON.stringify(await TabSet.getAll(), null, 2);
 				try {
