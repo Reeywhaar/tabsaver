@@ -48,6 +48,10 @@ Yes, available in preferences.
 
 # CHANGELOG
 
+## `v.0.1.5`
+
+* Option to open tab in same tab
+
 ## `v.0.1.4`
 
 * Fixed import issue
