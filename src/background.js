@@ -1,4 +1,4 @@
-import { readFileAsJson, saveFile } from "./utils.js";
+import { saveFile } from "./utils.js";
 import { openURL, storage, settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
 import { History } from "./history.js";
