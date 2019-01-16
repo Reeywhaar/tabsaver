@@ -405,8 +405,12 @@ export default {
       this.tabset.color = color;
       await this.save(this.tabset.data);
     },
-    async openTab(tab) {
-      await this.$store.dispatch("openUrl", [tab.url, tab.cookieStoreId]);
+    async openTab(tab, newTab = true) {
+      await this.$store.dispatch("openUrl", [
+        tab.url,
+        tab.cookieStoreId,
+        newTab
+      ]);
     },
     handleDown(event) {
       if (event.which === 2) {
@@ -414,7 +418,13 @@ export default {
       }
     },
     async handleClick(event, tab) {
-      this.openTab(tab);
+      if (!(event.which === 1 || event.which === 2)) return;
+      const newTab =
+        event.which === 2 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        this.$store.state.settings.openInNewTab;
+      this.openTab(tab, newTab);
     }
   }
 };

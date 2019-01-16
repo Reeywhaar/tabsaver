@@ -205,10 +205,10 @@ export default async () => {
 			async clearTabsets(context) {
 				await Storage.set("tabs", []);
 			},
-			async openUrl(context, [url, identity]) {
+			async openUrl(context, [url, identity, newTab = true]) {
 				return await browser.runtime.sendMessage({
 					domain: "openURL",
-					args: [url, identity],
+					args: [url, identity, newTab],
 				});
 			},
 			async updateStatesCount(context) {

@@ -53,6 +53,7 @@ const settingsDefault = {
 	showTitles: false,
 	showCount: false,
 	showWindows: true,
+	openInNewTab: true,
 	/**
 	 * Expand window TabSets
 	 * 0 - no
@@ -137,7 +138,21 @@ export function tabSetsAreEqual(setA, setB) {
 	return setsAreEqual(setA, setB);
 }
 
-export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
+export async function openURL(
+	url,
+	cookieStoreId = DEFAULT_COOKIE_STORE_ID,
+	newTab = true
+) {
+	const currentTabs = await browser.tabs.query({
+		active: true,
+		currentWindow: true,
+	});
+	if (
+		currentTabs.length === 0 ||
+		currentTabs[0] === browser.tabs.TAB_ID_NONE ||
+		currentTabs[0].cookieStoreId !== cookieStoreId
+	)
+		newTab = true;
 	try {
 		const lookup = await settings.get("tabLookup");
 		if (lookup !== 0) {
@@ -151,9 +166,14 @@ export async function openURL(url, cookieStoreId = DEFAULT_COOKIE_STORE_ID) {
 					]);
 			}
 		}
-		return await browser.tabs.create({
+		if (newTab) {
+			return await browser.tabs.create({
+				url: getMangledURL(url),
+				cookieStoreId,
+			});
+		}
+		return await browser.tabs.update({
 			url: getMangledURL(url),
-			cookieStoreId,
 		});
 	} catch (e) {
 		if (e.message.substr(0, 27) === "No cookie store exists with") {

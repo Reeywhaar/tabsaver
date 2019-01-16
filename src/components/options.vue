@@ -30,6 +30,14 @@
       </select>
     </div>
     <div class="options__section">
+      <label title="Open non-window tabs in new window">
+        <input class="options__left-checkbox" type="checkbox" v-model="openInNewTab">Open tab in new tab
+      </label>
+      <div
+        class="comment indent-1"
+      >* tabs with different containers will still be opened in different tabs (due api limitation)</div>
+    </div>
+    <div class="options__section">
       <label>
         <input class="options__left-checkbox" type="checkbox" v-model="includePinned">Include pinned tabs when saving TabSet
       </label>
@@ -176,6 +184,7 @@ export default {
     showTitles: createProperty("showTitles"),
     showCount: createProperty("showCount"),
     showWindows: createProperty("showWindows"),
+    openInNewTab: createProperty("openInNewTab"),
     expandWindows: createProperty("expandWindows"),
     placeCreatedTabs: createProperty("placeCreatedTabs"),
     theme: createProperty("theme"),
