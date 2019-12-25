@@ -1,51 +1,51 @@
 {
-	"manifest_version": 2,
-	"name": "Tab Saver",
-	"version": "0.1.5",
-	"description": "Allows you to manage and save tabs",
-	"icons": {
-		"48": "icons/icon.svg",
-		"96": "icons/icon.svg"
-	},
-	"browser_action": {
-		"default_icon": "icons/icon.svg",
-		"default_title": "Tab Saver",
-		"default_popup": "dist/panel.html",
-		"browser_style": true,
-		"theme_icons": [
-			{
-				"light": "icons/icon-light.svg",
-				"dark": "icons/icon.svg",
-				"size": 32
-			}
-		]
-	},
-	"background": {
-		"page": "dist/background.html"
-	},
-	"options_ui": {
-		"page": "dist/options.html",
-		"browser_style": true
-	},
-	"permissions": [
-		"storage",
-		"tabs",
-		"downloads",
-		"cookies",
-		"contextualIdentities",
-		"unlimitedStorage"
-	],
-	"applications": {
-		"gecko": {
-			"id": "{3c764d86-a50a-4f5c-b773-cb84bea924e7}",
-			"strict_min_version": "54.0"
-		}
-	},
-	"sidebar_action": {
-		"default_icon": "icons/icon.svg",
-		"default_title": "TabSaver",
-		"default_panel": "dist/sidebar.html",
-		"browser_style": true,
-		"open_at_install": false
-	}
+  "manifest_version": 2,
+  "name": "Tab Saver",
+  "version": "0.1.5",
+  "description": "Allows you to manage and save tabs",
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon.svg",
+    "default_title": "Tab Saver",
+    "default_popup": "dist/panel.html",
+    "browser_style": true,
+    "theme_icons": [
+      {
+        "light": "icons/icon-light.svg",
+        "dark": "icons/icon.svg",
+        "size": 32
+      }
+    ]
+  },
+  "background": {
+    "page": "dist/background.html"
+  },
+  "options_ui": {
+    "page": "dist/options.html",
+    "browser_style": true
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "downloads",
+    "cookies",
+    "contextualIdentities",
+    "unlimitedStorage"
+  ],
+  "applications": {
+    "gecko": {
+      "id": "{3c764d86-a50a-4f5c-b773-cb84bea924e7}",
+      "strict_min_version": "62.0"
+    }
+  },
+  "sidebar_action": {
+    "default_icon": "icons/icon.svg",
+    "default_title": "TabSaver",
+    "default_panel": "dist/sidebar.html",
+    "browser_style": true,
+    "open_at_install": false
+  }
 }
