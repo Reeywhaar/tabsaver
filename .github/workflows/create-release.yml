@@ -40,4 +40,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ${{ steps.web-ext-sign.outputs.target }}
+          files: ${{ steps.web-ext-sign.outputs.target || steps.web-ext-build.outputs.target }}
