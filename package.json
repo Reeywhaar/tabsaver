@@ -3,7 +3,15 @@
   "version": "1.0.0",
   "description": "TabSaver Firefox WebExtension",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "web-ext lint -s ext",
+    "compile": "./node_modules/.bin/webpack",
+    "compile:prod": "./node_modules/.bin/webpack --mode production",
+    "build": "npm run compile:prod && web-ext build -s ext",
+    "sign": "source .env && web-ext sign -s ext --api-key ${APIKEY} --api-secret ${APISECRET}",
+    "run": "source .env && ./node_modules/.bin/web-ext run -s ext --firefox-profile $WEB_EXT_FIREFOX_PROFILE",
+    "run:nightly": "source .env && ./node_modules/.bin/web-ext run -f nightly -s ext --firefox-profile $WEB_EXT_FIREFOX_PROFILE",
+    "test_data": "node make-test-data.js > private/test-data.json"
   },
   "repository": {
     "type": "git",
