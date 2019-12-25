@@ -1,25 +1,5 @@
 include ./.env
 
-.PHONY: buildDocker
-buildDocker:
-	docker-compose -f docker-compose.dev.yml build
-
-.PHONY: dockerShell
-dockerShell:
-	docker-compose -f docker-compose.dev.yml run --rm builder
-
-.PHONY: webpack
-webpack:
-	docker-compose -f docker-compose.dev.yml run --rm builder -c "./node_modules/.bin/webpack --mode development"
-
-.PHONY: webpackProd
-webpackProd:
-	docker-compose -f docker-compose.dev.yml run --rm builder -c "./node_modules/.bin/webpack --mode production"
-
-.PHONY: watch
-watch:
-	docker-compose -f docker-compose.dev.yml run --rm builder -c "./node_modules/.bin/webpack --mode development --watch"
-
 .PHONY: build
 build:
 	rm -r ext/dist && make webpackProd && make lint && web-ext build -s ext
