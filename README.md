@@ -49,9 +49,10 @@ Yes, available in preferences.
 # How to build
 
 First install dependencies: `npm install`.
+
 Second compile js with webpack `npm run compile:prod`
 
-Then, If you want to build artifact: `./node_modules/.bin/web-ext build -s ext`
+Then, If you want to build artifact: `./node_modules/.bin/web-ext build -s ext`. *this will create zip archive in ./web-ext-artifacts*
 
 And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -s ext`
 
