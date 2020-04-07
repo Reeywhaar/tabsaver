@@ -46,6 +46,16 @@ Yes, available in preferences.
 
 Yes, available in preferences.
 
+# How to build
+
+First install dependencies: `npm install`.
+Second compile js with webpack `npm run compile:prod`
+
+Then, If you want to build artifact: `./node_modules/.bin/web-ext build -s ext`
+
+And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -s ext`
+
+
 # CHANGELOG
 
 ## `v.0.1.7`
@@ -107,3 +117,4 @@ Yes, available in preferences.
 ## `v.0.0.1`
 
 There were dragons...
+
