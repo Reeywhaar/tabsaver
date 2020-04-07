@@ -48,6 +48,10 @@ Yes, available in preferences.
 
 # CHANGELOG
 
+## `v.0.1.7`
+
+* Updated dependencies
+
 ## `v.0.1.6`
 
 * Updated dependencies
