@@ -81,29 +81,5 @@ module.exports = (h, args) => {
       },
       devtool: false,
     },
-    // {
-    //   entry: {
-    //     "icon.svg": "./icon.svg.js",
-    //     "icon-light.svg": "./icon-light.svg.js",
-    //   },
-    //   output: {
-    //     path: path.resolve(__dirname, "ext/icons"),
-    //     filename: "[name]",
-    //   },
-    //   resolveLoader: {
-    //     alias: {
-    //       "svg-js-loader": "@reeywhaar/svgmaker/loader.js",
-    //     },
-    //   },
-    //   module: {
-    //     rules: [
-    //       {
-    //         test: /\.svg\.js$/,
-    //         use: "svg-js-loader",
-    //       },
-    //     ],
-    //   },
-    //   plugins: [new InertEntryPlugin()],
-    // },
   ];
 };
