@@ -4,7 +4,7 @@ module.exports = function icon(fill = "#4c4c4c") {
   const size = 128;
   const piece = (n) => (size / 128) * n;
   const prop = (x, n) => (x / 128) * n;
-  const borderWidth = piece(16);
+  const borderWidth = piece(10);
   const smallWidth = size - borderWidth * 2;
   const height = piece(110);
   const topHeight = piece(26);
