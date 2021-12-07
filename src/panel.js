@@ -5,12 +5,12 @@ import getStore from "./store.js";
 import WindowComponent from "./components/window.vue";
 
 async function main() {
-	Vue.config.devtools = false;
-	Vue.use(Vuex);
+  Vue.config.devtools = false;
+  Vue.use(Vuex);
 
-	WindowComponent.store = await getStore();
-	const app = new (Vue.extend(WindowComponent))();
-	app.$mount(".main");
+  WindowComponent.store = await getStore();
+  const app = new (Vue.extend(WindowComponent))();
+  app.$mount(".main");
 }
 
-main().catch(err => console.error(err));
+main().catch((err) => console.error(err));

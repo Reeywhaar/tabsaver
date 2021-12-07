@@ -1,5 +1,5 @@
 window.process = {
-	env: {
-		NODE_ENV: "production",
-	}
-}
+  env: {
+    NODE_ENV: "production",
+  },
+};
