@@ -59,6 +59,11 @@ And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -
 
 # CHANGELOG
 
+## `v.0.2.0`
+
+* Updated icon
+* Updated code dependencies
+
 ## `v.0.1.7`
 
 * Updated dependencies
