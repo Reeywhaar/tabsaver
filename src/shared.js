@@ -183,6 +183,11 @@ export async function openURL(
         url: getMangledURL(url),
         cookieStoreId: DEFAULT_COOKIE_STORE_ID,
       });
+    } else if (e.message === "Illegal to set non-private cookieStoreId in a private window") {
+      return await browser.tabs.create({
+        url: getMangledURL(url),
+        cookieStoreId: PRIVATE_COOKIE_STORE_ID,
+      });
     } else {
       throw e;
     }
