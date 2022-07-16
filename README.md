@@ -52,75 +52,75 @@ First install dependencies: `npm install`.
 
 Second compile js with webpack `npm run compile:prod`
 
-Then, If you want to build artifact: `./node_modules/.bin/web-ext build -s ext`. *this will create zip archive in ./web-ext-artifacts*
+Then, If you want to build artifact: `./node_modules/.bin/web-ext build -s ext`. _this will create zip archive in ./web-ext-artifacts_
 
 And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -s ext`
-
 
 # CHANGELOG
 
 ## `v.0.2.0`
 
-* Updated icon
-* Updated code dependencies
+- Updated icon
+- Updated code dependencies
 
 ## `v.0.1.7`
 
-* Updated dependencies
+- Updated dependencies
 
 ## `v.0.1.6`
 
-* Updated dependencies
+- Updated dependencies
 
 ## `v.0.1.5`
 
-* Option to open tab in same tab
+- Option to open tab in same tab
 
 ## `v.0.1.4`
 
-* Fixed import issue
+- Fixed import issue
 
 ## `v.0.1.3`
 
-* Refine drag'n'drop
-* Minor refactoring
+- Refine drag'n'drop
+- Minor refactoring
 
 ## `v.0.1.2`
 
-* Show border over element when dragging
+- Show border over element when dragging
 
 ## `v.0.1.1`
+
 ### Features
 
-* Reload tab icon added (shift click to cache free reload, middle click to duplicate)
-* Reload all window tabs icon added (shift click to cache free reload)
+- Reload tab icon added (shift click to cache free reload, middle click to duplicate)
+- Reload all window tabs icon added (shift click to cache free reload)
 
 ### Changes
 
-* Undo button's text changed to icon
-* Code fixes
-* Controls hover behavior
+- Undo button's text changed to icon
+- Code fixes
+- Controls hover behavior
 
 ## `v.0.1.0`
+
 ### Features
 
-* Extension options page
-* Ability to manage window's tabs
-* Undo feature
-* Detachable panel
-* Sidebar panel
-* Color may be assigned to TabSet
-* Options to show tab's
-  * tab's title
-  * favicon
-  * count
-* Dark/light themes support
+- Extension options page
+- Ability to manage window's tabs
+- Undo feature
+- Detachable panel
+- Sidebar panel
+- Color may be assigned to TabSet
+- Options to show tab's
+  - tab's title
+  - favicon
+  - count
+- Dark/light themes support
 
 ### Fixes
 
-* Panel works in private window
+- Panel works in private window
 
 ## `v.0.0.1`
 
 There were dragons...
-
