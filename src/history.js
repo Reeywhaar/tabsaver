@@ -38,11 +38,8 @@ export const History = {
     if (!state) return;
     let capacity = await History.permittedNumberOfStates();
     if (capacity === 0) return;
-    const states = await History.getAll();
-    if (states.length > capacity - 1) {
-      const overflow = states.length - (capacity - 1);
-      states.splice(0, overflow);
-    }
+    let states = await History.getAll();
+    states = states.slice(states.length - (capacity - 1), states.length);
     states.push(state);
     await Promise.all([
       storage.set("history:states", states),
