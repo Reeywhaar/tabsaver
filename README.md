@@ -58,6 +58,10 @@ And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -
 
 # CHANGELOG
 
+## `v.0.2.1`
+
+- Fixed tab opening in private mode. Thanks to [Crikxi](https://github.com/Reeywhaar/tabsaver/pull/29)
+
 ## `v.0.2.0`
 
 - Updated icon
