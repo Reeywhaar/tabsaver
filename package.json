@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "web-ext lint -s ext",
-    "compile": "./node_modules/.bin/webpack",
+    "compile": "./node_modules/.bin/webpack --mode development",
+    "watch": "./node_modules/.bin/webpack --mode development --watch",
     "compile:prod": "./node_modules/.bin/webpack --mode production",
     "build": "npm run compile:prod && web-ext build -s ext",
     "sign": "source .env && web-ext sign -s ext --api-key ${APIKEY} --api-secret ${APISECRET}",
