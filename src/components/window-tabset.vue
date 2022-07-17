@@ -6,7 +6,7 @@
     @drop="onDrop($event)"
     :class="{'window-tabset-incognito': tabset.incognito}"
   >
-    <div class="tabset__item" :style="{'background-color': headerColor}">
+    <div class="tabset__item">
       <span class="tabset__title" @click="toggleCollapse">Window {{title}}</span>
       <span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
       <div class="tabset__controls" :class="overlayClasses">
