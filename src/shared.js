@@ -123,7 +123,7 @@ export function getMangledURL(url) {
 }
 
 export function getUnmangledURL(url) {
-  if (url.indexOf(browser.extension.getURL("/dist/handler.html")) === 0) {
+  if (url.indexOf(browser.runtime.getURL("/dist/handler.html")) === 0) {
     const qu = parseQuery("?" + strAfter(url, "handler.html?"));
     return qu.url;
   }
