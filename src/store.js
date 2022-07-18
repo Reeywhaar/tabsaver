@@ -238,13 +238,13 @@ export default async () => {
     }
   });
 
-  const updateCurrentTabs = async () => {
+  const updateCurrentTabs = debounce(async () => {
     const tabs = await browser.tabs.query({
       active: true,
     });
     store.commit("setCurrentTabs", tabs);
     store.dispatch("updateWindows");
-  };
+  }, 10);
 
   browser.tabs.onActivated.addListener(updateCurrentTabs);
   browser.tabs.onUpdated.addListener(updateCurrentTabs);
