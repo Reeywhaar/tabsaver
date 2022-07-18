@@ -58,6 +58,11 @@ And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -
 
 # CHANGELOG
 
+## `v.0.2.2`
+
+- Fixed active tab highlighting in Firefox versions >= 101
+  https://bugzilla.mozilla.org/show_bug.cgi?id=1779926
+
 ## `v.0.2.1`
 
 - Fixed tab opening in private mode. Thanks to [Crikxi](https://github.com/Reeywhaar/tabsaver/pull/29)
