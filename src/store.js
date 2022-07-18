@@ -238,20 +238,17 @@ export default async () => {
     }
   });
 
-  browser.tabs.onUpdated.addListener(async () => {
+  const updateCurrentTabs = async () => {
     const tabs = await browser.tabs.query({
       active: true,
     });
     store.commit("setCurrentTabs", tabs);
     store.dispatch("updateWindows");
-  });
-  browser.tabs.onCreated.addListener(async () => {
-    const tabs = await browser.tabs.query({
-      active: true,
-    });
-    store.commit("setCurrentTabs", tabs);
-    store.dispatch("updateWindows");
-  });
+  };
+
+  browser.tabs.onActivated.addListener(updateCurrentTabs);
+  browser.tabs.onUpdated.addListener(updateCurrentTabs);
+  browser.tabs.onCreated.addListener(updateCurrentTabs);
   browser.tabs.onMoved.addListener(async () => {
     store.dispatch("updateWindows");
   });
