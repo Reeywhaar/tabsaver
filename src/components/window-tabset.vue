@@ -9,7 +9,7 @@
     <div class="tabset__item">
       <span class="tabset__title" @click="toggleCollapse">Window {{title}}</span>
       <span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
-      <div class="tabset__controls" :class="overlayClasses">
+      <div class="tabset__controls">
         <button
           class="inline-button tabset__button window-tabset__button tabset__button-add"
           @click="createTab()"
@@ -103,12 +103,6 @@ export default {
     showCount() {
       return this.$store.state.settings.showCount;
     },
-    overlayPosition() {
-      return this.$store.state.settings.overlayPosition;
-    },
-    overlayClasses() {
-      return [`tabset__controls-${this.overlayPosition}`];
-    }
   },
   methods: {
     isCurrentTab(tab) {

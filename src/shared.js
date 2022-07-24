@@ -68,7 +68,6 @@ const settingsDefault = {
    * 2 - after current tab
    */
   placeCreatedTabs: 1,
-  overlayPosition: "right",
   /**
    * Lookup strategy when opening existing tab
    * 0 - nowhere

@@ -11,7 +11,7 @@
         title="Click to show stored tabs, double click to edit name"
       >{{tabset.key}}</span>
       <span v-if="showCount" class="tabset__count">{{tabset.data.length}}</span>
-      <div class="tabset__controls" :class="overlayClasses">
+      <div class="tabset__controls">
         <color-select class="tabset__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
         <button
           @click="open()"
@@ -113,12 +113,6 @@ export default {
       if (!this.$props.tabset.color) return null;
       return `hsla(${this.$props.tabset.color}, 100%, 60%, 0.4)`;
     },
-    overlayPosition() {
-      return this.$store.state.settings.overlayPosition;
-    },
-    overlayClasses() {
-      return [`tabset__controls-${this.overlayPosition}`];
-    }
   },
   methods: {
     isCurrentTab(tab) {

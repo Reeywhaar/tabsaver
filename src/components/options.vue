@@ -61,13 +61,6 @@
       </label>
     </div>
     <div class="options__section">
-      <span>Show controls overlay at&ensp;</span>
-      <select class="browser-style" v-model="overlayPosition">
-        <option value="right">Right</option>
-        <option value="left">Left</option>
-      </select>
-    </div>
-    <div class="options__section">
       <label>
         <input class="options__left-checkbox" type="checkbox" v-model="useHistory">Use history
       </label>
@@ -175,7 +168,6 @@ export default {
     openInNewTab: createProperty("openInNewTab"),
     expandWindows: createProperty("expandWindows"),
     placeCreatedTabs: createProperty("placeCreatedTabs"),
-    overlayPosition: createProperty("overlayPosition"),
     tabLookup: createProperty("tabLookup"),
     useHistory: createProperty("useHistory"),
     numberOfHistoryStates: createProperty("numberOfHistoryStates"),

@@ -363,13 +363,7 @@ body.sidebar .main {
 
   line-height: 1em;
   height: 1.6em;
-}
 
-.tabset__controls:not(:hover) {
-  opacity: 0.5;
-}
-
-.tabset__controls-right {
   right: 0;
 
   padding-left: 0.3em;
@@ -379,16 +373,8 @@ body.sidebar .main {
   border-bottom-left-radius: 0.3em;
 }
 
-.tabset__controls-left {
-  left: 0;
-
-  flex-direction: row-reverse;
-
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-
-  border-top-right-radius: 0.3em;
-  border-bottom-right-radius: 0.3em;
+.tabset__controls:not(:hover) {
+  opacity: 0.5;
 }
 
 .tabset__item:not(:hover) .tabset__controls {
