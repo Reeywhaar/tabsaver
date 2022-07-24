@@ -444,13 +444,12 @@ body.sidebar .main {
 }
 
 .tabsets__separator {
-	box-shadow: 0px 0.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.5),
-		0px 1px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.35),
-		0px 1.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.25),
-		0px 2px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.17),
-		0px 2.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.12),
-		0px 3px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.08),
-		0px 3.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.05);
+	box-shadow: 0px 0.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.25),
+		0px 1px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.12),
+		0px 1.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.17),
+		0px 2px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.12),
+		0px 2.5px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.08),
+		0px 3px 0px 0.5px hsla(0, 0%, var(--separatorLightness), 0.03)
 }
 
 /* tabsaver__tab */
