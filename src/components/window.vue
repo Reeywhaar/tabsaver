@@ -1,5 +1,5 @@
 <template>
-  <div class="main" :class="mainClass">
+  <div class="main">
     <div class="save-new">
       <input
         class="save-new__input"
@@ -114,12 +114,6 @@ export default {
     },
     notification() {
       return this.$store.state.notification;
-    },
-    mainClass() {
-      if (this.$store.state.settings.theme === "daytime") {
-        return [`main-theme-${this.daytime}`];
-      }
-      return [`main-theme-${this.$store.state.settings.theme}`];
     },
     contentStyle() {
       return {

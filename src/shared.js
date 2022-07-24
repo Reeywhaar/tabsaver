@@ -78,7 +78,6 @@ const settingsDefault = {
   tabLookup: 1,
   useHistory: true,
   numberOfHistoryStates: 15,
-  theme: "light",
 };
 const settingsKeys = Object.keys(settingsDefault);
 const settingsListeners = [];

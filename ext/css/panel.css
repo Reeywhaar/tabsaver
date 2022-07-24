@@ -20,30 +20,16 @@
   --separatorLightness: 0%;
 }
 
-.main-theme-dark {
-  --background-color: #444;
-  --hover-color: hsl(200, 60%, 60%);
-  --prefs-bg-color: #444;
-  --prefs-border-color: rgba(255, 255, 255, 0.1);
-  --overlay-color: #222;
-  --text-color: #efefef;
-  --border-color: rgba(255, 255, 255, 0.6);
-  --shadow-color: rgba(255, 255, 255, 0.9);
-  --tab-header-color: hsla(200, 10%, 95%, 0.1);
-  --transparent-overlay-color: rgba(255, 255, 255, 0.1);
-  --title-border-color: rgba(255, 255, 255, 0.2);
-  --link-color: hsl(200, 60%, 80%);
-  --drop-border-color: rgba(255, 255, 255, 0.5);
-  --separatorLightness: 80%;
-
-  background: var(--background-color);
-  color: var(--text-color);
-}
-
 html,
 body {
   padding: 0;
   margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #444;
+  }
 }
 
 body.popup {
@@ -162,6 +148,28 @@ button {
   min-width: 100vw;
   display: flex;
   flex-direction: column;
+}
+
+@media (prefers-color-scheme: dark) {
+  .main {
+    --background-color: #444;
+    --hover-color: hsl(200, 60%, 60%);
+    --prefs-bg-color: #444;
+    --prefs-border-color: rgba(255, 255, 255, 0.1);
+    --overlay-color: #222;
+    --text-color: #efefef;
+    --border-color: rgba(255, 255, 255, 0.6);
+    --shadow-color: rgba(255, 255, 255, 0.9);
+    --tab-header-color: hsla(200, 10%, 95%, 0.1);
+    --transparent-overlay-color: rgba(255, 255, 255, 0.1);
+    --title-border-color: rgba(255, 255, 255, 0.2);
+    --link-color: hsl(200, 60%, 80%);
+    --drop-border-color: rgba(255, 255, 255, 0.5);
+    --separatorLightness: 80%;
+
+    background: var(--background-color);
+    color: var(--text-color);
+  }
 }
 
 body.popup .main {
@@ -495,6 +503,10 @@ body.sidebar .main {
 
 .prefs__pinned-button[data-state="on"] {
   background-color: var(--hover-color);
+}
+
+body.popup .prefs__pinned-button {
+  border-radius: 6px;
 }
 
 .prefs__undo {

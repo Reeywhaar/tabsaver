@@ -61,18 +61,6 @@
       </label>
     </div>
     <div class="options__section">
-      <span>Theme&ensp;</span>
-      <select class="browser-style" v-model="theme">
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="daytime">Based on day time</option>
-      </select>
-      <div
-        class="comment"
-        v-if="theme === 'daytime'"
-      >* Day time based theme is light from 7am to 8pm, otherwise it's dark</div>
-    </div>
-    <div class="options__section">
       <span>Show controls overlay at&ensp;</span>
       <select class="browser-style" v-model="overlayPosition">
         <option value="right">Right</option>
@@ -187,7 +175,6 @@ export default {
     openInNewTab: createProperty("openInNewTab"),
     expandWindows: createProperty("expandWindows"),
     placeCreatedTabs: createProperty("placeCreatedTabs"),
-    theme: createProperty("theme"),
     overlayPosition: createProperty("overlayPosition"),
     tabLookup: createProperty("tabLookup"),
     useHistory: createProperty("useHistory"),
