@@ -58,6 +58,10 @@ And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -
 
 # CHANGELOG
 
+## `v.0.2.3`
+
+- Style improvements. Theme now obeys firefox's theme (dark, light)
+
 ## `v.0.2.2`
 
 - Fixed active tab highlighting in Firefox versions >= 101
