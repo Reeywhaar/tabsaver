@@ -1,24 +1,24 @@
 <template>
-	<span class="font-icon" v-html="text"></span>
+  <span class="font-icon" v-html="text"></span>
 </template>
 
 <script>
 const mapping = {
-	open: "&#xe2c6;",
-	add: "&#xe145;",
-	save: "&#xe884;",
-	cross: "&#xea0f;",
-	reload: "&#xe5d5;",
-	undo: "&#xe965;",
-	detach: "&#xea33;",
-	cog: "&#xe8b8;",
+  add: 61543,
+  close: 61453,
+  gear: 61459,
+  save: 61465,
+  reload: 61470,
+  open: 61587,
+  undo: 61666,
+  detach: 61772,
 };
 export default {
-	props: ["icon"],
-	computed: {
-		text() {
-			return mapping[this.icon];
-		},
-	},
+  props: ["icon"],
+  computed: {
+    text() {
+      return String.fromCharCode(mapping[this.icon]);
+    },
+  },
 };
 </script>

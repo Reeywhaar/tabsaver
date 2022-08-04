@@ -1,11 +1,11 @@
 @font-face {
-  font-family: IcoMoon;
-  src: url(/icons/icomoon-icons/icomoon.woff);
+  font-family: Icons;
+  src: url(/icons/icons.woff);
 }
 
 :root {
   --background-color: #fff;
-  --hover-color: hsl(200, 60%, 70%);
+  --hover-color: hsl(200, 67%, 60%);
   --prefs-bg-color: hsl(0, 0%, 95%);
   --prefs-border-color: rgba(0, 0, 0, 0.1);
   --overlay-color: #fff;
@@ -15,7 +15,7 @@
   --tab-header-color: hsla(200, 10%, 95%, 0.5);
   --transparent-overlay-color: rgba(0, 0, 0, 0.1);
   --title-border-color: #fff;
-  --link-color: hsl(210, 90%, 45%);
+  --link-color: hsl(200, 49%, 48%);
   --drop-border-color: rgba(0, 0, 0, 0.4);
   --separatorLightness: 0%;
 }
@@ -43,7 +43,8 @@ button {
 }
 
 .font-icon {
-  font-family: IcoMoon;
+  font-family: Icons;
+  font-size: 1rem;
 }
 
 .hidden {
@@ -95,10 +96,6 @@ button {
   font: inherit;
   padding: 0.2em 0.3em;
   border-radius: 0.2em;
-}
-
-.inline-button:hover:not(:disabled) {
-  color: var(--hover-color);
 }
 
 .inline-button:active:not(:disabled) {
@@ -240,10 +237,6 @@ body.sidebar .main {
   color: #fff;
 }
 
-.window-tabset__button {
-  padding: 0 0.2em;
-}
-
 .tabset__item {
   padding: var(--padding-y) var(--padding-x);
   background: var(--tab-header-color);
@@ -288,26 +281,16 @@ body.sidebar .main {
   margin-bottom: -1px;
 }
 
-.tabset__link-remove-button {
-  margin-right: 1.2em;
-}
-
-.tabset__link-reload-button {
-  font-size: 1.1em;
-}
-
-.tabset__link-reload-button,
-.tabset__link-remove-button {
+.tabset__link-button {
   line-height: 0.8em;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-.tabset__link-remove-button {
-  font-size: 70%;
+.tabset__link-button:hover {
+  opacity: 1;
 }
 
-.tabset__link-container:not(:hover) .tabset__link-reload-button,
-.tabset__link-container:not(:hover) .tabset__link-remove-button {
+.tabset__link-container:not(:hover) .tabset__link-button {
   display: none;
 }
 
@@ -357,7 +340,6 @@ body.sidebar .main {
   align-items: center;
   position: absolute;
   top: calc(var(--padding-y) / 2);
-  background: var(--overlay-color);
   color: var(--text-color);
   padding-top: 0.2em;
 
@@ -366,15 +348,11 @@ body.sidebar .main {
 
   right: 0;
 
-  padding-left: 0.3em;
-  padding-right: 1em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
 
   border-top-left-radius: 0.3em;
   border-bottom-left-radius: 0.3em;
-}
-
-.tabset__controls:not(:hover) {
-  opacity: 0.5;
 }
 
 .tabset__item:not(:hover) .tabset__controls {
@@ -382,26 +360,11 @@ body.sidebar .main {
 }
 
 .tabset__button {
-  font-size: 130%;
+  opacity: 0.5;
 }
 
-.tabset__button-open,
-.tabset__button-add,
-.tabset__button-save {
-  padding: 0;
-}
-
-.tabset__button-remove {
-  font-size: 80%;
-}
-
-.tabset__button-reload {
-  padding-left: 0;
-}
-
-.tabset__button-more {
-  position: relative;
-  top: -0.25em;
+.tabset__button:hover {
+  opacity: 1;
 }
 
 /* tabsets */
@@ -476,6 +439,7 @@ body.sidebar .main {
   align-items: center;
   justify-content: space-around;
   background: var(--prefs-bg-color);
+  padding-right: 0.2em;
 }
 
 .prefs__pinned {
@@ -485,51 +449,25 @@ body.sidebar .main {
 
 .prefs__pinned-button {
   color: var(--text-color);
+  border-radius: 6px;
 }
 
 .prefs__pinned-button[data-state="on"] {
   background-color: var(--hover-color);
+  color: var(--background-color);
 }
 
-body.popup .prefs__pinned-button {
-  border-radius: 6px;
-}
-
-.prefs__undo {
-  /* padding: 0.5em; */
+.prefs__button {
   opacity: 0.5;
+}
+
+.prefs__button:hover:not(:disabled) {
+  opacity: 1;
 }
 
 .prefs__icon {
-  font-size: 8pt;
   line-height: 1em;
   vertical-align: middle;
-}
-
-.prefs__icon-prefs {
-  font-size: 10pt;
-}
-
-.prefs__options-button {
-  font-size: 140%;
-  opacity: 0.5;
-  padding: 0.2em;
-  line-height: 0.6em;
-  position: relative;
-  top: -0.1em;
-}
-
-body.sidebar .prefs__options-button {
-  margin-right: 0.2em;
-}
-
-.prefs__detach-button {
-  font-size: 140%;
-  opacity: 0.5;
-  padding: 0.2em;
-  line-height: 0.6em;
-  margin-right: 0.2em;
-  position: relative;
 }
 
 body.sidebar .prefs__detach-button {

@@ -4,21 +4,25 @@
     @dragover="onDragover($event)"
     @dragend="onDragend($event)"
     @drop="onDrop($event)"
-    :class="{'window-tabset-incognito': tabset.incognito}"
+    :class="{ 'window-tabset-incognito': tabset.incognito }"
   >
     <div class="tabset__item">
-      <span class="tabset__title" @click="toggleCollapse">Window {{title}}</span>
-      <span v-if="showCount" class="tabset__count">{{tabset.tabs.length}}</span>
+      <span class="tabset__title" @click="toggleCollapse"
+        >Window {{ title }}</span
+      >
+      <span v-if="showCount" class="tabset__count">{{
+        tabset.tabs.length
+      }}</span>
       <div class="tabset__controls">
         <button
-          class="inline-button tabset__button window-tabset__button tabset__button-add"
+          class="inline-button tabset__button"
           @click="createTab()"
           title="Create Tab"
         >
           <icon icon="add"></icon>
         </button>
         <hold-button
-          class="inline-button tabset__button window-tabset__button tabset__button-reload"
+          class="inline-button tabset__button"
           @click="reloadAllTabs($event)"
           @cancel="onHoldCancel('reload all tabs')"
           title="Reload all tabs"
@@ -26,21 +30,23 @@
           <icon icon="reload"></icon>
         </hold-button>
         <hold-button
-          class="inline-button tabset__button window-tabset__button tabset__button-remove"
+          class="inline-button tabset__button"
           @click="closeWindow()"
           @cancel="onHoldCancel('close window')"
           title="Close Window"
         >
-          <icon icon="cross"></icon>
+          <icon icon="close"></icon>
         </hold-button>
       </div>
     </div>
     <div class="tabset__links" v-if="!collapsed">
-      <div v-if="tabset.tabs.length === 0" class="tabset__links-empty">No Tabs</div>
+      <div v-if="tabset.tabs.length === 0" class="tabset__links-empty">
+        No Tabs
+      </div>
       <div
         v-for="tab in tabset.tabs"
         class="tabset__link-container"
-        :class="{'tabsaver__tab-current': isCurrentTab(tab)}"
+        :class="{ 'tabsaver__tab-current': isCurrentTab(tab) }"
         :key="tab.url"
         draggable="true"
         @dragstart="onTabDrag($event, tab)"
@@ -52,18 +58,18 @@
           @mouseup.native="handleClick($event, tab)"
         ></tabset-tab>
         <button
-          class="inline-button tabset__link-reload-button"
+          class="inline-button tabset__link-button"
           title="Reload tab"
           @mousedown="reloadTab(tab, $event)"
         >
           <icon icon="reload"></icon>
         </button>
         <button
-          class="inline-button tabset__link-remove-button"
+          class="inline-button tabset__link-button"
           title="Remove tab"
           @click="closeTab(tab)"
         >
-          <icon icon="cross"></icon>
+          <icon icon="close"></icon>
         </button>
       </div>
     </div>
@@ -82,7 +88,7 @@ export default {
     "tabset-tab": TabsetTabComponent,
     "hold-button": HoldButtonComponent,
     "color-select": ColorSelectComponent,
-    icon: IconComponent
+    icon: IconComponent,
   },
   data() {
     let collapsed = true;
@@ -96,7 +102,7 @@ export default {
       collapsed = false;
     }
     return {
-      collapsed
+      collapsed,
     };
   },
   computed: {
@@ -106,7 +112,8 @@ export default {
   },
   methods: {
     isCurrentTab(tab) {
-      return first(this.$store.state.currentTabs, x => x.id === tab.id) === null
+      return first(this.$store.state.currentTabs, (x) => x.id === tab.id) ===
+        null
         ? false
         : true;
     },
@@ -117,13 +124,13 @@ export default {
       }
 
       browser.tabs.reload(tab.id, {
-        bypassCache: event.shiftKey
+        bypassCache: event.shiftKey,
       });
     },
     reloadAllTabs(event) {
       for (let tab of this.$props.tabset.tabs) {
         browser.tabs.reload(tab.id, {
-          bypassCache: event.shiftKey
+          bypassCache: event.shiftKey,
         });
       }
     },
@@ -150,7 +157,7 @@ export default {
         event.preventDefault();
         await Promise.all([
           browser.tabs.update(tab.id, { active: true }),
-          browser.windows.update(tab.windowId, { focused: true })
+          browser.windows.update(tab.windowId, { focused: true }),
         ]);
       } else if (event.which === 2) {
         event.preventDefault();
@@ -174,7 +181,7 @@ export default {
     onDragover(event) {
       if (
         !event.dataTransfer.types.find(
-          type => type === "tabsaver/native-tab" || type === "tabsaver/tab"
+          (type) => type === "tabsaver/native-tab" || type === "tabsaver/tab"
         )
       )
         return;
@@ -206,7 +213,7 @@ export default {
           );
           browser.tabs.move(tab.id, {
             index: -1,
-            windowId: this.$props.tabset.id
+            windowId: this.$props.tabset.id,
           });
           return;
         } else {
@@ -224,11 +231,11 @@ export default {
           browser.tabs
             .create({
               url: tab.tab.url,
-              cookieStoreId: tab.tab.cookieStoreId
+              cookieStoreId: tab.tab.cookieStoreId,
             })
-            .catch(e => {
+            .catch((e) => {
               browser.tabs.create({
-                url: tab.tab.url
+                url: tab.tab.url,
               });
             });
           return;
@@ -236,7 +243,7 @@ export default {
       } else {
         const el = parentMatching(event.target, ".tabset__link-container");
         if (!el) return;
-        const ch = this.$children.find(ch => el.contains(ch.$el));
+        const ch = this.$children.find((ch) => el.contains(ch.$el));
         if (!ch) return;
 
         let append = eventYProportion(event, el) ? 1 : 0;
@@ -261,7 +268,7 @@ export default {
 
           browser.tabs.move(tab.id, {
             index: ch.$props.link.index + append,
-            windowId: this.$props.tabset.id
+            windowId: this.$props.tabset.id,
           });
           return;
         } else {
@@ -272,14 +279,14 @@ export default {
               windowId: this.tabset.id,
               url: tab.tab.url,
               cookieStoreId: tab.tab.cookieStoreId,
-              index: ch.$props.link.index + append
+              index: ch.$props.link.index + append,
             })
-            .catch(e => {
+            .catch((e) => {
               browser.tabs.create({
                 active: false,
                 windowId: this.tabset.id,
                 url: tab.tab.url,
-                index: ch.$props.link.index + append
+                index: ch.$props.link.index + append,
               });
             });
         }
@@ -310,12 +317,12 @@ export default {
       browser.tabs.create({
         active: true,
         windowId: this.$props.tabset.id,
-        index
+        index,
       });
     },
     closeWindow() {
       browser.windows.remove(this.$props.tabset.id);
-    }
-  }
+    },
+  },
 };
 </script>

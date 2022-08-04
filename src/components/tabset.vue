@@ -1,6 +1,6 @@
 <template>
   <div class="tabset" v-if="tabset">
-    <div class="tabset__item" :style="{'background-color': headerColor}">
+    <div class="tabset__item" :style="{ 'background-color': headerColor }">
       <span
         class="tabset__title"
         @click="toggleCollapse"
@@ -9,20 +9,27 @@
         @focusout.stop="rename()"
         :contenteditable="editable"
         title="Click to show stored tabs, double click to edit name"
-      >{{tabset.key}}</span>
-      <span v-if="showCount" class="tabset__count">{{tabset.data.length}}</span>
+        >{{ tabset.key }}</span
+      >
+      <span v-if="showCount" class="tabset__count">{{
+        tabset.data.length
+      }}</span>
       <div class="tabset__controls">
-        <color-select class="tabset__color-select" :value="tabset.color" @input="setColor($event)"></color-select>
+        <color-select
+          class="tabset__color-select"
+          :value="tabset.color"
+          @input="setColor($event)"
+        ></color-select>
         <button
           @click="open()"
-          class="inline-button tabset__button tabset__button-open"
+          class="inline-button tabset__button"
           title="Open TabSet"
         >
           <icon icon="open"></icon>
         </button>
         <button
           @click="addCurrentTab()"
-          class="inline-button tabset__button tabset__button-add"
+          class="inline-button tabset__button"
           title="Add current tab to TabSet"
         >
           <icon icon="add"></icon>
@@ -30,7 +37,7 @@
         <hold-button
           @click="save()"
           @cancel="onHoldCancel('save TabSet')"
-          class="inline-button tabset__button tabset__button-save"
+          class="inline-button tabset__button"
           title="Save current window under selected TabSet"
         >
           <icon icon="save"></icon>
@@ -38,10 +45,10 @@
         <hold-button
           @click="remove()"
           @cancel="onHoldCancel('remove TabSet')"
-          class="inline-button tabset__button tabset__button-remove"
+          class="inline-button tabset__button"
           title="Remove TabSet"
         >
-          <icon icon="cross"></icon>
+          <icon icon="close"></icon>
         </hold-button>
       </div>
     </div>
@@ -51,11 +58,13 @@
         class="tabset__links-empty"
         @dragover="onTabDragover($event)"
         @drop="onTabDrop($event, null)"
-      >No Tabs</div>
+      >
+        No Tabs
+      </div>
       <div
         v-for="(tab, index) in tabset.data"
         class="tabset__link-container"
-        :class="{'tabsaver__tab-current': isCurrentTab(tab)}"
+        :class="{ 'tabsaver__tab-current': isCurrentTab(tab) }"
         :key="tab.url"
         draggable="true"
         :data-index="index"
@@ -72,12 +81,12 @@
           @mouseup.native="handleClick($event, tab)"
         ></tabset-tab>
         <hold-button
-          class="inline-button tabset__link-remove-button"
+          class="inline-button tabset__link-button"
           title="Remove tab"
           @click="removeTab(tab)"
           @cancel="onHoldCancel('remove tab')"
         >
-          <icon icon="cross"></icon>
+          <icon icon="close"></icon>
         </hold-button>
       </div>
     </div>
@@ -96,12 +105,12 @@ export default {
     "tabset-tab": TabsetTabComponent,
     "hold-button": HoldButtonComponent,
     "color-select": ColorSelectComponent,
-    icon: IconComponent
+    icon: IconComponent,
   },
   data() {
     return {
       collapsed: true,
-      editable: false
+      editable: false,
     };
   },
   computed: {
@@ -119,7 +128,7 @@ export default {
       if (this.$store.getters.currentWindow === null) return false;
       return first(
         this.$store.state.currentTabs,
-        x =>
+        (x) =>
           x.windowId === this.$store.getters.currentWindow.id &&
           tab.url === x.url &&
           tab.cookieStoreId === x.cookieStoreId
@@ -144,7 +153,7 @@ export default {
         "tabsaver/tab",
         JSON.stringify({
           key: this.tabset.key,
-          tab
+          tab,
         })
       );
       e.dataTransfer.setData("text/plain", tab.url);
@@ -174,7 +183,7 @@ export default {
 
             await this.$store.dispatch("tabsetAppend", [
               this.tabset.key,
-              data.tab
+              data.tab,
             ]);
             await this.$store.dispatch("tabsetRemoveTab", [data.key, data.tab]);
             return;
@@ -202,7 +211,7 @@ export default {
               data.tab,
               this.tabset.key,
               tab,
-              after
+              after,
             ]);
             return;
           } else if (
@@ -214,7 +223,8 @@ export default {
             const tabExists =
               first(
                 this.tabset.data,
-                x => x.url === tab.url && x.cookieStoreId === tab.cookieStoreId
+                (x) =>
+                  x.url === tab.url && x.cookieStoreId === tab.cookieStoreId
               ) !== null;
 
             if (tabExists) {
@@ -227,7 +237,7 @@ export default {
             await this.$store.dispatch("tabsetAppend", [
               this.tabset.key,
               tab,
-              index + after
+              index + after,
             ]);
             return;
           }
@@ -239,7 +249,7 @@ export default {
     },
     onTabDragover(event) {
       const type = event.dataTransfer.types.find(
-        type => type === "tabsaver/native-tab" || type === "tabsaver/tab"
+        (type) => type === "tabsaver/native-tab" || type === "tabsaver/tab"
       );
 
       if (!type) return;
@@ -311,7 +321,7 @@ export default {
         await this.$store.dispatch("tabsetSave", {
           key: this.tabset.key,
           color: this.tabset.color,
-          tabs
+          tabs,
         });
         // this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
       } catch (e) {
@@ -403,7 +413,7 @@ export default {
       await this.$store.dispatch("openUrl", [
         tab.url,
         tab.cookieStoreId,
-        newTab
+        newTab,
       ]);
     },
     handleDown(event) {
@@ -419,7 +429,7 @@ export default {
         event.ctrlKey ||
         this.$store.state.settings.openInNewTab;
       this.openTab(tab, newTab);
-    }
-  }
+    },
+  },
 };
 </script>
