@@ -7,8 +7,14 @@
         v-model="newTabSetName"
         placeholder="Add TabSet"
         @keydown.enter="createTabSet"
+      />
+      <button
+        class="button save-new__button"
+        title="Add TabSet"
+        @click="createTabSet"
       >
-      <button class="button save-new__button" title="Add TabSet" @click="createTabSet">+</button>
+        +
+      </button>
     </div>
     <div class="content" :style="contentStyle">
       <div class="tabsets">
@@ -19,9 +25,12 @@
           :key="window.id"
           :title="index + 1"
           class="tabsets__tabset tabsets__window-tabset"
-          :class="{'tabsets__window-tabset-current': isCurrentTabSet(window)}"
+          :class="{ 'tabsets__window-tabset-current': isCurrentTabSet(window) }"
         ></window-tabset>
-        <div class="tabsets__separator" v-if="windows.length > 0 && showWindows"></div>
+        <div
+          class="tabsets__separator"
+          v-if="windows.length > 0 && showWindows"
+        ></div>
         <tabset
           v-for="tabset in items"
           :tabset="tabset"
@@ -36,10 +45,12 @@
         ></tabset>
       </div>
     </div>
-    <div class="notification">{{notification}}</div>
+    <div class="notification">{{ notification }}</div>
     <div class="prefs">
       <div class="prefs__pinned" title="Include pinned tabs when saving">
-        <toggle-button class="prefs__pinned-button" v-model="pinned">Save Pinned</toggle-button>
+        <toggle-button class="prefs__pinned-button" v-model="pinned"
+          >Save Pinned</toggle-button
+        >
       </div>
       <hold-button
         @click="undo"
@@ -53,8 +64,16 @@
         class="inline-button prefs__options-button"
         @click="openSettings()"
         title="Open preferences"
-      >⚙</button>
-      <button class="inline-button prefs__detach-button" @click="detach()" title="Detach">➚</button>
+      >
+        ⚙
+      </button>
+      <button
+        class="inline-button prefs__detach-button"
+        @click="detach()"
+        title="Detach"
+      >
+        ➚
+      </button>
     </div>
   </div>
 </template>
@@ -72,14 +91,14 @@ export default {
     holdButton: HoldButtonComponent,
     toggleButton: ToggleButtonComponent,
     icon: IconComponent,
-    "window-tabset": WindowTabSetComponent
+    "window-tabset": WindowTabSetComponent,
   },
   data() {
     const hours = new Date().getHours();
     const daytime = hours >= 7 && hours < 20 ? "light" : "dark";
     return {
       newTabSetName: "",
-      daytime
+      daytime,
     };
   },
   mounted() {
@@ -105,9 +124,9 @@ export default {
       set(value) {
         this.$store.dispatch("setSetting", {
           key: "includePinned",
-          value
+          value,
         });
-      }
+      },
     },
     undoAvailable() {
       return this.$store.state.statesCount > 0;
@@ -117,9 +136,9 @@ export default {
     },
     contentStyle() {
       return {
-        minHeight: `${Math.min(this.$store.state.items.length, 15)}em`
+        minHeight: `${Math.min(this.$store.state.items.length, 15)}em`,
       };
-    }
+    },
   },
   methods: {
     onTabSetDrag(e, tabset) {
@@ -177,7 +196,7 @@ export default {
               data.tab,
               tabset.key,
               tabset.data[tabset.data.length - 1],
-              true
+              true,
             ]);
           }
         }
@@ -188,7 +207,7 @@ export default {
     },
     onDragover(event) {
       const type = event.dataTransfer.types.find(
-        type =>
+        (type) =>
           type === "tabsaver/native-tab" ||
           type === "tabsaver/tab" ||
           type === "tabsaver/tabset"
@@ -261,14 +280,14 @@ export default {
         width: 250,
         height: 500,
         top: 0,
-        left: 0
+        left: 0,
       });
     },
     isCurrentTabSet(window) {
       const c = this.$store.getters.currentWindow;
       if (!c) return false;
       return c.id === window.id;
-    }
-  }
+    },
+  },
 };
 </script>
