@@ -12,9 +12,8 @@
   --text-color: #444;
   --border-color: rgba(0, 0, 0, 0.2);
   --shadow-color: rgba(0, 0, 0, 0.2);
-  --tab-header-color: hsla(200, 10%, 95%, 0.5);
+  --tab-header-color: hsla(200, 10%, 98%, 1);
   --transparent-overlay-color: rgba(0, 0, 0, 0.1);
-  --title-border-color: #fff;
   --link-color: hsl(200, 49%, 48%);
   --drop-border-color: rgba(0, 0, 0, 0.4);
   --separatorLightness: 0%;
@@ -28,7 +27,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   html {
-    background-color: #444;
+    background-color: #222;
   }
 }
 
@@ -149,17 +148,16 @@ button {
 
 @media (prefers-color-scheme: dark) {
   .main {
-    --background-color: #444;
+    --background-color: #222;
     --hover-color: hsl(200, 60%, 60%);
     --prefs-bg-color: #444;
     --prefs-border-color: rgba(255, 255, 255, 0.1);
     --overlay-color: #222;
     --text-color: #efefef;
-    --border-color: rgba(255, 255, 255, 0.6);
+    --border-color: rgba(255, 255, 255, 0.25);
     --shadow-color: rgba(255, 255, 255, 0.9);
-    --tab-header-color: hsla(200, 10%, 95%, 0.1);
+    --tab-header-color: hsla(200, 10%, 15%, 1);
     --transparent-overlay-color: rgba(255, 255, 255, 0.1);
-    --title-border-color: rgba(255, 255, 255, 0.2);
     --link-color: hsl(200, 60%, 80%);
     --drop-border-color: rgba(255, 255, 255, 0.5);
     --separatorLightness: 80%;
@@ -286,6 +284,10 @@ body.sidebar .main {
   opacity: 0.5;
 }
 
+.tabset__link-button:last-child {
+  padding-right: 0.65em;
+}
+
 .tabset__link-button:hover {
   opacity: 1;
 }
@@ -339,6 +341,7 @@ body.sidebar .main {
   flex-wrap: nowrap;
   align-items: center;
   position: absolute;
+  background-color: var(--tab-header-color);
   top: calc(var(--padding-y) / 2);
   color: var(--text-color);
   padding-top: 0.2em;
@@ -348,8 +351,8 @@ body.sidebar .main {
 
   right: 0;
 
-  padding-left: 0.2em;
-  padding-right: 0.2em;
+  padding-left: 0.4em;
+  padding-right: 0.6em;
 
   border-top-left-radius: 0.3em;
   border-bottom-left-radius: 0.3em;
