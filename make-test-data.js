@@ -162,7 +162,7 @@ function generateTabset() {
   const links = Array.from(getRandomLinks(getRandomInt(3, 20))).map((x) => {
     return {
       url: x,
-      pinned: getRandomInt(0, 4) === 0 ? false : true,
+      pinned: getRandomInt(0, 4) === 0,
     };
   });
   return {
