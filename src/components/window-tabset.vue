@@ -5,6 +5,7 @@
     @dragend="onDragend($event)"
     @drop="onDrop($event)"
     :class="{ 'window-tabset-incognito': tabset.incognito }"
+    ref="root"
   >
     <div class="tabset__item">
       <span class="tabset__title" @click="toggleCollapse"
@@ -52,6 +53,7 @@
         @dragstart="onTabDrag($event, tab)"
       >
         <tabset-tab
+          :ref="setTabRef"
           class="tabset__link"
           :link="tab"
           @mousedown.native="handleDown($event)"
@@ -102,6 +104,7 @@ export default {
       collapsed = false;
     }
     return {
+      tabRefs: [],
       collapsed,
     };
   },
@@ -243,7 +246,7 @@ export default {
       } else {
         const el = parentMatching(event.target, ".tabset__link-container");
         if (!el) return;
-        const ch = this.$children.find((ch) => el.contains(ch.$el));
+        const ch = this.tabRefs.find((ch) => el.contains(ch.$el));
         if (!ch) return;
 
         let append = eventYProportion(event, el) ? 1 : 0;
@@ -322,6 +325,9 @@ export default {
     },
     closeWindow() {
       browser.windows.remove(this.$props.tabset.id);
+    },
+    setTabRef(el) {
+      if (el) this.tabRefs.push(el);
     },
   },
 };

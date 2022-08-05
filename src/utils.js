@@ -232,22 +232,6 @@ export function* reverse(iterable) {
   }
 }
 
-export function abortablePromise(fn) {
-  const subscribe = {};
-  subscribe.on = (fn) => {
-    subscribe.listener = fn;
-  };
-  subscribe.fire = () => {
-    if (!subscribe.listener) return;
-    subscribe.listener();
-  };
-  const promise = new Promise((resolve, reject) => {
-    fn(resolve, reject, subscribe.on);
-  });
-  promise.abort = () => subscribe.fire();
-  return promise;
-}
-
 export function cutString(str, len, ellipsis = "") {
   if (str.length <= len) return str;
   return str.substr(0, len - ellipsis.length) + ellipsis;
@@ -302,4 +286,8 @@ export function eventYProportion(event, target = event.currentTarget) {
   const y = event.clientY - rect.y;
   const proportion = y / rect.height;
   return proportion >= 0.5;
+}
+
+export function serialize(object) {
+  return JSON.parse(JSON.stringify(object));
 }

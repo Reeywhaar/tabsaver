@@ -1,6 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const { VueLoaderPlugin } = require("vue-loader");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const SvgMakerPlugin = require("@reeywhaar/svgmaker/webpack-plugin.js");
 
@@ -37,6 +37,8 @@ module.exports = (h, args) => {
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.DefinePlugin({
           "process.env.NODE_ENV": JSON.stringify(args.mode ?? "production"),
+          __VUE_OPTIONS_API__: true,
+          __VUE_PROD_DEVTOOLS__: false,
         }),
         ...[
           {
@@ -77,7 +79,7 @@ module.exports = (h, args) => {
           chunks: "all",
         },
       },
-      devtool: false,
+      devtool: args.mode === "development" ? "cheap-module-source-map" : false,
     },
   ];
 };

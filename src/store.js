@@ -1,8 +1,15 @@
 import { storage as Storage, settings as Settings } from "./shared.js";
 import { TabSet } from "./tabset.js";
 import { History as Undo } from "./history.js";
-import { reverse, sleep, debounce, first, parseQuery } from "./utils.js";
-import Vuex from "vuex/dist/vuex.esm.js";
+import {
+  reverse,
+  sleep,
+  debounce,
+  first,
+  parseQuery,
+  serialize,
+} from "./utils.js";
+import { createStore } from "vuex";
 
 export default async () => {
   const windowid = await (async () => {
@@ -32,7 +39,7 @@ export default async () => {
       }),
     ]);
 
-  const store = new Vuex.Store({
+  const store = new createStore({
     state: {
       windows,
       items,
@@ -128,7 +135,7 @@ export default async () => {
         return await browser.runtime.sendMessage({
           domain: "tabset",
           action: "add",
-          args: [key, await getWindowTabs()],
+          args: [key, serialize(await getWindowTabs())],
         });
       },
       async tabsetSave(context, { key, color, tabs = null }) {
@@ -137,6 +144,7 @@ export default async () => {
           if (!context.state.settings.includePinned) {
             tabs = tabs.filter((x) => !x.pinned);
           }
+          tabs = serialize(tabs);
         }
         return await browser.runtime.sendMessage({
           domain: "tabset",
@@ -184,7 +192,7 @@ export default async () => {
         return await browser.runtime.sendMessage({
           domain: "tabset",
           action: "removeTab",
-          args: [tabsetKey, tab],
+          args: [tabsetKey, serialize(tab)],
         });
       },
       async tabsetMoveTab(
@@ -194,7 +202,13 @@ export default async () => {
         return await browser.runtime.sendMessage({
           domain: "tabset",
           action: "moveTab",
-          args: [tabsetKey, tab, targetTabsetKey, targetTab, after],
+          args: [
+            tabsetKey,
+            serialize(tab),
+            targetTabsetKey,
+            serialize(targetTab),
+            after,
+          ],
         });
       },
       async clearTabsets(context) {

@@ -93,7 +93,7 @@
   </div>
 </template>
 <script>
-import { sleep, firstIndex, first, eventYProportion } from "../utils.js";
+import { sleep, first, eventYProportion } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
