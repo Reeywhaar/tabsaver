@@ -58,6 +58,12 @@ And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -
 
 # CHANGELOG
 
+## `v.0.2.4`
+
+- Style improvements. Fixed controls interaction with text and scrollbars
+- Size of the window is now saved
+- Updated to Vue 3
+
 ## `v.0.2.3`
 
 - Style improvements. Theme now obeys firefox's theme (dark, light)
