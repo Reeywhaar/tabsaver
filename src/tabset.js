@@ -42,7 +42,7 @@ export const TabSet = {
   async saveAll(tabs) {
     await storage.set("tabs", tabs);
   },
-  async save(key, tabs, color = null) {
+  async save(key, tabs, color = null, size) {
     const tabsData = tabs
       .map((x) => serializeTab(x))
       .filter((x) => {
@@ -56,22 +56,24 @@ export const TabSet = {
       throw new Error("TabSet is empty");
     }
     const d = await TabSet.getAll();
-    const index = firstIndex(d, (x) => {
+    const existing = d.find((x) => {
       return x.key === key;
     });
-    if (index !== -1) {
-      d[index].data = tabsData;
-      d[index].color = color;
+    if (existing) {
+      existing.data = tabsData;
+      existing.color = color;
+      existing.size = size;
     } else {
       d.push({
         key,
         data: tabsData,
         color,
+        size,
       });
     }
     await TabSet.saveAll(d);
   },
-  async add(key, tabs) {
+  async add(key, tabs, size) {
     if (key === null || key === "") {
       key = getDefaultTabSetName();
     }
@@ -93,7 +95,7 @@ export const TabSet = {
         throw new Error(`Set exists under name "${set.key}"`);
       }
     }
-    return await this.save(key, tabs);
+    return await this.save(key, tabs, undefined, size);
   },
   async open(key) {
     const tabset = first(await TabSet.getAll(), (x) => x.key === key);
@@ -118,7 +120,10 @@ export const TabSet = {
     if (allowedTabs.length === 0) {
       throw new Error("Trying to open empty TabSet");
     }
-    const window = await browser.windows.create();
+    const window = await browser.windows.create({
+      width: tabset.size ? tabset.size[0] : undefined,
+      height: tabset.size ? tabset.size[1] : undefined,
+    });
     const tabNeedToBeClosed = window.tabs[0];
     for (const [index, tab] of allowedTabs.entries()) {
       const props = {

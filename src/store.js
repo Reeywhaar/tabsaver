@@ -18,11 +18,19 @@ export default async () => {
     return null;
   })();
 
-  async function getWindowTabs() {
-    const window = await (windowid === null
+  async function getCurrentWindow() {
+    return windowid === null
       ? browser.windows.getCurrent({ populate: true })
-      : browser.windows.get(windowid, { populate: true }));
-    return window.tabs;
+      : browser.windows.get(windowid, { populate: true });
+  }
+
+  async function getWindowTabs() {
+    return (await getCurrentWindow()).tabs;
+  }
+
+  async function getWindowSize() {
+    const window = await getCurrentWindow();
+    return [window.width, window.height];
   }
 
   const [items, settings, statesCount, windows, currentTabs] =
@@ -135,7 +143,7 @@ export default async () => {
         return await browser.runtime.sendMessage({
           domain: "tabset",
           action: "add",
-          args: [key, serialize(await getWindowTabs())],
+          args: [key, serialize(await getWindowTabs(), await getWindowSize())],
         });
       },
       async tabsetSave(context, { key, color, tabs = null }) {
@@ -146,10 +154,11 @@ export default async () => {
           }
           tabs = serialize(tabs);
         }
+        const size = await getWindowSize();
         return await browser.runtime.sendMessage({
           domain: "tabset",
           action: "save",
-          args: [key, tabs, color],
+          args: [key, tabs, color, size],
         });
       },
       async tabsetRename(context, [oldkey, newkey]) {
