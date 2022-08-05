@@ -13,7 +13,7 @@
         title="Add TabSet"
         @click="createTabSet"
       >
-        +
+        <icon icon="add"></icon>
       </button>
     </div>
     <div class="content" :style="contentStyle">
