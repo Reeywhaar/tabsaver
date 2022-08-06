@@ -453,11 +453,15 @@ body.sidebar .main {
 .prefs__pinned-button {
   color: var(--text-color);
   border-radius: 6px;
+  background: none;
+  padding: 0.2em;
+  opacity: 0.6 !important;
 }
 
 .prefs__pinned-button[data-state="on"] {
-  background-color: var(--hover-color);
-  color: var(--background-color);
+  color: var(--hover-color);
+  background: none;
+  opacity: 1 !important;
 }
 
 .prefs__button {
