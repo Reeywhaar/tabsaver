@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tabset window-tabset"
+    class="tabset"
     @dragover="onDragover($event)"
     @dragend="onDragend($event)"
     @drop="onDrop($event)"

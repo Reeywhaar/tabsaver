@@ -241,7 +241,7 @@ body.sidebar .main {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  line-height: 1.5em;
+  line-height: 1.5rem;
   position: relative;
 }
 
@@ -344,10 +344,9 @@ body.sidebar .main {
   background-color: var(--tab-header-color);
   top: calc(var(--padding-y) / 2);
   color: var(--text-color);
-  padding-top: 0.2em;
 
-  line-height: 1em;
-  height: 1.6em;
+  line-height: 1.5em;
+  height: 1.5rem;
 
   right: 0;
 
