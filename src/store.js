@@ -1,6 +1,4 @@
-import { storage as Storage, settings as Settings } from "./shared.js";
-import { TabSet } from "./services/tabset.js";
-import { History } from "./services/history.js";
+import { createStore } from "vuex";
 import {
   reverse,
   sleep,
@@ -9,12 +7,8 @@ import {
   parseQuery,
   serialize,
 } from "./utils.js";
-import { createStore } from "vuex";
 
-export default async () => {
-  const tabset = new TabSet();
-  const history = new History();
-
+export default async (storage, settings, tabset, history) => {
   const windowid = await (async () => {
     const query = parseQuery(location.search);
     if ("windowid" in query) return parseInt(query.windowid, 10);
@@ -36,10 +30,10 @@ export default async () => {
     return [window.width, window.height];
   }
 
-  const [items, settings, statesCount, windows, currentTabs] =
+  const [items, settingsData, statesCount, windows, currentTabs] =
     await Promise.all([
       tabset.getAll(),
-      Settings.getAll(),
+      settings.getAll(),
       history.count(),
       browser.windows.getAll({
         populate: true,
@@ -54,7 +48,7 @@ export default async () => {
     state: {
       windows,
       items,
-      settings,
+      settings: settingsData,
       statesCount,
       notification: "",
       notificationCounter: 0,
@@ -132,7 +126,7 @@ export default async () => {
         context.commit("updateItems", await tabset.getAll());
       },
       async setSetting(context, { key, value }) {
-        await Settings.set(key, value);
+        await settings.set(key, value);
         context.commit("setSetting", { key, value });
       },
       async tabsetOpen(context, key = null) {
@@ -224,7 +218,7 @@ export default async () => {
         });
       },
       async clearTabsets(context) {
-        await Storage.set("tabs", []);
+        await storage.set("tabs", []);
       },
       async openUrl(context, [url, identity, newTab = true]) {
         return await browser.runtime.sendMessage({

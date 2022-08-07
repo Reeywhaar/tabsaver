@@ -1,6 +1,5 @@
 import { oneOf, getKey, padLeft, setsAreEqual } from "../utils.js";
 import {
-  storage,
   getMangledURL,
   getUnmangledURL,
   DEFAULT_COOKIE_STORE_ID,
@@ -8,12 +7,14 @@ import {
 } from "../shared.js";
 
 export class TabSet {
+  storage;
+
   async getAll() {
-    return storage.get("tabs", []);
+    return this.storage.get("tabs", []);
   }
 
   async saveAll(tabs) {
-    await storage.set("tabs", tabs);
+    await this.storage.set("tabs", tabs);
   }
 
   async save(key, tabs, color = null, size) {

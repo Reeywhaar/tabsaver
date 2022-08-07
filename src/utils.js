@@ -282,3 +282,30 @@ export function eventYProportion(event, target = event.currentTarget) {
 export function serialize(object) {
   return JSON.parse(JSON.stringify(object));
 }
+
+export async function processListeners(
+  listeners,
+  key,
+  value,
+  blocking = false
+) {
+  let failedcbs = [];
+  for (let cb of listeners) {
+    try {
+      if (blocking) {
+        await cb(key, value);
+      } else {
+        cb(key, value);
+      }
+    } catch (e) {
+      if (e.message === "can't access dead object") {
+        failedcbs.push(cb);
+      } else {
+        throw e;
+      }
+    }
+  }
+  for (let fcb of failedcbs) {
+    listeners.splice(listeners.indexOf(fcb), 1);
+  }
+}

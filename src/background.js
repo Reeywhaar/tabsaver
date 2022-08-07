@@ -1,14 +1,12 @@
 import { saveFile } from "./utils.js";
-import { openURL, storage, settings } from "./shared.js";
-import { TabSet } from "./services/tabset.js";
-import { History } from "./services/history.js";
+import { openURL } from "./shared.js";
 import { diff as objdiff, applyChange } from "deep-diff";
+import { createServices } from "./createServices.js";
 
 async function main() {
   let trackHistory = true;
 
-  const tabset = new TabSet();
-  const history = new History();
+  const { settings, storage, tabset, history } = createServices();
 
   browser.runtime.onMessage.addListener(async (msg) => {
     if (typeof msg === "object") {
