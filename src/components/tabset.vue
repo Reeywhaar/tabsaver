@@ -93,7 +93,7 @@
   </div>
 </template>
 <script>
-import { sleep, first, eventYProportion } from "../utils.js";
+import { sleep, first, eventYProportion, serialize } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -321,7 +321,7 @@ export default {
         await this.$store.dispatch("tabsetSave", {
           key: this.tabset.key,
           color: this.tabset.color,
-          tabs,
+          tabs: serialize(tabs),
         });
         // this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
       } catch (e) {
