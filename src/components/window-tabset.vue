@@ -31,7 +31,7 @@
           <icon icon="reload"></icon>
         </hold-button>
         <hold-button
-          class="inline-button tabset__button"
+          class="inline-button tabset__button tabset__button-remove"
           @click="closeWindow()"
           @cancel="onHoldCancel('close window')"
           title="Close Window"

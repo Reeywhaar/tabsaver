@@ -361,6 +361,10 @@ body.sidebar .main {
   opacity: 0;
 }
 
+.tabset__color-select {
+  margin-bottom: -0.1rem;
+}
+
 .tabset__button {
   opacity: 0.5;
   height: 1.5rem;
@@ -371,6 +375,10 @@ body.sidebar .main {
 
 .tabset__button:hover {
   opacity: 1;
+}
+
+.tabset__button-remove {
+  margin-top: -0.15rem;
 }
 
 /* tabsets */

@@ -45,7 +45,7 @@
         <hold-button
           @click="remove()"
           @cancel="onHoldCancel('remove TabSet')"
-          class="inline-button tabset__button"
+          class="inline-button tabset__button tabset__button-remove"
           title="Remove TabSet"
         >
           <icon icon="close"></icon>
