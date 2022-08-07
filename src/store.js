@@ -35,7 +35,7 @@ export default async () => {
 
   const [items, settings, statesCount, windows, currentTabs] =
     await Promise.all([
-      TabSet.getAll(),
+      TabSet.shared.getAll(),
       Settings.getAll(),
       Undo.count(),
       browser.windows.getAll({
@@ -126,7 +126,7 @@ export default async () => {
           context.commit("setNotification", "");
       },
       async updateItems(context) {
-        context.commit("updateItems", await TabSet.getAll());
+        context.commit("updateItems", await TabSet.shared.getAll());
       },
       async setSetting(context, { key, value }) {
         await Settings.set(key, value);

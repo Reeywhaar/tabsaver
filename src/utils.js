@@ -78,15 +78,6 @@ export async function readFileAsJson() {
  * @param {any[]} array
  * @param {function} fn
  */
-export function firstIndex(array, fn) {
-  return Array.from(array).findIndex(fn);
-}
-
-/**
- *
- * @param {any[]} array
- * @param {function} fn
- */
 export function first(array, fn) {
   return Array.from(array).find(fn) || null;
 }

@@ -121,21 +121,10 @@ export function getMangledURL(url) {
 }
 
 export function getUnmangledURL(url) {
-  if (url.indexOf(browser.runtime.getURL("/dist/handler.html")) === 0) {
-    const qu = parseQuery("?" + strAfter(url, "handler.html?"));
-    return qu.url;
+  if (url.startsWith(browser.runtime.getURL("/dist/handler.html"))) {
+    return parseQuery("?" + strAfter(url, "handler.html?")).url;
   }
   return url;
-}
-
-export function tabSetsAreEqual(setA, setB) {
-  setA = setA.filter((x) => {
-    return !oneOf(x, "", "about:blank", "about:newtab");
-  });
-  setB = setB.filter((x) => {
-    return !oneOf(x, "", "about:blank", "about:newtab");
-  });
-  return setsAreEqual(setA, setB);
 }
 
 export async function openURL(
@@ -193,12 +182,4 @@ export async function openURL(
       throw e;
     }
   }
-}
-
-export function getDefaultTabSetName() {
-  const date = new Date();
-  const pl = padLeft.bind(null, 2, "0");
-  return `${date.getFullYear()}-${pl(date.getMonth() + 1)}-${pl(
-    date.getDate()
-  )} ${pl(date.getHours())}:${pl(date.getMinutes())}`;
 }

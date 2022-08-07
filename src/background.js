@@ -11,13 +11,13 @@ async function main() {
     if (typeof msg === "object") {
       switch (msg.type) {
         case "import":
-          await TabSet.saveAll(msg.data);
+          await TabSet.shared.saveAll(msg.data);
           return;
       }
     }
     switch (msg) {
       case "export":
-        const out = JSON.stringify(await TabSet.getAll(), null, 2);
+        const out = JSON.stringify(await TabSet.shared.getAll(), null, 2);
         try {
           await saveFile(out, "export.tabsaver.json");
         } catch (e) {}
@@ -26,7 +26,7 @@ async function main() {
         try {
           trackHistory = false;
           let last = await History.pop();
-          let target = await TabSet.getAll();
+          let target = await TabSet.shared.getAll();
           for (let change of last) {
             applyChange(target, target, change);
           }
@@ -38,7 +38,7 @@ async function main() {
     if (typeof msg === "object" && "domain" in msg) {
       switch (msg.domain) {
         case "tabset":
-          return await TabSet[msg.action](...msg.args);
+          return await TabSet.shared[msg.action](...msg.args);
         case "openURL":
           return await openURL(...msg.args);
       }
