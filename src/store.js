@@ -1,6 +1,6 @@
 import { storage as Storage, settings as Settings } from "./shared.js";
 import { TabSet } from "./services/tabset.js";
-import { History as Undo } from "./history.js";
+import { History } from "./services/history.js";
 import {
   reverse,
   sleep,
@@ -12,13 +12,14 @@ import {
 import { createStore } from "vuex";
 
 export default async () => {
+  const tabset = new TabSet();
+  const history = new History();
+
   const windowid = await (async () => {
     const query = parseQuery(location.search);
     if ("windowid" in query) return parseInt(query.windowid, 10);
     return null;
   })();
-
-  const tabset = new TabSet();
 
   async function getCurrentWindow() {
     return windowid === null
@@ -39,7 +40,7 @@ export default async () => {
     await Promise.all([
       tabset.getAll(),
       Settings.getAll(),
-      Undo.count(),
+      history.count(),
       browser.windows.getAll({
         populate: true,
         windowTypes: ["normal"],
@@ -232,7 +233,7 @@ export default async () => {
         });
       },
       async updateStatesCount(context) {
-        const count = await Undo.count();
+        const count = await history.count();
         context.commit("updateStatesCount", count);
       },
       async undo(context) {
