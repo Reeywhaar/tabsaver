@@ -1,15 +1,13 @@
-import { oneOf, getKey, padLeft, setsAreEqual } from "./utils.js";
+import { oneOf, getKey, padLeft, setsAreEqual } from "../utils.js";
 import {
   storage,
   getMangledURL,
   getUnmangledURL,
   DEFAULT_COOKIE_STORE_ID,
   PRIVATE_COOKIE_STORE_ID,
-} from "./shared.js";
+} from "../shared.js";
 
 export class TabSet {
-  static shared = new TabSet();
-
   async getAll() {
     return storage.get("tabs", []);
   }

@@ -1,5 +1,5 @@
 import { storage as Storage, settings as Settings } from "./shared.js";
-import { TabSet } from "./tabset.js";
+import { TabSet } from "./services/tabset.js";
 import { History as Undo } from "./history.js";
 import {
   reverse,
@@ -18,6 +18,8 @@ export default async () => {
     return null;
   })();
 
+  const tabset = new TabSet();
+
   async function getCurrentWindow() {
     return windowid === null
       ? browser.windows.getCurrent({ populate: true })
@@ -35,7 +37,7 @@ export default async () => {
 
   const [items, settings, statesCount, windows, currentTabs] =
     await Promise.all([
-      TabSet.shared.getAll(),
+      tabset.getAll(),
       Settings.getAll(),
       Undo.count(),
       browser.windows.getAll({
@@ -126,7 +128,7 @@ export default async () => {
           context.commit("setNotification", "");
       },
       async updateItems(context) {
-        context.commit("updateItems", await TabSet.shared.getAll());
+        context.commit("updateItems", await tabset.getAll());
       },
       async setSetting(context, { key, value }) {
         await Settings.set(key, value);
