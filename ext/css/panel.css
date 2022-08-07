@@ -109,6 +109,7 @@ button {
   display: flex;
   flex-direction: row;
   display: inline-block;
+  align-items: center;
 }
 
 .color-select__item {
@@ -285,7 +286,7 @@ body.sidebar .main {
 }
 
 .tabset__link-button:last-child {
-  padding-right: 0.65em;
+  margin-right: 0.4rem;
 }
 
 .tabset__link-button:hover {
@@ -342,7 +343,6 @@ body.sidebar .main {
   align-items: center;
   position: absolute;
   background-color: var(--tab-header-color);
-  top: calc(var(--padding-y) / 2);
   color: var(--text-color);
 
   line-height: 1.5em;
@@ -350,11 +350,11 @@ body.sidebar .main {
 
   right: 0;
 
-  padding-left: 0.4em;
-  padding-right: 0.6em;
+  padding-left: 0.4rem;
+  padding-right: 0.6rem;
 
-  border-top-left-radius: 0.3em;
-  border-bottom-left-radius: 0.3em;
+  border-top-left-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
 }
 
 .tabset__item:not(:hover) .tabset__controls {
@@ -363,6 +363,10 @@ body.sidebar .main {
 
 .tabset__button {
   opacity: 0.5;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .tabset__button:hover {
