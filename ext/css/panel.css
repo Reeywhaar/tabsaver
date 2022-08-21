@@ -259,21 +259,16 @@ body.sidebar .main {
 }
 
 .tabset__links-empty {
-  content: "No tabs";
-  font-weight: bold;
+  opacity: 0.3;
   display: block;
-  margin-right: 0.2em;
-  margin-left: calc(var(--padding-x) * 1.4);
+  padding: 0.02rem var(--padding-x);
 }
 
 .tabset__link-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding-left: var(--padding-x);
-  padding-right: var(--padding-x);
-  padding-top: 0.02rem;
-  padding-bottom: 0.02rem;
+  padding: 0.02rem var(--padding-x);
   line-height: 1.2em;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;

@@ -59,7 +59,7 @@
         @dragover="onTabDragover($event)"
         @drop="onTabDrop($event, null)"
       >
-        No Tabs
+        Empty...
       </div>
       <div
         v-for="(tab, index) in tabset.data"

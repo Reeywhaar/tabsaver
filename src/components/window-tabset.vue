@@ -42,7 +42,7 @@
     </div>
     <div class="tabset__links" v-if="!collapsed">
       <div v-if="tabset.tabs.length === 0" class="tabset__links-empty">
-        No Tabs
+        Empty...
       </div>
       <div
         v-for="tab in tabset.tabs"
