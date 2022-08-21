@@ -289,8 +289,8 @@ export async function processListeners(
   value,
   blocking = false
 ) {
-  let failedcbs = [];
-  for (let cb of listeners) {
+  let error;
+  for (const cb of listeners) {
     try {
       if (blocking) {
         await cb(key, value);
@@ -298,14 +298,16 @@ export async function processListeners(
         cb(key, value);
       }
     } catch (e) {
-      if (e.message === "can't access dead object") {
-        failedcbs.push(cb);
+      if (isDeadObjectError(e)) {
+        listeners.splice(listeners.indexOf(cb), 1);
       } else {
-        throw e;
+        if (!error) error = e;
       }
     }
   }
-  for (let fcb of failedcbs) {
-    listeners.splice(listeners.indexOf(fcb), 1);
-  }
+  if (error) throw error;
+}
+
+function isDeadObjectError(e) {
+  return e instanceof TypeError && e.message === "can't access dead object";
 }
