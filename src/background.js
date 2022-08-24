@@ -18,10 +18,16 @@ async function main() {
     }
     switch (msg) {
       case "export":
-        const out = JSON.stringify(await tabset.getAll(), null, 2);
+        const data = (await tabset.getAll()).map((t) => ({
+          ...t,
+          data: t.data.map((t) => ({ ...t, favIconUrl: undefined })),
+        }));
+        const out = JSON.stringify(data, null, 2);
         try {
           await saveFile(out, "export.tabsaver.json");
-        } catch (e) {}
+        } catch (e) {
+          console.error(e);
+        }
         return;
       case "undo":
         try {
