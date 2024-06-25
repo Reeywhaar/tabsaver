@@ -1,6 +1,6 @@
 {
   "name": "tab-saver",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "TabSaver Firefox WebExtension",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

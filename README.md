@@ -58,6 +58,10 @@ And If you want to run extension in dev mode: `./node_modules/.bin/web-ext run -
 
 # CHANGELOG
 
+## `v.0.2.6`
+
+- Technical release
+
 ## `v.0.2.5`
 
 - Style improvements. Code cleanup
