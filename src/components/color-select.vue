@@ -25,7 +25,7 @@ export default {
       type: Array,
     },
     value: {
-      type: Boolean,
+      type: Number,
       required: false,
     },
   },

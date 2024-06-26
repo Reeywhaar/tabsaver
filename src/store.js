@@ -1,6 +1,4 @@
-import { storage as Storage, settings as Settings } from "./shared.js";
-import { TabSet } from "./tabset.js";
-import { History as Undo } from "./history.js";
+import { createStore } from "vuex";
 import {
   reverse,
   sleep,
@@ -9,9 +7,8 @@ import {
   parseQuery,
   serialize,
 } from "./utils.js";
-import { createStore } from "vuex";
 
-export default async () => {
+export default async (storage, settings, tabset, history) => {
   const windowid = await (async () => {
     const query = parseQuery(location.search);
     if ("windowid" in query) return parseInt(query.windowid, 10);
@@ -33,11 +30,11 @@ export default async () => {
     return [window.width, window.height];
   }
 
-  const [items, settings, statesCount, windows, currentTabs] =
+  const [items, settingsData, statesCount, windows, currentTabs] =
     await Promise.all([
-      TabSet.getAll(),
-      Settings.getAll(),
-      Undo.count(),
+      tabset.getAll(),
+      settings.getAll(),
+      history.count(),
       browser.windows.getAll({
         populate: true,
         windowTypes: ["normal"],
@@ -51,7 +48,7 @@ export default async () => {
     state: {
       windows,
       items,
-      settings,
+      settings: settingsData,
       statesCount,
       notification: "",
       notificationCounter: 0,
@@ -126,10 +123,10 @@ export default async () => {
           context.commit("setNotification", "");
       },
       async updateItems(context) {
-        context.commit("updateItems", await TabSet.getAll());
+        context.commit("updateItems", await tabset.getAll());
       },
       async setSetting(context, { key, value }) {
-        await Settings.set(key, value);
+        await settings.set(key, value);
         context.commit("setSetting", { key, value });
       },
       async tabsetOpen(context, key = null) {
@@ -221,7 +218,7 @@ export default async () => {
         });
       },
       async clearTabsets(context) {
-        await Storage.set("tabs", []);
+        await storage.set("tabs", []);
       },
       async openUrl(context, [url, identity, newTab = true]) {
         return await browser.runtime.sendMessage({
@@ -230,7 +227,7 @@ export default async () => {
         });
       },
       async updateStatesCount(context) {
-        const count = await Undo.count();
+        const count = await history.count();
         context.commit("updateStatesCount", count);
       },
       async undo(context) {
