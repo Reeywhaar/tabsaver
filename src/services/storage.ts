@@ -1,26 +1,28 @@
 import { processListeners } from "../utils";
 
-export class Storage {
-  storageListeners = [];
-  storageBeforeListeners = [];
+type Listener = (key: string, value: any) => unknown;
 
-  async get(key, def = null) {
+export class Storage {
+  storageListeners: Listener[] = [];
+  storageBeforeListeners: Listener[] = [];
+
+  async get<T = any>(key: string, def: T) {
     const req = await browser.storage.local.get(key);
     if (!(key in req)) return def;
-    return req[key];
+    return req[key] as T;
   }
 
-  async set(key, value) {
+  async set<T>(key: string, value: T) {
     await processListeners(this.storageBeforeListeners, key, value, true);
     await browser.storage.local.set({ [key]: value });
     await processListeners(this.storageListeners, key, value, false);
   }
 
-  subscribeBefore(fn) {
+  subscribeBefore(fn: Listener) {
     this.storageBeforeListeners.push(fn);
   }
 
-  subscribe(fn) {
+  subscribe(fn: Listener) {
     this.storageListeners.push(fn);
   }
 }

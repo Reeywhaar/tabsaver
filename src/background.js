@@ -1,7 +1,7 @@
-import { saveFile } from "./utils.js";
-import { openURL } from "./shared.js";
+import { saveFile } from "./utils";
+import { openURL } from "./shared";
 import { diff as objdiff, applyChange } from "deep-diff";
-import { createServices } from "./createServices.js";
+import { createServices } from "./createServices";
 
 async function main() {
   let trackHistory = true;

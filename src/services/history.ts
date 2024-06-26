@@ -1,8 +1,12 @@
-import { debounce } from "../utils.js";
+import { debounce } from "../utils";
+import { Settings } from "./settings";
+import { Storage } from "./storage";
+
+type HistoryState = {};
 
 export class History {
-  storage;
-  settings;
+  storage!: Storage;
+  settings!: Settings;
 
   async permittedNumberOfStates() {
     const [use, length] = await Promise.all([
@@ -10,21 +14,20 @@ export class History {
       this.settings.get("numberOfHistoryStates"),
     ]);
     if (!use) return 0;
-    return length;
+    return length ?? 0;
   }
 
-  getAll() {
-    return this.storage.get("history:states", []);
+  async getAll() {
+    return await this.storage.get<HistoryState[]>("history:states", []);
   }
 
   async last() {
-    const states = await this.storage.get("history:states", []);
-    if (states.length === 0) return null;
-    return states[states.length - 1];
+    const states = await this.storage.get<HistoryState[]>("history:states", []);
+    return states.at(-1) ?? null;
   }
 
   async pop() {
-    const states = await this.storage.get("history:states", []);
+    const states = await this.storage.get<HistoryState[]>("history:states", []);
     if (states.length === 0) return null;
     const last = states.pop();
     await Promise.all([
@@ -41,7 +44,7 @@ export class History {
     ]);
   }
 
-  push = debounce(async (state, callback = () => {}) => {
+  push = debounce(async (state: HistoryState, callback = () => {}) => {
     if (!state) return;
     let capacity = await this.permittedNumberOfStates();
     if (capacity === 0) return;

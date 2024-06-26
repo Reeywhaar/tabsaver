@@ -1,4 +1,4 @@
-import { sleep, parseQuery } from "./utils.js";
+import { sleep, parseQuery } from "./utils";
 
 async function main() {
   const query = parseQuery(window.location.search);
@@ -9,7 +9,7 @@ async function main() {
   }
 }
 
-function copyToClipboard(text) {
+function copyToClipboard(text: string) {
   const input = document.createElement("input");
   input.setAttribute("value", text);
   document.body.appendChild(input);
@@ -19,8 +19,8 @@ function copyToClipboard(text) {
 }
 
 let notificationCounter = 0;
-function notify(text) {
-  const el = document.querySelector(".notification");
+function notify(text: string) {
+  const el = document.querySelector(".notification") as HTMLDivElement;
   el.innerText = text;
   notificationCounter++;
   sleep(6000).then(() => {
@@ -31,25 +31,27 @@ function notify(text) {
   });
 }
 
-function createLink(href, text) {
+function createLink(href: string, text: string) {
   const a = document.createElement("a");
   a.href = href;
   a.innerText = text;
   return a;
 }
 
-function getTemplate(selector) {
-  return document.querySelector(selector).content.cloneNode(true);
+function getTemplate(selector: string) {
+  return (
+    document.querySelector(selector) as HTMLTemplateElement
+  ).content.cloneNode(true);
 }
 
-function loadTemplate(selector) {
+function loadTemplate(selector: string) {
   document.body.appendChild(getTemplate(selector));
 }
 
-function showRestricted(url) {
+function showRestricted(url: string) {
   loadTemplate("#restricted");
   document.title = url;
-  const urlEl = document.querySelector(".url");
+  const urlEl = document.querySelector(".url") as HTMLDivElement;
   const link = createLink(url, url);
   urlEl.appendChild(link);
   link.addEventListener("click", (e) => {
@@ -59,10 +61,10 @@ function showRestricted(url) {
   });
 }
 
-function showContainerRemoved(url) {
+function showContainerRemoved(url: string) {
   loadTemplate("#container-removed");
   document.title = url;
-  const urlEl = document.querySelector(".url");
+  const urlEl = document.querySelector(".url") as HTMLDivElement;
   const link = createLink(url, url);
   urlEl.appendChild(link);
   link.addEventListener("click", (e) => {

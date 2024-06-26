@@ -1,27 +1,28 @@
 import { strAfter, parseQuery } from "./utils.js";
 
-export function isURLPrivileged(url) {
+export function isURLPrivileged(url: string) {
   if (url === "about:blank") return false;
   if (url === "about:home") return false;
   if (/^(chrome|javascript|data|file|about)\:/.test(url)) return true;
   return false;
 }
 
-export function getMangledURL(url) {
+export function getMangledURL(url: string) {
   if (isURLPrivileged(url))
     return `/dist/handler.html?url=${encodeURIComponent(url)}`;
   return url;
 }
 
-export function getUnmangledURL(url) {
+export function getUnmangledURL(url?: string): string | undefined {
+  if (!url) return undefined;
   if (url.startsWith(browser.runtime.getURL("/dist/handler.html"))) {
-    return parseQuery("?" + strAfter(url, "handler.html?")).url;
+    return parseQuery("?" + strAfter(url, "handler.html?")).url as string;
   }
   return url;
 }
 
 export async function openURL(
-  url,
+  url: string,
   cookieStoreId = DEFAULT_COOKIE_STORE_ID,
   newTab = true
 ) {
@@ -31,16 +32,18 @@ export async function openURL(
   });
   if (
     currentTabs.length === 0 ||
-    currentTabs[0] === browser.tabs.TAB_ID_NONE ||
+    currentTabs[0].id === browser.tabs.TAB_ID_NONE ||
     currentTabs[0].cookieStoreId !== cookieStoreId
   )
     newTab = true;
   try {
-    const lookup = await settings.get("tabLookup");
+    const lookup = await window.settings.get("tabLookup");
     if (lookup !== 0) {
       const query = lookup === 1 ? { currentWindow: true } : {};
       const tabs = await browser.tabs.query(query);
       for (let tab of tabs) {
+        if (!tab.id) continue;
+        if (!tab.windowId) continue;
         if (tab.cookieStoreId === cookieStoreId && tab.url === url)
           return await Promise.all([
             browser.tabs.update(tab.id, { active: true }),
@@ -57,8 +60,9 @@ export async function openURL(
     return await browser.tabs.update({
       url: getMangledURL(url),
     });
-  } catch (e) {
-    if (e.message.substr(0, 27) === "No cookie store exists with") {
+  } catch (e: unknown) {
+    if (!(e instanceof Error)) throw e;
+    if (e.message.substring(0, 27) === "No cookie store exists with") {
       return await browser.tabs.create({
         url: getMangledURL(url),
         cookieStoreId: DEFAULT_COOKIE_STORE_ID,

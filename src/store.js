@@ -6,7 +6,7 @@ import {
   first,
   parseQuery,
   serialize,
-} from "./utils.js";
+} from "./utils";
 
 export default async (storage, settings, tabset, history) => {
   const windowid = await (async () => {

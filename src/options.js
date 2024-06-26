@@ -1,8 +1,8 @@
 import "./globals.js";
 import { createApp, h } from "vue";
-import getStore from "./store.js";
-import OptionsView from "./components/options.vue";
-import { createServices } from "./createServices.js";
+import getStore from "./store";
+import OptionsView from "./components/options";
+import { createServices } from "./createServices";
 
 async function main() {
   const app = createApp(OptionsView);

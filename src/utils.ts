@@ -1,26 +1,12 @@
-export function withDefault(obj, def) {
-  if (obj === null || typeof obj === "undefined") {
-    return def;
-  }
-  return obj;
-}
-
-/**
- *
- * @param {number} n
- */
-export function sleep(n) {
+export function sleep(n: number) {
   return new Promise((resolve) => setTimeout(resolve, n));
 }
 
-export function pipe(obj, ...fns) {
-  return fns.reduce(
-    (c, fn) => (c instanceof Promise ? c.then((c) => fn(c)) : fn(c)),
-    obj
-  );
-}
-
-export async function saveFile(value, fileName, fileType = "application/json") {
+export async function saveFile(
+  value: BlobPart,
+  fileName: string,
+  fileType: string = "application/json"
+) {
   const blob = new Blob([value], { type: fileType });
   const url = URL.createObjectURL(blob);
 
@@ -31,32 +17,36 @@ export async function saveFile(value, fileName, fileType = "application/json") {
   });
 }
 
-export function readFile(accept = ".json") {
-  function readContent(file) {
-    return new Promise((resolve) => {
+export function readFile(accept: string = ".json") {
+  function readContent(file: File) {
+    return new Promise<string>((resolve) => {
       const fr = new FileReader();
       fr.onload = function (e) {
-        resolve(e.target.result);
+        resolve(e.target!.result as string);
       };
       fr.readAsText(file);
     });
   }
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     const input = document.createElement("input");
     const host = document.body;
     input.type = "file";
     input.accept = accept;
-    input.value = null;
+    input.value = "";
     input.style.display = "none";
     host.appendChild(input);
     input.addEventListener(
       "change",
       async function (e) {
-        if (e.target.files.length < 1)
+        const trg = e.target as HTMLInputElement;
+        const file = trg.files?.[0];
+        if (!file) {
           reject(new Error("no file was selected"));
+          return;
+        }
 
         try {
-          resolve(await readContent(e.target.files[0]));
+          resolve(await readContent(file));
         } catch (e) {
           reject(new Error("error while reading import file"));
         } finally {
@@ -73,22 +63,14 @@ export async function readFileAsJson() {
   return JSON.parse(await readFile());
 }
 
-/**
- *
- * @param {any[]} array
- * @param {function} fn
- */
-export function first(array, fn) {
+export function first<T>(array: ArrayLike<T>, fn: (v: T) => boolean) {
   return Array.from(array).find(fn) || null;
 }
 
 /**
  * Checks if two arrays are contain same elements
- *
- * @param {any[]} setA
- * @param {any[]} setB
  */
-export function setsAreEqual(setA, setB) {
+export function setsAreEqual<T>(setA: T[], setB: T[]) {
   setB = setB.slice(0);
   if (setA.length !== setB.length) return false;
 
@@ -103,17 +85,18 @@ export function setsAreEqual(setA, setB) {
 
 /**
  * Binds event handler to host
- *
- * @param {HTMLElement} host host to bind event
- * @param {string} selector host child selector
- * @param {string} event event name
- * @param {function} fn event handler
- * @param {boolean} capture capture/bubble mode
  */
-export function live(host, selector, event, fn, capture = false) {
+export function live(
+  host: HTMLElement,
+  selector: string,
+  event: string,
+  fn: (this: HTMLElement, event: Event) => unknown,
+  capture = false
+) {
   host.addEventListener(
     event,
     (e) => {
+      if (!e.target || !(e.target instanceof HTMLElement)) return;
       if (e.target.matches(selector)) fn.call(e.target, e);
     },
     capture
@@ -122,13 +105,13 @@ export function live(host, selector, event, fn, capture = false) {
 
 /**
  * Bind event and removes once event occured
- *
- * @param {HTMLElement} node element
- * @param {string} type event name
- * @param {function} fn handler
- * @param {boolean} capture capture/bubble mode (false)
  */
-export function once(node, type, fn, capture = false) {
+export function once(
+  node: HTMLElement,
+  type: string,
+  fn: (this: HTMLElement, event: Event) => unknown,
+  capture = false
+) {
   return node.addEventListener(
     type,
     function handler(e) {
@@ -139,67 +122,47 @@ export function once(node, type, fn, capture = false) {
   );
 }
 
-export function oneOf(obj, ...subjs) {
+export function oneOf<T>(obj: T, ...subjs: T[]) {
   for (let subj of subjs) {
     if (obj === subj) return true;
   }
   return false;
 }
 
-export function strAfter(str, search) {
+export function strAfter(str: string, search: string) {
   if (str.indexOf(search) === -1) return str;
   return str.substr(str.indexOf(search) + search.length);
 }
 
-export function getKey(obj, key, def = null) {
-  if (key in obj) return obj[key];
-  return def;
-}
-
-/**
- *
- * @param {number} length
- * @param {string} padder
- * @param {string} str
- */
-export function padLeft(length, padder = " ", str) {
+export function padLeft(length: number, padder = " ", str: string) {
   str = str.toString();
   if (str.length >= length) return str;
   return padder.repeat(length - str.length) + str;
 }
 
-export function parseQuery(query) {
+export function parseQuery(query: string) {
   return query
     .substr(1) // remove "?"
     .split("&")
     .map((x) => {
       return x.split("=").map((x) => decodeURIComponent(x));
     })
-    .reduce((c, [key, value]) => {
+    .reduce<Record<string, any>>((c, [key, value]) => {
       if (key) c[key] = value;
       return c;
     }, {});
 }
 
-/**
- *
- * @param {HTMLElement} el
- * @param {string} selector
- */
-export function findParent(el, selector) {
-  while (!el.matches(selector)) {
-    if (el === document.body) return null;
-    el = el.parentElement;
+export function findParent(el: HTMLElement, selector: string) {
+  let iel: HTMLElement | undefined = el;
+  while (!iel?.matches(selector)) {
+    if (iel === document.body) return null;
+    iel = iel?.parentElement ?? undefined;
   }
-  return el;
+  return iel;
 }
 
-/**
- *
- * @param {function} fn
- * @param {any} def
- */
-export async function tryOR(fn, def = null) {
+export async function tryOR<T>(fn: () => T, def: T | null = null) {
   try {
     return await fn();
   } catch (e) {
@@ -207,7 +170,7 @@ export async function tryOR(fn, def = null) {
   }
 }
 
-export function moveArrayItem(arr, index, offset) {
+export function moveArrayItem<T>(arr: T[], index: number, offset: number) {
   if (offset < 0 && index + offset < 0) throw new Error("Out of bound move");
   if (offset >= 0 && index + offset > arr.length - 1)
     throw new Error("Out of bound move");
@@ -216,51 +179,46 @@ export function moveArrayItem(arr, index, offset) {
   return arr;
 }
 
-export function* reverse(iterable) {
+export function* reverse<T>(iterable: T[]) {
   const len = iterable.length;
   for (let i = len - 1; i >= 0; i--) {
     yield iterable[i];
   }
 }
 
-export function cutString(str, len, ellipsis = "") {
+export function cutString(str: string, len: number, ellipsis = "") {
   if (str.length <= len) return str;
-  return str.substr(0, len - ellipsis.length) + ellipsis;
+  return str.substring(0, len - ellipsis.length) + ellipsis;
 }
 
-export function debounce(fn, delay, immediate) {
-  let timeout;
-  return (...args) => {
+export function debounce<T extends (...args: any[]) => unknown>(
+  fn: T,
+  delay: number,
+  immediate: boolean = false
+) {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<T>) => {
     const cb = () => {
       timeout = null;
       if (!immediate) fn(...args);
     };
     const callNow = immediate && !timeout;
-    clearTimeout(timeout);
+    clearTimeout(timeout ?? undefined);
     timeout = setTimeout(cb, delay);
     if (callNow) fn(...args);
   };
 }
 
-/**
- *
- * @param {function} fn
- * @param {number} interval
- */
-export async function waitUntil(fn, interval = 100) {
+export async function waitUntil(fn: () => Promise<boolean>, interval = 100) {
   while (!(await fn())) {
     await sleep(interval);
   }
 }
 
-/**
- *
- * @param {HTMLElement} el
- * @param {string} selector
- */
-export function parentMatching(el, selector) {
+export function parentMatching(el: HTMLElement, selector: string) {
   while (el !== document.body.parentElement) {
     if (el.matches(selector)) return el;
+    if (!el.parentElement) return null;
     el = el.parentElement;
   }
   return null;
@@ -269,27 +227,28 @@ export function parentMatching(el, selector) {
 /**
  * Calculates wheter event occured in bottom or top half
  * of element
- *
- * @param {Event} event
  */
-export function eventYProportion(event, target = event.currentTarget) {
-  const rect = target.getBoundingClientRect();
+export function eventYProportion(
+  event: Event & { clientY: number },
+  target = event.currentTarget
+) {
+  const rect = (target as HTMLElement).getBoundingClientRect();
   const y = event.clientY - rect.y;
   const proportion = y / rect.height;
   return proportion >= 0.5;
 }
 
-export function serialize(object) {
+export function serialize(object: any) {
   return JSON.parse(JSON.stringify(object));
 }
 
 export async function processListeners(
-  listeners,
-  key,
-  value,
+  listeners: ((key: string, value: any) => unknown)[],
+  key: string,
+  value: any,
   blocking = false
 ) {
-  let error;
+  let error: unknown | null = null;
   for (const cb of listeners) {
     try {
       if (blocking) {
@@ -308,6 +267,14 @@ export async function processListeners(
   if (error) throw error;
 }
 
-function isDeadObjectError(e) {
+export function isNil<T>(v: T | null | undefined): v is null | undefined {
+  return v === null || v === undefined;
+}
+
+export function isNotNil<T>(v: T | null | undefined): v is T {
+  return !isNil(v);
+}
+
+function isDeadObjectError(e: any) {
   return e instanceof TypeError && e.message === "can't access dead object";
 }
