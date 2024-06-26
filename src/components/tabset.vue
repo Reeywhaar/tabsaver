@@ -45,7 +45,7 @@
         <hold-button
           @click="remove()"
           @cancel="onHoldCancel('remove TabSet')"
-          class="inline-button tabset__button tabset__button-remove"
+          class="inline-button tabset__button"
           title="Remove TabSet"
         >
           <icon icon="close"></icon>
@@ -59,7 +59,7 @@
         @dragover="onTabDragover($event)"
         @drop="onTabDrop($event, null)"
       >
-        Empty...
+        No Tabs
       </div>
       <div
         v-for="(tab, index) in tabset.data"
@@ -93,7 +93,7 @@
   </div>
 </template>
 <script>
-import { sleep, first, eventYProportion, serialize } from "../utils.js";
+import { sleep, first, eventYProportion } from "../utils.js";
 import TabsetTabComponent from "./tabset-tab.vue";
 import ColorSelectComponent from "./color-select.vue";
 import HoldButtonComponent from "./hold-button.vue";
@@ -321,7 +321,7 @@ export default {
         await this.$store.dispatch("tabsetSave", {
           key: this.tabset.key,
           color: this.tabset.color,
-          tabs: serialize(tabs),
+          tabs,
         });
         // this.$store.dispatch("notify", `"${this.tabset.key}" saved`);
       } catch (e) {

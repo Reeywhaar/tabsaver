@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tabset"
+    class="tabset window-tabset"
     @dragover="onDragover($event)"
     @dragend="onDragend($event)"
     @drop="onDrop($event)"
@@ -31,7 +31,7 @@
           <icon icon="reload"></icon>
         </hold-button>
         <hold-button
-          class="inline-button tabset__button tabset__button-remove"
+          class="inline-button tabset__button"
           @click="closeWindow()"
           @cancel="onHoldCancel('close window')"
           title="Close Window"
@@ -42,7 +42,7 @@
     </div>
     <div class="tabset__links" v-if="!collapsed">
       <div v-if="tabset.tabs.length === 0" class="tabset__links-empty">
-        Empty...
+        No Tabs
       </div>
       <div
         v-for="tab in tabset.tabs"

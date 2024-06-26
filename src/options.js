@@ -1,13 +1,11 @@
 import "./globals.js";
-import { createApp, h } from "vue";
+import { createApp } from "vue";
 import getStore from "./store.js";
-import OptionsView from "./components/options.vue";
-import { createServices } from "./createServices.js";
+import WindowComponent from "./components/options.vue";
 
 async function main() {
-  const app = createApp(OptionsView);
-  const { settings, storage, tabset, history } = createServices();
-  app.use(await getStore(storage, settings, tabset, history));
+  const app = createApp(WindowComponent);
+  app.use(await getStore());
   app.mount(".main");
 }
 

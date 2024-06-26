@@ -49,8 +49,8 @@
     <div class="prefs">
       <div class="prefs__pinned" title="Include pinned tabs when saving">
         <toggle-button class="prefs__pinned-button" v-model="pinned"
-          ><icon class="prefs__icon" icon="pin"></icon
-        ></toggle-button>
+          >Save Pinned</toggle-button
+        >
       </div>
       <hold-button
         @click="undo"

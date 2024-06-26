@@ -1,14 +1,5 @@
 import { sleep, parseQuery } from "./utils.js";
 
-async function main() {
-  const query = parseQuery(window.location.search);
-  if ("containerRemoved" in query) {
-    showContainerRemoved(query.url);
-  } else {
-    showRestricted(query.url);
-  }
-}
-
 function copyToClipboard(text) {
   const input = document.createElement("input");
   input.setAttribute("value", text);
@@ -69,6 +60,15 @@ function showContainerRemoved(url) {
     e.preventDefault();
     window.location.replace(url);
   });
+}
+
+async function main() {
+  const query = parseQuery(window.location.search);
+  if ("containerRemoved" in query) {
+    showContainerRemoved(query.url);
+  } else {
+    showRestricted(query.url);
+  }
 }
 
 main().catch((e) => console.error(e));

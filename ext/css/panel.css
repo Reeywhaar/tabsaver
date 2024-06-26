@@ -109,7 +109,6 @@ button {
   display: flex;
   flex-direction: row;
   display: inline-block;
-  align-items: center;
 }
 
 .color-select__item {
@@ -242,7 +241,7 @@ body.sidebar .main {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  line-height: 1.5rem;
+  line-height: 1.5em;
   position: relative;
 }
 
@@ -259,16 +258,21 @@ body.sidebar .main {
 }
 
 .tabset__links-empty {
-  opacity: 0.3;
+  content: "No tabs";
+  font-weight: bold;
   display: block;
-  padding: 0.02rem var(--padding-x);
+  margin-right: 0.2em;
+  margin-left: calc(var(--padding-x) * 1.4);
 }
 
 .tabset__link-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding: 0.02rem var(--padding-x);
+  padding-left: var(--padding-x);
+  padding-right: var(--padding-x);
+  padding-top: 0.02rem;
+  padding-bottom: 0.02rem;
   line-height: 1.2em;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -281,7 +285,7 @@ body.sidebar .main {
 }
 
 .tabset__link-button:last-child {
-  margin-right: 0.4rem;
+  padding-right: 0.65em;
 }
 
 .tabset__link-button:hover {
@@ -338,42 +342,32 @@ body.sidebar .main {
   align-items: center;
   position: absolute;
   background-color: var(--tab-header-color);
+  top: calc(var(--padding-y) / 2);
   color: var(--text-color);
+  padding-top: 0.2em;
 
-  line-height: 1.5em;
-  height: 1.5rem;
+  line-height: 1em;
+  height: 1.6em;
 
   right: 0;
 
-  padding-left: 0.4rem;
-  padding-right: 0.6rem;
+  padding-left: 0.4em;
+  padding-right: 0.6em;
 
-  border-top-left-radius: 0.3rem;
-  border-bottom-left-radius: 0.3rem;
+  border-top-left-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
 }
 
 .tabset__item:not(:hover) .tabset__controls {
   opacity: 0;
 }
 
-.tabset__color-select {
-  margin-bottom: -0.1rem;
-}
-
 .tabset__button {
   opacity: 0.5;
-  height: 1.5rem;
-  line-height: 1.5rem;
-  padding-top: 0;
-  padding-bottom: 0;
 }
 
 .tabset__button:hover {
   opacity: 1;
-}
-
-.tabset__button-remove {
-  margin-top: -0.15rem;
 }
 
 /* tabsets */
@@ -459,15 +453,11 @@ body.sidebar .main {
 .prefs__pinned-button {
   color: var(--text-color);
   border-radius: 6px;
-  background: none;
-  padding: 0.2em;
-  opacity: 0.6 !important;
 }
 
 .prefs__pinned-button[data-state="on"] {
-  color: var(--hover-color);
-  background: none;
-  opacity: 1 !important;
+  background-color: var(--hover-color);
+  color: var(--background-color);
 }
 
 .prefs__button {

@@ -12,7 +12,6 @@ const mapping = {
   open: 61587,
   undo: 61666,
   detach: 61772,
-  pin: 61581,
 };
 export default {
   props: ["icon"],

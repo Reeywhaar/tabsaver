@@ -78,6 +78,15 @@ export async function readFileAsJson() {
  * @param {any[]} array
  * @param {function} fn
  */
+export function firstIndex(array, fn) {
+  return Array.from(array).findIndex(fn);
+}
+
+/**
+ *
+ * @param {any[]} array
+ * @param {function} fn
+ */
 export function first(array, fn) {
   return Array.from(array).find(fn) || null;
 }
@@ -281,33 +290,4 @@ export function eventYProportion(event, target = event.currentTarget) {
 
 export function serialize(object) {
   return JSON.parse(JSON.stringify(object));
-}
-
-export async function processListeners(
-  listeners,
-  key,
-  value,
-  blocking = false
-) {
-  let error;
-  for (const cb of listeners) {
-    try {
-      if (blocking) {
-        await cb(key, value);
-      } else {
-        cb(key, value);
-      }
-    } catch (e) {
-      if (isDeadObjectError(e)) {
-        listeners.splice(listeners.indexOf(cb), 1);
-      } else {
-        if (!error) error = e;
-      }
-    }
-  }
-  if (error) throw error;
-}
-
-function isDeadObjectError(e) {
-  return e instanceof TypeError && e.message === "can't access dead object";
 }
