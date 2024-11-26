@@ -2,6 +2,8 @@
 
 # Tab Saver
 
+<strong>There is a continuation of this addon <a href="https://github.com/Reeywhaar/tabsaver-2">TabSaver 2</a>. Check it out! First version of this addon is unlikely to be updated, it works though.</strong>
+
 WebExtension to manage your tabs.
 With this extension you can save tabs in current window and open them later.
 
